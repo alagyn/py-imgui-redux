@@ -1,0 +1,9 @@
+[submodule "third-party/pybind11"]
+	path = third-party/pybind11
+	url = git@github.com:pybind/pybind11.git
+[submodule "third-party/imgui"]
+	path = third-party/imgui
+	url = git@github.com:ocornut/imgui.git
+[submodule "third-party/imnodes"]
+	path = third-party/imnodes
+	url = git@github.com:Nelarius/imnodes.git
