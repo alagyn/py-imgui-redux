@@ -7,3 +7,6 @@
 [submodule "third-party/imnodes"]
 	path = third-party/imnodes
 	url = git@github.com:Nelarius/imnodes.git
+[submodule "third-party/glfw"]
+	path = third-party/glfw
+	url = git@github.com:glfw/glfw.git
