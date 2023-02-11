@@ -1,17 +1,7 @@
-#include <utilityDefines.h>
+#include <modules.h>
 
-#include <modules/context.hpp>
-#include <modules/cursor-layout.hpp>
-#include <modules/demos.hpp>
-#include <modules/im-windows.hpp>
-#include <modules/stacks.hpp>
-#include <modules/styles.hpp>
-#include <modules/widgets-text.hpp>
-
-PYBIND11_MODULE(imgui, m)
+void init_structs(py::module& m)
 {
-    m.doc() = "DearImGui Framework";
-
     // Vectors
     py::class_<ImVec2> Vec2(m, "Vec2");
     Vec2.def_readwrite("x", &ImVec2::x);
@@ -32,25 +22,4 @@ PYBIND11_MODULE(imgui, m)
         py::arg("z"),
         py::arg("w")
     );
-
-    // Context Creation
-    init_context(m);
-
-    // Demo, Debug, Info
-    init_demos(m);
-
-    // Styles
-    init_styles(m);
-
-    // Windows
-    init_windows(m);
-
-    // Stacks
-    init_stacks(m);
-
-    // Cursor / Layout
-    init_cursor_and_layout(m);
-
-    // Widgets: Text
-    init_widgets_text(m);
 }

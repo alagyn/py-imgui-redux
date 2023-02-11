@@ -1,14 +1,27 @@
-#include "test.h"
-
 #include <iostream>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
-int func1(int a, int b)
+namespace py = pybind11;
+
+std::string test(char* str, unsigned len)
 {
-    return a + b;
+    std::string x(10, '\0');
+    for(int i = 0; i < 8; ++i)
+    {
+        x[i] = '0' + i;
+    }
+
+    return x;
 }
 
-int func2(const char* str)
+PYBIND11_MODULE(bdd, m)
 {
-    std::cout << str << " is asdf\n";
-    return 123;
+    m.def(
+        "test",
+        test,
+        py::arg("str"),
+        py::arg("len"),
+        py::return_value_policy::reference
+    );
 }

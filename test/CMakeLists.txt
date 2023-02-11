@@ -1,16 +1,15 @@
 
-Python3_add_library(test
+Python3_add_library(bdd
     src/test.cpp
-    src/bind-test1.cpp
-    src/bind-test2.cpp
-    src/bind-main.cpp
 )
 
-target_include_directories(test PRIVATE inc)
+target_include_directories(bdd PRIVATE inc)
 
-target_link_libraries(test PRIVATE pybind11::headers)
+target_link_libraries(bdd PRIVATE pybind11::headers)
 
-set_target_properties(test PROPERTIES
+set_target_properties(bdd PROPERTIES
     INTERPROCEDURAL_OPTIMIZATION ON
     CXX_VISIBILITY_PRESET ON
-    VISIBILITY_INLINES_HIDDEN ON)
+    VISIBILITY_INLINES_HIDDEN ON
+    CXX_STANDARD 17
+)

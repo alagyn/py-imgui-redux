@@ -1,7 +1,6 @@
 #pragma once
 
 #include <imgui.h>
-#include <imgui_internal.h>
 #include <pybind11/pybind11.h>
 
 namespace py = pybind11;

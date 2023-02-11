@@ -1,11 +1,10 @@
-#pragma once
-#include <utilityDefines.h>
+#include <modules.h>
 
 void init_demos(py::module& m)
 {
     m.def(
         "ShowDemoWindow",
-        [](bool closable) -> bool
+        [](const bool& closable) -> bool
         {
             bool p_open = true;
             if(closable)
