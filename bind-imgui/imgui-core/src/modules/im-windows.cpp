@@ -1,4 +1,4 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_windows(py::module& m)
 {
@@ -20,9 +20,9 @@ void init_windows(py::module& m)
 
             return py::make_tuple(ret, p_open);
         },
-        py::arg("name"),
-        py::arg("closable"),
-        py::arg("flags"),
+        "name"_a,
+        "closable"_a,
+        "flags"_a,
         py::return_value_policy::automatic_reference
     );
     QUICK(End);
@@ -33,28 +33,28 @@ void init_windows(py::module& m)
         py::overload_cast<const char*, const ImVec2&, bool, ImGuiWindowFlags>(
             &ImGui::BeginChild
         ),
-        py::arg("str_id"),
-        py::arg("size") = ImVec2(0, 0),
-        py::arg("border") = false,
-        py::arg("flags") = 0
+        "str_id"_a,
+        "size"_a = ImVec2(0, 0),
+        "border"_a = false,
+        "flags"_a = 0
     );
     m.def(
         "BeginChild",
         py::overload_cast<ImGuiID, const ImVec2&, bool, ImGuiWindowFlags>(
             &ImGui::BeginChild
         ),
-        py::arg("id"),
-        py::arg("size") = ImVec2(0, 0),
-        py::arg("border") = false,
-        py::arg("flags") = 0
+        "id"_a,
+        "size"_a = ImVec2(0, 0),
+        "border"_a = false,
+        "flags"_a = 0
     );
     QUICK(EndChild);
 
     // Window Utils
     QUICK(IsWindowAppearing);
     QUICK(IsWindowCollapsed);
-    m.def(IMFUNC(IsWindowFocused), py::arg("flags") = 0);
-    m.def(IMFUNC(IsWindowHovered), py::arg("flags") = 0);
+    m.def(IMFUNC(IsWindowFocused), "flags"_a = 0);
+    m.def(IMFUNC(IsWindowHovered), "flags"_a = 0);
     QUICK(GetWindowDrawList);
     QUICK(GetWindowPos);
     QUICK(GetWindowSize);
@@ -64,38 +64,34 @@ void init_windows(py::module& m)
     // Window Manip
     m.def(
         IMFUNC(SetNextWindowPos),
-        py::arg("pos"),
-        py::arg("cond") = 0,
-        py::arg("pivot") = ImVec2(0, 0)
+        "pos"_a,
+        "cond"_a = 0,
+        "pivot"_a = ImVec2(0, 0)
     );
-    m.def(IMFUNC(SetNextWindowSize), py::arg("size"), py::arg("cond") = 0);
+    m.def(IMFUNC(SetNextWindowSize), "size"_a, "cond"_a = 0);
     // Ignoring SetNextWindowSizeConstraints
-    m.def(IMFUNC(SetNextWindowContentSize), py::arg("size"));
-    m.def(
-        IMFUNC(SetNextWindowCollapsed),
-        py::arg("collapsed"),
-        py::arg("cond") = 0
-    );
+    m.def(IMFUNC(SetNextWindowContentSize), "size"_a);
+    m.def(IMFUNC(SetNextWindowCollapsed), "collapsed"_a, "cond"_a = 0);
     QUICK(SetNextWindowFocus);
-    m.def(IMFUNC(SetNextWindowScroll), py::arg("scroll"));
-    m.def(IMFUNC(SetNextWindowBgAlpha), py::arg("alpha"));
+    m.def(IMFUNC(SetNextWindowScroll), "scroll"_a);
+    m.def(IMFUNC(SetNextWindowBgAlpha), "alpha"_a);
     m.def(
         "SetWindowPos",
         py::overload_cast<const ImVec2&, ImGuiCond>(ImGui::SetWindowPos),
-        py::arg("pos"),
-        py::arg("cond") = 0
+        "pos"_a,
+        "cond"_a = 0
     );
     m.def(
         "SetWindowSize",
         py::overload_cast<const ImVec2&, ImGuiCond>(ImGui::SetWindowSize),
-        py::arg("size"),
-        py::arg("cond") = 0
+        "size"_a,
+        "cond"_a = 0
     );
     m.def(
         "SetWindowCollapsed",
         py::overload_cast<bool, ImGuiCond>(ImGui::SetWindowCollapsed),
-        py::arg("collapsed"),
-        py::arg("cond") = 0
+        "collapsed"_a,
+        "cond"_a = 0
     );
     // overload cast doesn't like having no arguments
     m.def("SetWindowFocus", static_cast<void (*)(void)>(ImGui::SetWindowFocus));
@@ -104,31 +100,31 @@ void init_windows(py::module& m)
         py::overload_cast<const char*, const ImVec2&, ImGuiCond>(
             ImGui::SetWindowPos
         ),
-        py::arg("name"),
-        py::arg("pos"),
-        py::arg("cond") = 0
+        "name"_a,
+        "pos"_a,
+        "cond"_a = 0
     );
     m.def(
         "SetWindowSize",
         py::overload_cast<const char*, const ImVec2&, ImGuiCond>(
             ImGui::SetWindowSize
         ),
-        py::arg("name"),
-        py::arg("pos"),
-        py::arg("cond") = 0
+        "name"_a,
+        "pos"_a,
+        "cond"_a = 0
     );
     m.def(
         "SetWindowCollapsed",
         py::overload_cast<const char*, bool, ImGuiCond>(ImGui::SetWindowCollapsed
         ),
-        py::arg("name"),
-        py::arg("collapsed"),
-        py::arg("cond") = 0
+        "name"_a,
+        "collapsed"_a,
+        "cond"_a = 0
     );
     m.def(
         "SetWindowFocus",
         py::overload_cast<const char*>(ImGui::SetWindowFocus),
-        py::arg("name")
+        "name"_a
     );
 
     // Content region
@@ -140,30 +136,22 @@ void init_windows(py::module& m)
     // Window Scrolling
     QUICK(GetScrollX);
     QUICK(GetScrollY);
-    m.def(
-        "SetScrollX",
-        py::overload_cast<float>(ImGui::SetScrollX),
-        py::arg("scroll_x")
-    );
-    m.def(
-        "SetScrollY",
-        py::overload_cast<float>(ImGui::SetScrollY),
-        py::arg("scroll_y")
-    );
+    m.def("SetScrollX", py::overload_cast<float>(ImGui::SetScrollX), "scroll_x"_a);
+    m.def("SetScrollY", py::overload_cast<float>(ImGui::SetScrollY), "scroll_y"_a);
     QUICK(GetScrollMaxX);
     QUICK(GetScrollMaxY);
-    m.def(IMFUNC(SetScrollHereX), py::arg("center_x_ratio") = 0.5f);
-    m.def(IMFUNC(SetScrollHereY), py::arg("center_y_ratio") = 0.5f);
+    m.def(IMFUNC(SetScrollHereX), "center_x_ratio"_a = 0.5f);
+    m.def(IMFUNC(SetScrollHereY), "center_y_ratio"_a = 0.5f);
     m.def(
         "SetScrollFromPosX",
         py::overload_cast<float, float>(ImGui::SetScrollFromPosX),
-        py::arg("local_x"),
-        py::arg("center_x_ratio") = 0.5f
+        "local_x"_a,
+        "center_x_ratio"_a = 0.5f
     );
     m.def(
         "SetScrollFromPosY",
         py::overload_cast<float, float>(ImGui::SetScrollFromPosY),
-        py::arg("local_x"),
-        py::arg("center_y_ratio") = 0.5
+        "local_x"_a,
+        "center_y_ratio"_a = 0.5
     );
 }

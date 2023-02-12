@@ -1,9 +1,8 @@
-#include <modules.h>
+#include <bind-modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
-PYBIND11_MODULE(imgui, m)
+void init_core_imgui(py::module& m)
 {
-    m.doc() = "DearImGui Framework";
-
     // Structs
     init_structs(m);
 
@@ -31,4 +30,8 @@ PYBIND11_MODULE(imgui, m)
     init_widgets_drags(m);
     init_widgets_slide(m);
     init_widgets_input(m);
+    init_widgets_colors(m);
+    init_widgets_tree(m);
+    init_widgets_tables(m);
+    init_widgets_tabs(m);
 }

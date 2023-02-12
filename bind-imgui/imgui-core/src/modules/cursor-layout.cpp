@@ -1,26 +1,22 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_cursor_and_layout(py::module& m)
 {
     QUICK(Separator);
-    m.def(
-        IMFUNC(SameLine),
-        py::arg("offset_from_start_x") = 0.0f,
-        py::arg("spacing") = 1.0f
-    );
+    m.def(IMFUNC(SameLine), "offset_from_start_x"_a = 0.0f, "spacing"_a = 1.0f);
     QUICK(NewLine);
     QUICK(Spacing);
-    m.def(IMFUNC(Dummy), py::arg("size"));
-    m.def(IMFUNC(Indent), py::arg("indent_w") = 0.0f);
-    m.def(IMFUNC(Unindent), py::arg("indent_w") = 0.0f);
+    m.def(IMFUNC(Dummy), "size"_a);
+    m.def(IMFUNC(Indent), "indent_w"_a = 0.0f);
+    m.def(IMFUNC(Unindent), "indent_w"_a = 0.0f);
     QUICK(BeginGroup);
     QUICK(EndGroup);
     QUICK(GetCursorPos);
     QUICK(GetCursorPosX);
     QUICK(GetCursorPosY);
-    m.def(IMFUNC(SetCursorPos), py::arg("pos"));
-    m.def(IMFUNC(SetCursorPosX), py::arg("local_x"));
-    m.def(IMFUNC(SetCursorPosY), py::arg("local_y"));
+    m.def(IMFUNC(SetCursorPos), "pos"_a);
+    m.def(IMFUNC(SetCursorPosX), "local_x"_a);
+    m.def(IMFUNC(SetCursorPosY), "local_y"_a);
     QUICK(GetCursorStartPos);
     QUICK(GetCursorScreenPos);
     m.def(IMFUNC(SetCursorScreenPos));

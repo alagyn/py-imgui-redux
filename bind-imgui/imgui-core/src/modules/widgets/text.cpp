@@ -1,4 +1,4 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_widgets_text(py::module& m)
 {
@@ -9,7 +9,7 @@ void init_widgets_text(py::module& m)
         {
             ImGui::TextUnformatted(text);
         },
-        py::arg("text")
+        "text"_a
     );
     m.def(
         "TextColored",
@@ -17,8 +17,8 @@ void init_widgets_text(py::module& m)
         {
             ImGui::TextColored(col, text);
         },
-        py::arg("col"),
-        py::arg("text")
+        "col"_a,
+        "text"_a
     );
     m.def(
         "TextDisabled",
@@ -26,7 +26,7 @@ void init_widgets_text(py::module& m)
         {
             ImGui::TextDisabled(text);
         },
-        py::arg("text")
+        "text"_a
     );
     m.def(
         "TextWrapper",
@@ -34,7 +34,7 @@ void init_widgets_text(py::module& m)
         {
             ImGui::TextWrapped(text);
         },
-        py::arg("text")
+        "text"_a
     );
     m.def(
         "LabelText",
@@ -42,8 +42,8 @@ void init_widgets_text(py::module& m)
         {
             ImGui::LabelText(label, text);
         },
-        py::arg("label"),
-        py::arg("text")
+        "label"_a,
+        "text"_a
     );
     m.def(
         "BulletText",
@@ -51,6 +51,23 @@ void init_widgets_text(py::module& m)
         {
             ImGui::BulletText(text);
         },
-        py::arg("text")
+        "text"_a
+    );
+
+    // Text utils
+    m.def(
+        "CalcTextSize",
+        [](const char* text, bool hide_text_after_double_hash, float wrap_width)
+        {
+            return ImGui::CalcTextSize(
+                text,
+                nullptr,
+                hide_text_after_double_hash,
+                wrap_width
+            );
+        },
+        "text"_a,
+        "hide_text_after_double_hash"_a = false,
+        "wrap_width"_a = -1.0f
     );
 }

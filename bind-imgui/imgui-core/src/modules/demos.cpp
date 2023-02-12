@@ -1,4 +1,4 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_demos(py::module& m)
 {
@@ -17,7 +17,7 @@ void init_demos(py::module& m)
             }
             return p_open;
         },
-        py::arg("closable")
+        "closable"_a
     );
     m.def(
         "ShowMetricsWindow",
@@ -34,7 +34,7 @@ void init_demos(py::module& m)
             }
             return p_open;
         },
-        py::arg("closable")
+        "closable"_a
     );
     m.def(
         "ShowDebugLogWindow",
@@ -51,7 +51,7 @@ void init_demos(py::module& m)
             }
             return p_open;
         },
-        py::arg("closable")
+        "closable"_a
     );
     m.def(
         "ShowStackToolWindow",
@@ -68,7 +68,7 @@ void init_demos(py::module& m)
             }
             return p_open;
         },
-        py::arg("closable")
+        "closable"_a
     );
     m.def(
         "ShowAboutWindow",
@@ -85,11 +85,11 @@ void init_demos(py::module& m)
             }
             return p_open;
         },
-        py::arg("closable")
+        "closable"_a
     );
-    m.def(IMFUNC(ShowStyleEditor), py::arg("ref") = nullptr);
-    m.def(IMFUNC(ShowStyleSelector), py::arg("label"));
-    m.def(IMFUNC(ShowFontSelector), py::arg("label"));
+    m.def(IMFUNC(ShowStyleEditor), "ref"_a = nullptr);
+    m.def(IMFUNC(ShowStyleSelector), "label"_a);
+    m.def(IMFUNC(ShowFontSelector), "label"_a);
     QUICK(ShowUserGuide);
     QUICK(GetVersion);
 }

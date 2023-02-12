@@ -1,4 +1,4 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_widgets_input(py::module& m)
 {
@@ -15,10 +15,10 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputText(label, outBuf.data(), max_size, flags);
             return py::make_tuple(out, outBuf);
         },
-        py::arg("label"),
-        py::arg("value"),
-        py::arg("max_size"),
-        py::arg("flags") = 0,
+        "label"_a,
+        "value"_a,
+        "max_size"_a,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -40,11 +40,11 @@ void init_widgets_input(py::module& m)
             );
             return py::make_tuple(out, outBuf);
         },
-        py::arg("label"),
-        py::arg("value"),
-        py::arg("max_size"),
-        py::arg("size") = ImVec2(0, 0),
-        py::arg("flags") = 0,
+        "label"_a,
+        "value"_a,
+        "max_size"_a,
+        "size"_a = ImVec2(0, 0),
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -66,11 +66,11 @@ void init_widgets_input(py::module& m)
             );
             return py::make_tuple(out, outBuf);
         },
-        py::arg("label"),
-        py::arg("hint"),
-        py::arg("value"),
-        py::arg("max_size"),
-        py::arg("flags") = 0,
+        "label"_a,
+        "hint"_a,
+        "value"_a,
+        "max_size"_a,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -86,12 +86,12 @@ void init_widgets_input(py::module& m)
                 ImGui::InputFloat(label, &v, step, step_fast, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("step") = 0.0f,
-        py::arg("step_fast") = 0.0f,
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "step"_a = 0.0f,
+        "step_fast"_a = 0.0f,
+        "format"_a = "%.3f",
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -104,10 +104,10 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputFloat2(label, v.data(), format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -120,10 +120,10 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputFloat3(label, v.data(), format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -136,10 +136,10 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputFloat4(label, v.data(), format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -153,11 +153,11 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputInt(label, &v, step, step_fast, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("step") = 1,
-        py::arg("step_fast") = 100,
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "step"_a = 1,
+        "step_fast"_a = 100,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -167,9 +167,9 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputInt2(label, v.data(), flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -179,9 +179,9 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputInt3(label, v.data(), flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -191,9 +191,9 @@ void init_widgets_input(py::module& m)
             bool out = ImGui::InputInt4(label, v.data(), flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     m.def(
@@ -209,12 +209,12 @@ void init_widgets_input(py::module& m)
                 ImGui::InputDouble(label, &v, step, step_fast, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("step") = 0.0,
-        py::arg("step_fast") = 0.0,
-        py::arg("format") = "%.6f",
-        py::arg("flags") = 0,
+        "label"_a,
+        "v"_a,
+        "step"_a = 0.0,
+        "step_fast"_a = 0.0,
+        "format"_a = "%.6f",
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     // Ignoring InputScalar

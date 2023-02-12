@@ -1,4 +1,4 @@
-#include <modules.h>
+#include <imgui-core/inc/imgui-modules.h>
 
 void init_widgets_slide(py::module& m)
 {
@@ -16,12 +16,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderFloat(label, &v, v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
     m.def(
         "SliderFloat2",
@@ -36,12 +36,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderFloat2(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
     m.def(
         "SliderFloat3",
@@ -56,12 +56,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderFloat3(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
     m.def(
         "SliderFloat4",
@@ -76,12 +76,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderFloat4(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
     m.def(
         "SliderAngle",
@@ -102,12 +102,12 @@ void init_widgets_slide(py::module& m)
             );
             return py::make_tuple(out, v_rad);
         },
-        py::arg("label"),
-        py::arg("v_rad"),
-        py::arg("v_deg_min") = -360.0f,
-        py::arg("v_deg_max") = 360.0f,
-        py::arg("format") = "%.0f deg",
-        py::arg("flags") = 0
+        "label"_a,
+        "v_rad"_a,
+        "v_deg_min"_a = -360.0f,
+        "v_deg_max"_a = 360.0f,
+        "format"_a = "%.0f deg",
+        "flags"_a = 0
     );
     m.def(
         "VSliderFloat",
@@ -123,13 +123,13 @@ void init_widgets_slide(py::module& m)
                 ImGui::VSliderFloat(label, size, &v, v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("size"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "size"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
 
     // Int
@@ -145,12 +145,12 @@ void init_widgets_slide(py::module& m)
             bool out = ImGui::SliderInt(label, &v, v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%d",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%d",
+        "flags"_a = 0
     );
     m.def(
         "SliderInt2",
@@ -165,12 +165,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderInt2(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%d",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%d",
+        "flags"_a = 0
     );
     m.def(
         "SliderInt3",
@@ -185,12 +185,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderInt3(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%d",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%d",
+        "flags"_a = 0
     );
     m.def(
         "SliderInt4",
@@ -205,12 +205,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::SliderInt4(label, v.data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%d",
-        py::arg("flags") = 0
+        "label"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%d",
+        "flags"_a = 0
     );
     m.def(
         "VSliderInt",
@@ -226,12 +226,12 @@ void init_widgets_slide(py::module& m)
                 ImGui::VSliderInt(label, size, &v, v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
-        py::arg("label"),
-        py::arg("size"),
-        py::arg("v"),
-        py::arg("v_min"),
-        py::arg("v_max"),
-        py::arg("format") = "%.3f",
-        py::arg("flags") = 0
+        "label"_a,
+        "size"_a,
+        "v"_a,
+        "v_min"_a,
+        "v_max"_a,
+        "format"_a = "%.3f",
+        "flags"_a = 0
     );
 }

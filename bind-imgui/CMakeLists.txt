@@ -1,26 +1,6 @@
+set(${PROJECT_NAME}_SRCS "bind-modules.cpp")
 
-set(MOD src/modules)
-set(WID ${MOD}/widgets)
-
-set(${PROJECT_NAME}_SRCS
-    src/bind-imgui.cpp
-
-    # Modules
-    ${MOD}/context.cpp
-    ${MOD}/cursor-layout.cpp
-    ${MOD}/demos.cpp
-    ${MOD}/im-windows.cpp
-    ${MOD}/stacks.cpp
-    ${MOD}/structs.cpp
-    ${MOD}/styles.cpp
-
-    # Widgets
-    ${WID}/drag-inputs.cpp
-    ${WID}/input.cpp
-    ${WID}/main.cpp
-    ${WID}/slide-inputs.cpp
-    ${WID}/text.cpp
-)
+include(imgui-core.cmake)
 
 Python3_add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -38,5 +18,10 @@ target_link_libraries(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
-    inc
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+    IMGUI_DISABLE_OBSOLETE_KEYIO
 )

@@ -17,11 +17,5 @@ std::string test(char* str, unsigned len)
 
 PYBIND11_MODULE(bdd, m)
 {
-    m.def(
-        "test",
-        test,
-        py::arg("str"),
-        py::arg("len"),
-        py::return_value_policy::reference
-    );
+    m.def("test", test, "str"_a, "len"_a, py::return_value_policy::reference);
 }
