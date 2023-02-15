@@ -3,7 +3,6 @@ sys.path.append("../build/test/Release")
 
 import bdd  # type: ignore
 
-x = "bbbb"
-out = bdd.test(x, len(x))
-print(x)
-print(out)
+x = bdd.Test(25)
+print(x.inc())
+print(x.dec(5))

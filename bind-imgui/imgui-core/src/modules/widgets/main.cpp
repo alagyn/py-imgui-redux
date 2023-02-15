@@ -45,14 +45,17 @@ void init_widgets_main(py::module& m)
 
     // TODO Images
 
+    // TODO make context managers for Begin/End pairs
+
     // Combo
     m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flag"_a = 0);
     QUICK(EndCombo);
+
     // Ignoring old Combo() funcs
     // Use Selectable instead
 
     // Listbox
-    m.def(IMFUNC(BeginListBox), "label"_a, "size"_a);
+    m.def(IMFUNC(BeginListBox), "label"_a, "size"_a = ImVec2(0, 0));
     QUICK(EndListBox);
     // Ignoreing old ListBox() funcs
     // Use Selectable instead
@@ -84,7 +87,7 @@ void init_widgets_main(py::module& m)
         "label"_a,
         "shortcut"_a = nullptr,
         "selected"_a = false,
-        "enabled"_a = false
+        "enabled"_a = true
     );
     // Ignoring other Menu item overload
 

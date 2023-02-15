@@ -1,17 +1,19 @@
 set(MOD imgui-core/src/modules)
 set(WID ${MOD}/widgets)
+set(BE imgui-core/src/bind-backends)
 
 list(APPEND ${PROJECT_NAME}_SRCS
     imgui-core/src/bind-imgui.cpp
 
     # Modules
-    ${MOD}/context.cpp
     ${MOD}/cursor-layout.cpp
     ${MOD}/demos.cpp
-    ${MOD}/enums.cpp
+    ${MOD}/drawlist.cpp
+    ${MOD}/imgui-context.cpp
+    ${MOD}/imgui-enums.cpp
+    ${MOD}/imgui-structs.cpp
     ${MOD}/im-windows.cpp
     ${MOD}/stacks.cpp
-    ${MOD}/structs.cpp
     ${MOD}/styles.cpp
 
     # Widgets
@@ -24,4 +26,8 @@ list(APPEND ${PROJECT_NAME}_SRCS
     ${WID}/tabs.cpp
     ${WID}/text.cpp
     ${WID}/tree.cpp
+
+    # Backends
+    # ${BE}/opengl3.cpp
+    ${BE}/glfw.cpp
 )

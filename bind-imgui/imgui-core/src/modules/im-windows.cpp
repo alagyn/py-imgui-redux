@@ -21,8 +21,8 @@ void init_windows(py::module& m)
             return py::make_tuple(ret, p_open);
         },
         "name"_a,
-        "closable"_a,
-        "flags"_a,
+        "closable"_a = false,
+        "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
     QUICK(End);

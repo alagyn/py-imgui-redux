@@ -4,20 +4,21 @@ void init_demos(py::module& m)
 {
     m.def(
         "ShowDemoWindow",
-        [](const bool& closable) -> bool
+        [](py::object closable) -> bool
         {
             bool p_open = true;
-            if(closable)
-            {
-                ImGui::ShowDemoWindow(&p_open);
-            }
-            else
+            if(closable.is_none())
             {
                 ImGui::ShowDemoWindow();
             }
+            else
+            {
+                p_open = closable.cast<bool>();
+                ImGui::ShowDemoWindow(&p_open);
+            }
             return p_open;
         },
-        "closable"_a
+        "closable"_a = py::none()
     );
     m.def(
         "ShowMetricsWindow",

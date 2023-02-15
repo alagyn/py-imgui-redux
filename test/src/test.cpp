@@ -2,20 +2,43 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+using namespace pybind11::literals;
 namespace py = pybind11;
 
-std::string test(char* str, unsigned len)
+class Test
 {
-    std::string x(10, '\0');
-    for(int i = 0; i < 8; ++i)
+private:
+    int value;
+
+public:
+    Test(int value)
+        : value(value)
     {
-        x[i] = '0' + i;
     }
 
-    return x;
-}
+    int inc()
+    {
+        return ++value;
+    }
+
+    int dec(int num)
+    {
+        value -= num;
+        return value;
+    }
+};
 
 PYBIND11_MODULE(bdd, m)
 {
-    m.def("test", test, "str"_a, "len"_a, py::return_value_policy::reference);
+    py::class_<Test>(m, "Test")
+        .def(py::init<int>(), "value"_a)
+        .def("inc", &Test::inc)
+        .def(
+            "dec",
+            [](Test* self, int num)
+            {
+                return self->dec(num);
+            },
+            "num"_a
+        );
 }

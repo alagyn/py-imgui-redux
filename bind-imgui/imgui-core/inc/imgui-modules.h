@@ -1,6 +1,6 @@
 #pragma once
+#include <binder/inc/module-utility.h>
 #include <imgui.h>
-#include <module-utility.h>
 
 // Quick bind for a function with no args or special needs
 #define QUICK(x) \
@@ -9,12 +9,12 @@
 // Saves typing when making typical standard defs
 #define IMFUNC(x) #x, ImGui::##x
 
-MODULE(context);
+MODULE(imgui_context);
 MODULE(cursor_and_layout);
 MODULE(demos);
 MODULE(windows);
 MODULE(stacks);
-MODULE(structs);
+MODULE(imgui_structs);
 MODULE(styles);
 
 MODULE(widgets_text);
@@ -27,4 +27,10 @@ MODULE(widgets_tree);
 MODULE(widgets_tables);
 MODULE(widgets_tabs);
 
-MODULE(enums);
+MODULE(imgui_enums);
+MODULE(drawlist);
+
+// Backends
+// TODO use defines to control compilation later
+//MODULE(backend_opengl3);
+MODULE(backend_glfw);

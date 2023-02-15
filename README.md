@@ -10,3 +10,8 @@ The Dear ImGUI API will remain as unchanged as possible so that existing ImGUI d
 `imgui` - Core DearImGUI  
 `imgui.implot` - ImPlot library  
 `imgui.imnodes` - ImNodes library
+
+
+## Backends:
+
+`imgui.glfw` - GLFW

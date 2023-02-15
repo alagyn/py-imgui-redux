@@ -1,5 +1,7 @@
 build
 
+*.ini
+
 # Prerequisites
 *.d
 
