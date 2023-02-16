@@ -3,7 +3,7 @@ set(WID ${MOD}/widgets)
 set(BE imgui-core/src/bind-backends)
 
 list(APPEND ${PROJECT_NAME}_SRCS
-    imgui-core/src/bind-imgui.cpp
+    imgui-core/src/bind-imgui-core.cpp
 
     # Modules
     ${MOD}/cursor-layout.cpp

@@ -9,7 +9,6 @@ PYBIND11_MODULE(imgui, m)
     auto imnodes = m.def_submodule("imnodes", "ImNodes Library");
     init_imnodes(imnodes);
 
-    // TODO
-    //auto implot = m.def_submodule("implot", "ImPlot Library");
-    //init_implot(implit);
+    auto implot = m.def_submodule("implot", "ImPlot Library");
+    init_implot(implot);
 }

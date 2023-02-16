@@ -10,3 +10,6 @@
 [submodule "third-party/glfw"]
 	path = third-party/glfw
 	url = git@github.com:glfw/glfw.git
+[submodule "third-party/implot"]
+	path = third-party/implot
+	url = git@github.com:epezent/implot.git

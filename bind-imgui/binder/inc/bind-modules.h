@@ -4,3 +4,4 @@
 
 MODULE(core_imgui);
 MODULE(imnodes);
+MODULE(implot);

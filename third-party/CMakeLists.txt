@@ -18,6 +18,11 @@ set(imgui_SRCS
 
     # imnodes
     imnodes/imnodes.cpp
+
+    # implot
+    implot/implot.cpp
+    implot/implot_items.cpp
+    implot/implot_demo.cpp
 )
 
 add_library(imgui-cpp
@@ -29,6 +34,7 @@ target_include_directories(imgui-cpp
     PUBLIC
     imgui
     imnodes
+    implot
 )
 
 target_link_libraries(imgui-cpp

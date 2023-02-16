@@ -2,6 +2,7 @@ set(${PROJECT_NAME}_SRCS "binder/src/bind-modules.cpp")
 
 include(imgui-core.cmake)
 include(imnodes.cmake)
+include(implot.cmake)
 
 Python3_add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
