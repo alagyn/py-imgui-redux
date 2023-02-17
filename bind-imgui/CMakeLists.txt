@@ -23,3 +23,8 @@ target_include_directories(${PROJECT_NAME}
     PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE
+    PYBIND11_DETAILED_ERROR_MESSAGES
+)

@@ -3,6 +3,7 @@ sys.path.append("../build/bind-imgui/Release")
 
 import imgui  # type: ignore
 import imgui.glfw as glfw  # type: ignore
+import imgui.implot as implot  # type: ignore
 
 print("Init GLFW")
 window = glfw.Init(window_width=500, window_height=500, title="Test")
@@ -17,6 +18,8 @@ print("Init Context for GLFW")
 glfw.InitContextForGLFW(window)
 print("Set Style Colors")
 imgui.StyleColorsDark()
+print("Create ImPlot Context")
+implot.CreateContext()
 
 print("Making Clear Color")
 clearColor = imgui.Vec4(0.45, 0.55, 0.6, 1.0)
@@ -28,7 +31,7 @@ while True:
     # print("ImGUI NewFrame")
     imgui.NewFrame()
     # print("ShowDemo")
-    imgui.ShowDemoWindow()
+    implot.ShowDemoWindow()
     # print("ImGUI Render")
     imgui.Render()
     # print("GLFW Render")

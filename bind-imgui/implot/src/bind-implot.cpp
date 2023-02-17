@@ -3,6 +3,8 @@
 
 void init_implot(py::module& m)
 {
+    // Context
+    init_implot_context(m);
     // Enums
     init_implot_enums(m);
     // Structs

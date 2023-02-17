@@ -9,6 +9,7 @@
 #define QUICK(fn) m.def(#fn, ImPlot::##fn, py::return_value_policy::automatic_reference)
 // clang-format on
 
+MODULE(implot_context);
 MODULE(implot_enums);
 MODULE(implot_structs);
 MODULE(setup_funcs);

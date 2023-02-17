@@ -1,4 +1,5 @@
 #include <implot/inc/implot-modules.h>
+#include <pybind11/stl.h>
 
 void init_setup_funcs(py::module& m)
 {

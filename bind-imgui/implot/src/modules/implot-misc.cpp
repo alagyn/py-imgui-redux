@@ -67,6 +67,7 @@ void init_misc(py::module& m)
             }
 
             return open;
-        }
+        },
+        "closable"_a = false
     );
 }
