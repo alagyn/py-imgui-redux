@@ -1,4 +1,6 @@
-set(${PROJECT_NAME}_SRCS "binder/src/bind-modules.cpp")
+set(${PROJECT_NAME}_SRCS
+    binder/src/bind-modules.cpp
+)
 
 include(imgui-core.cmake)
 include(imnodes.cmake)

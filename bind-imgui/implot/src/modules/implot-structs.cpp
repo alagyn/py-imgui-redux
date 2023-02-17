@@ -1,4 +1,4 @@
-#include <binder/inc/def-utility.h>
+#include <binder/inc/struct-utility.h>
 #include <implot/inc/implot-modules.h>
 
 void init_implot_structs(py::module& m)

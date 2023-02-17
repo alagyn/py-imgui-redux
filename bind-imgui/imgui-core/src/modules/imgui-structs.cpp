@@ -1,4 +1,4 @@
-#include <binder/inc/def-utility.h>
+#include <binder/inc/struct-utility.h>
 #include <imgui-core/inc/imgui-modules.h>
 
 void init_imgui_structs(py::module& m)

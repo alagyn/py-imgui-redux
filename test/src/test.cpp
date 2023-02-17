@@ -40,5 +40,12 @@ PYBIND11_MODULE(bdd, m)
                 return self->dec(num);
             },
             "num"_a
+        )
+        .def_property_readonly_static(
+            "stat",
+            [](py::type)
+            {
+                return 25;
+            }
         );
 }

@@ -107,23 +107,23 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(BeginPopup), "str_id"_a, "flags"_a = 0);
     m.def(
         "BeginPopupModal",
-        [](const char* name, py::object visible, int flags)
+        [](const char* name, bool closable, int flags)
         {
-            bool outVisible = true;
+            bool open = true;
             bool out = false;
-            if(visible.is_none())
+            if(!closable)
             {
                 out = ImGui::BeginPopupModal(name, nullptr, flags);
             }
             else
             {
-                out = ImGui::BeginPopupModal(name, &outVisible, flags);
+                out = ImGui::BeginPopupModal(name, &open, flags);
             }
 
-            return py::make_tuple(out, outVisible);
+            return py::make_tuple(out, open);
         },
         "name"_a,
-        "visible"_a = py::none(),
+        "closable"_a = false,
         "flags"_a = 0
     );
     QUICK(EndPopup);

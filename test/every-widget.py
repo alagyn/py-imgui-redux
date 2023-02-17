@@ -17,7 +17,7 @@ class State:
         self.listboxVal = [False, False]
 
 
-def showAll(state: State):
+def normWidgets(state: State):
     if imgui.Button("B1"):
         print("B1")
     imgui.Text("This is ")
@@ -39,7 +39,7 @@ def showAll(state: State):
         state.radio = -1
     if imgui.RadioButton("Radio0", state.radio == 0):
         state.radio = 0
-    elif imgui.RadioButton("Radio1", state.radio == 1):
+    if imgui.RadioButton("Radio1", state.radio == 1):
         state.radio = 1
 
     imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
@@ -82,16 +82,84 @@ def showAll(state: State):
             print("WindowItem2")
         imgui.EndMenu()
 
-    imgui.Text("Hover Me")
+    imgui.Text("Tooltip")
     if imgui.IsItemHovered():
         imgui.BeginTooltip()
         imgui.Text("This is a tooltip")
         imgui.EndTooltip()
 
+    if imgui.BeginPopup("popup"):
+        if imgui.Selectable("Beep"):
+            print("Sheep")
+        imgui.EndPopup()
+
+    if imgui.Button("Popup"):
+        imgui.OpenPopup("popup")
+
+    visible, op = imgui.BeginPopupModal("nc-modal")
+    if visible:
+        imgui.Selectable("ASDFASDF")
+        imgui.EndPopup()
+
+    visible, op = imgui.BeginPopupModal("c-modal", True)
+    if visible:
+        imgui.Selectable("ASDFASDF")
+        imgui.Dummy(imgui.Vec2(10, 20))
+        imgui.Text("Hover to close")
+        if imgui.IsItemHovered():
+            imgui.CloseCurrentPopup()
+        imgui.EndPopup()
+
+    if imgui.Button("Non-Closable Modal"):
+        imgui.OpenPopup("nc-modal")
+
+    if imgui.Button("Closable Modal"):
+        imgui.OpenPopup("c-modal")
+
+    imgui.Text("right click me")
+    if imgui.BeginPopupContextItem("ctx-item"):
+        imgui.Selectable("asdf")
+        imgui.Selectable("potato")
+        imgui.Selectable("whatever")
+        imgui.EndPopup()
+
+    if imgui.IsPopupOpen("ctx-item"):
+        print("Open")
+
+
+def tables():
+    COLS = 3
+    ROWS = 10
+    flags = (
+        imgui.TableFlags.BordersInnerH |
+        imgui.TableFlags.BordersOuterV |
+        imgui.TableFlags.BordersOuterH
+    )
+    if imgui.BeginTable("tab-id", COLS, flags):
+        for x in range(ROWS):
+            imgui.TableNextRow()
+            for c in range(COLS):
+                imgui.TableNextColumn()
+                col = imgui.Vec4(x / ROWS, c / COLS, 1 - (x + c) / (ROWS + COLS), 1.0)
+                imgui.TextColored(
+                    col, f"({int(col.x * 255)}, {int(col.y * 255)}, {int(col.z * 255)})")
+
+        imgui.EndTable()
+
+
+def showAll(state: State):
+    if imgui.Begin("Widgets", False)[0]:
+        normWidgets(state)
+        imgui.End()
+
+    if imgui.Begin("Tables", False)[0]:
+        tables()
+        imgui.End()
+
 
 def main():
     print("Init GLFW")
-    window = glfw.Init(window_width=500, window_height=500, title="Test")
+    window = glfw.Init(window_width=800, window_height=600, title="Test")
 
     if window is None:
         print("Error during GLFW init")
@@ -116,9 +184,7 @@ def main():
         # print("ImGUI NewFrame")
         imgui.NewFrame()
         # print("ShowDemo")
-        if imgui.Begin("Window", False)[0]:
-            showAll(state)
-            imgui.End()
+        showAll(state)
         # print("ImGUI Render")
         imgui.Render()
         # print("GLFW Render")

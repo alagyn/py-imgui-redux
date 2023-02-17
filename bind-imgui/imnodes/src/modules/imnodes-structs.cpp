@@ -1,4 +1,4 @@
-#include <binder/inc/def-utility.h>
+#include <binder/inc/struct-utility.h>
 #include <imnodes/inc/imnodes-modules.h>
 
 void init_imnodes_structs(py::module& m)

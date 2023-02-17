@@ -1,269 +1,268 @@
-#include <binder/inc/def-utility.h>
+#include <binder/inc/enum-utility.h>
 #include <implot/inc/implot-modules.h>
 
 void init_implot_enums(py::module& m)
 {
-    py::enum_<ImAxis_>(m, "Axis")
-        .ENUM(ImAxis, X1)
-        .ENUM(ImAxis, X2)
-        .ENUM(ImAxis, X3)
-        .ENUM(ImAxis, Y1)
-        .ENUM(ImAxis, Y2)
-        .ENUM(ImAxis, Y3);
+    ENUM(Im, Axis)
+        .VALUE(Im, Axis, X1)
+        .VALUE(Im, Axis, X2)
+        .VALUE(Im, Axis, X3)
+        .VALUE(Im, Axis, Y1)
+        .VALUE(Im, Axis, Y2)
+        .VALUE(Im, Axis, Y3);
 
-    py::enum_<ImPlotFlags_>(m, "PlotFlags")
-        .ENUM(ImPlotFlags, None)
-        .ENUM(ImPlotFlags, NoTitle)
-        .ENUM(ImPlotFlags, NoLegend)
-        .ENUM(ImPlotFlags, NoMouseText)
-        .ENUM(ImPlotFlags, NoInputs)
-        .ENUM(ImPlotFlags, NoMenus)
-        .ENUM(ImPlotFlags, NoBoxSelect)
-        .ENUM(ImPlotFlags, NoChild)
-        .ENUM(ImPlotFlags, NoFrame)
-        .ENUM(ImPlotFlags, Equal)
-        .ENUM(ImPlotFlags, Crosshairs)
-        .ENUM(ImPlotFlags, CanvasOnly);
+    ENUM(Im, PlotFlags)
+        .VALUE(Im, PlotFlags, None)
+        .VALUE(Im, PlotFlags, NoTitle)
+        .VALUE(Im, PlotFlags, NoLegend)
+        .VALUE(Im, PlotFlags, NoMouseText)
+        .VALUE(Im, PlotFlags, NoInputs)
+        .VALUE(Im, PlotFlags, NoMenus)
+        .VALUE(Im, PlotFlags, NoBoxSelect)
+        .VALUE(Im, PlotFlags, NoChild)
+        .VALUE(Im, PlotFlags, NoFrame)
+        .VALUE(Im, PlotFlags, Equal)
+        .VALUE(Im, PlotFlags, Crosshairs)
+        .VALUE(Im, PlotFlags, CanvasOnly);
 
-    py::enum_<ImPlotAxisFlags_>(m, "AxisFlags")
-        .ENUM(ImPlotAxisFlags, None)
-        .ENUM(ImPlotAxisFlags, NoLabel)
-        .ENUM(ImPlotAxisFlags, NoGridLines)
-        .ENUM(ImPlotAxisFlags, NoTickMarks)
-        .ENUM(ImPlotAxisFlags, NoTickLabels)
-        .ENUM(ImPlotAxisFlags, NoInitialFit)
-        .ENUM(ImPlotAxisFlags, NoMenus)
-        .ENUM(ImPlotAxisFlags, NoSideSwitch)
-        .ENUM(ImPlotAxisFlags, NoHighlight)
-        .ENUM(ImPlotAxisFlags, Opposite)
-        .ENUM(ImPlotAxisFlags, Foreground)
-        .ENUM(ImPlotAxisFlags, Invert)
-        .ENUM(ImPlotAxisFlags, AutoFit)
-        .ENUM(ImPlotAxisFlags, RangeFit)
-        .ENUM(ImPlotAxisFlags, PanStretch)
-        .ENUM(ImPlotAxisFlags, LockMin)
-        .ENUM(ImPlotAxisFlags, LockMax)
-        .ENUM(ImPlotAxisFlags, Lock)
-        .ENUM(ImPlotAxisFlags, NoDecorations)
-        .ENUM(ImPlotAxisFlags, AuxDefault);
+    ENUM(ImPlot, AxisFlags)
+        .VALUE(ImPlot, AxisFlags, None)
+        .VALUE(ImPlot, AxisFlags, NoLabel)
+        .VALUE(ImPlot, AxisFlags, NoGridLines)
+        .VALUE(ImPlot, AxisFlags, NoTickMarks)
+        .VALUE(ImPlot, AxisFlags, NoTickLabels)
+        .VALUE(ImPlot, AxisFlags, NoInitialFit)
+        .VALUE(ImPlot, AxisFlags, NoMenus)
+        .VALUE(ImPlot, AxisFlags, NoSideSwitch)
+        .VALUE(ImPlot, AxisFlags, NoHighlight)
+        .VALUE(ImPlot, AxisFlags, Opposite)
+        .VALUE(ImPlot, AxisFlags, Foreground)
+        .VALUE(ImPlot, AxisFlags, Invert)
+        .VALUE(ImPlot, AxisFlags, AutoFit)
+        .VALUE(ImPlot, AxisFlags, RangeFit)
+        .VALUE(ImPlot, AxisFlags, PanStretch)
+        .VALUE(ImPlot, AxisFlags, LockMin)
+        .VALUE(ImPlot, AxisFlags, LockMax)
+        .VALUE(ImPlot, AxisFlags, Lock)
+        .VALUE(ImPlot, AxisFlags, NoDecorations)
+        .VALUE(ImPlot, AxisFlags, AuxDefault);
 
-    py::enum_<ImPlotSubplotFlags_>(m, "SubplotFlags")
-        .ENUM(ImPlotSubplotFlags, None)
-        .ENUM(ImPlotSubplotFlags, NoTitle)
-        .ENUM(ImPlotSubplotFlags, NoLegend)
-        .ENUM(ImPlotSubplotFlags, NoMenus)
-        .ENUM(ImPlotSubplotFlags, NoResize)
-        .ENUM(ImPlotSubplotFlags, NoAlign)
-        .ENUM(ImPlotSubplotFlags, ShareItems)
-        .ENUM(ImPlotSubplotFlags, LinkRows)
-        .ENUM(ImPlotSubplotFlags, LinkCols)
-        .ENUM(ImPlotSubplotFlags, LinkAllX)
-        .ENUM(ImPlotSubplotFlags, LinkAllY)
-        .ENUM(ImPlotSubplotFlags, ColMajor);
+    ENUM(ImPlot, SubplotFlags)
+        .VALUE(ImPlot, SubplotFlags, None)
+        .VALUE(ImPlot, SubplotFlags, NoTitle)
+        .VALUE(ImPlot, SubplotFlags, NoLegend)
+        .VALUE(ImPlot, SubplotFlags, NoMenus)
+        .VALUE(ImPlot, SubplotFlags, NoResize)
+        .VALUE(ImPlot, SubplotFlags, NoAlign)
+        .VALUE(ImPlot, SubplotFlags, ShareItems)
+        .VALUE(ImPlot, SubplotFlags, LinkRows)
+        .VALUE(ImPlot, SubplotFlags, LinkCols)
+        .VALUE(ImPlot, SubplotFlags, LinkAllX)
+        .VALUE(ImPlot, SubplotFlags, LinkAllY)
+        .VALUE(ImPlot, SubplotFlags, ColMajor);
 
-    py::enum_<ImPlotLegendFlags_>(m, "LegendFlags")
-        .ENUM(ImPlotLegendFlags, None)
-        .ENUM(ImPlotLegendFlags, NoButtons)
-        .ENUM(ImPlotLegendFlags, NoHighlightItem)
-        .ENUM(ImPlotLegendFlags, NoHighlightAxis)
-        .ENUM(ImPlotLegendFlags, NoMenus)
-        .ENUM(ImPlotLegendFlags, Outside)
-        .ENUM(ImPlotLegendFlags, Horizontal)
-        .ENUM(ImPlotLegendFlags, Sort);
+    ENUM(ImPlot, LegendFlags)
+        .VALUE(ImPlot, LegendFlags, None)
+        .VALUE(ImPlot, LegendFlags, NoButtons)
+        .VALUE(ImPlot, LegendFlags, NoHighlightItem)
+        .VALUE(ImPlot, LegendFlags, NoHighlightAxis)
+        .VALUE(ImPlot, LegendFlags, NoMenus)
+        .VALUE(ImPlot, LegendFlags, Outside)
+        .VALUE(ImPlot, LegendFlags, Horizontal)
+        .VALUE(ImPlot, LegendFlags, Sort);
 
-    py::enum_<ImPlotMouseTextFlags_>(m, "MouseTextFlags")
-        .ENUM(ImPlotMouseTextFlags, None)
-        .ENUM(ImPlotMouseTextFlags, NoAuxAxes)
-        .ENUM(ImPlotMouseTextFlags, NoFormat)
-        .ENUM(ImPlotMouseTextFlags, ShowAlways);
+    ENUM(ImPlot, MouseTextFlags)
+        .VALUE(ImPlot, MouseTextFlags, None)
+        .VALUE(ImPlot, MouseTextFlags, NoAuxAxes)
+        .VALUE(ImPlot, MouseTextFlags, NoFormat)
+        .VALUE(ImPlot, MouseTextFlags, ShowAlways);
 
-    py::enum_<ImPlotDragToolFlags_>(m, "DragToolFlags")
-        .ENUM(ImPlotDragToolFlags, None)
-        .ENUM(ImPlotDragToolFlags, NoCursors)
-        .ENUM(ImPlotDragToolFlags, NoFit)
-        .ENUM(ImPlotDragToolFlags, NoInputs)
-        .ENUM(ImPlotDragToolFlags, Delayed);
+    ENUM(ImPlot, DragToolFlags)
+        .VALUE(ImPlot, DragToolFlags, None)
+        .VALUE(ImPlot, DragToolFlags, NoCursors)
+        .VALUE(ImPlot, DragToolFlags, NoFit)
+        .VALUE(ImPlot, DragToolFlags, NoInputs)
+        .VALUE(ImPlot, DragToolFlags, Delayed);
 
-    py::enum_<ImPlotItemFlags_>(m, "ItemFlags")
-        .ENUM(ImPlotItemFlags, None)
-        .ENUM(ImPlotItemFlags, NoLegend)
-        .ENUM(ImPlotItemFlags, NoFit);
+    ENUM(ImPlot, ItemFlags)
+        .VALUE(ImPlot, ItemFlags, None)
+        .VALUE(ImPlot, ItemFlags, NoLegend)
+        .VALUE(ImPlot, ItemFlags, NoFit);
 
-    py::enum_<ImPlotLineFlags_>(m, "LineFlags")
-        .ENUM(ImPlotLineFlags, None)
-        .ENUM(ImPlotLineFlags, Segments)
-        .ENUM(ImPlotLineFlags, Loop)
-        .ENUM(ImPlotLineFlags, SkipNaN)
-        .ENUM(ImPlotLineFlags, NoClip)
-        .ENUM(ImPlotLineFlags, Shaded);
+    ENUM(ImPlot, LineFlags)
+        .VALUE(ImPlot, LineFlags, None)
+        .VALUE(ImPlot, LineFlags, Segments)
+        .VALUE(ImPlot, LineFlags, Loop)
+        .VALUE(ImPlot, LineFlags, SkipNaN)
+        .VALUE(ImPlot, LineFlags, NoClip)
+        .VALUE(ImPlot, LineFlags, Shaded);
 
-    py::enum_<ImPlotScatterFlags_>(m, "ScatterFlags")
-        .ENUM(ImPlotScatterFlags, None)
-        .ENUM(ImPlotScatterFlags, NoClip);
+    ENUM(ImPlot, ScatterFlags)
+        .VALUE(ImPlot, ScatterFlags, None)
+        .VALUE(ImPlot, ScatterFlags, NoClip);
 
-    py::enum_<ImPlotStairsFlags_>(m, "StairsFlags")
-        .ENUM(ImPlotStairsFlags, None)
-        .ENUM(ImPlotStairsFlags, PreStep)
-        .ENUM(ImPlotStairsFlags, Shaded);
+    ENUM(ImPlot, StairsFlags)
+        .VALUE(ImPlot, StairsFlags, None)
+        .VALUE(ImPlot, StairsFlags, PreStep)
+        .VALUE(ImPlot, StairsFlags, Shaded);
 
-    py::enum_<ImPlotShadedFlags_>(m, "ShadedFlags").ENUM(ImPlotShadedFlags, None);
+    ENUM(ImPlot, ShadedFlags).VALUE(ImPlot, ShadedFlags, None);
 
-    py::enum_<ImPlotBarsFlags_>(m, "BarsFlags")
-        .ENUM(ImPlotBarsFlags, None)
-        .ENUM(ImPlotBarsFlags, Horizontal);
+    ENUM(ImPlot, BarsFlags)
+        .VALUE(ImPlot, BarsFlags, None)
+        .VALUE(ImPlot, BarsFlags, Horizontal);
 
-    py::enum_<ImPlotBarGroupsFlags_>(m, "BarGroupsFlags")
-        .ENUM(ImPlotBarGroupsFlags, None)
-        .ENUM(ImPlotBarGroupsFlags, Horizontal)
-        .ENUM(ImPlotBarGroupsFlags, Stacked);
+    ENUM(ImPlot, BarGroupsFlags)
+        .VALUE(ImPlot, BarGroupsFlags, None)
+        .VALUE(ImPlot, BarGroupsFlags, Horizontal)
+        .VALUE(ImPlot, BarGroupsFlags, Stacked);
 
-    py::enum_<ImPlotErrorBarsFlags_>(m, "ErrorBarsFlags")
-        .ENUM(ImPlotErrorBarsFlags, None)
-        .ENUM(ImPlotErrorBarsFlags, Horizontal);
+    ENUM(ImPlot, ErrorBarsFlags)
+        .VALUE(ImPlot, ErrorBarsFlags, None)
+        .VALUE(ImPlot, ErrorBarsFlags, Horizontal);
 
-    py::enum_<ImPlotStemsFlags_>(m, "StemsFlags")
-        .ENUM(ImPlotStemsFlags, None)
-        .ENUM(ImPlotStemsFlags, Horizontal);
+    ENUM(ImPlot, StemsFlags)
+        .VALUE(ImPlot, StemsFlags, None)
+        .VALUE(ImPlot, StemsFlags, Horizontal);
 
-    py::enum_<ImPlotInfLinesFlags_>(m, "InfLineFlags")
-        .ENUM(ImPlotInfLinesFlags, None)
-        .ENUM(ImPlotInfLinesFlags, Horizontal);
+    ENUM(ImPlot, InfLinesFlags)
+        .VALUE(ImPlot, InfLinesFlags, None)
+        .VALUE(ImPlot, InfLinesFlags, Horizontal);
 
-    py::enum_<ImPlotPieChartFlags_>(m, "PieCharFlags")
-        .ENUM(ImPlotPieChartFlags, None)
-        .ENUM(ImPlotPieChartFlags, Normalize);
+    ENUM(ImPlot, PieChartFlags)
+        .VALUE(ImPlot, PieChartFlags, None)
+        .VALUE(ImPlot, PieChartFlags, Normalize);
 
-    py::enum_<ImPlotHeatmapFlags_>(m, "HeatmapFlags")
-        .ENUM(ImPlotHeatmapFlags, None)
-        .ENUM(ImPlotHeatmapFlags, ColMajor);
+    ENUM(ImPlot, HeatmapFlags)
+        .VALUE(ImPlot, HeatmapFlags, None)
+        .VALUE(ImPlot, HeatmapFlags, ColMajor);
 
-    py::enum_<ImPlotHistogramFlags_>(m, "HistogramFlags")
-        .ENUM(ImPlotHistogramFlags, None)
-        .ENUM(ImPlotHistogramFlags, Horizontal)
-        .ENUM(ImPlotHistogramFlags, Cumulative)
-        .ENUM(ImPlotHistogramFlags, Density)
-        .ENUM(ImPlotHistogramFlags, NoOutliers)
-        .ENUM(ImPlotHistogramFlags, ColMajor);
+    ENUM(ImPlot, HistogramFlags)
+        .VALUE(ImPlot, HistogramFlags, None)
+        .VALUE(ImPlot, HistogramFlags, Horizontal)
+        .VALUE(ImPlot, HistogramFlags, Cumulative)
+        .VALUE(ImPlot, HistogramFlags, Density)
+        .VALUE(ImPlot, HistogramFlags, NoOutliers)
+        .VALUE(ImPlot, HistogramFlags, ColMajor);
 
-    py::enum_<ImPlotDigitalFlags_>(m, "DigitalFlags")
-        .ENUM(ImPlotDigitalFlags, None);
+    ENUM(ImPlot, DigitalFlags).VALUE(ImPlot, DigitalFlags, None);
 
-    py::enum_<ImPlotImageFlags_>(m, "ImageFlags").ENUM(ImPlotImageFlags, None);
+    ENUM(ImPlot, ImageFlags).VALUE(ImPlot, ImageFlags, None);
 
-    py::enum_<ImPlotTextFlags_>(m, "TextFlags")
-        .ENUM(ImPlotTextFlags, None)
-        .ENUM(ImPlotTextFlags, Vertical);
+    ENUM(ImPlot, TextFlags)
+        .VALUE(ImPlot, TextFlags, None)
+        .VALUE(ImPlot, TextFlags, Vertical);
 
-    py::enum_<ImPlotDummyFlags_>(m, "DummyFlags").ENUM(ImPlotDummyFlags, None);
+    ENUM(ImPlot, DummyFlags).VALUE(ImPlot, DummyFlags, None);
 
-    py::enum_<ImPlotCond_>(m, "Cond")
-        .ENUM(ImPlotCond, None)
-        .ENUM(ImPlotCond, Always)
-        .ENUM(ImPlotCond, Once);
+    ENUM(ImPlot, Cond)
+        .VALUE(ImPlot, Cond, None)
+        .VALUE(ImPlot, Cond, Always)
+        .VALUE(ImPlot, Cond, Once);
 
-    py::enum_<ImPlotCol_>(m, "Col")
-        .ENUM(ImPlotCol, Line)
-        .ENUM(ImPlotCol, Fill)
-        .ENUM(ImPlotCol, MarkerOutline)
-        .ENUM(ImPlotCol, MarkerFill)
-        .ENUM(ImPlotCol, ErrorBar)
-        .ENUM(ImPlotCol, FrameBg)
-        .ENUM(ImPlotCol, PlotBg)
-        .ENUM(ImPlotCol, PlotBorder)
-        .ENUM(ImPlotCol, LegendBg)
-        .ENUM(ImPlotCol, LegendBorder)
-        .ENUM(ImPlotCol, LegendText)
-        .ENUM(ImPlotCol, TitleText)
-        .ENUM(ImPlotCol, InlayText)
-        .ENUM(ImPlotCol, AxisText)
-        .ENUM(ImPlotCol, AxisGrid)
-        .ENUM(ImPlotCol, AxisTick)
-        .ENUM(ImPlotCol, AxisBg)
-        .ENUM(ImPlotCol, AxisBgHovered)
-        .ENUM(ImPlotCol, AxisBgActive)
-        .ENUM(ImPlotCol, Selection)
-        .ENUM(ImPlotCol, Crosshairs);
+    ENUM(ImPlot, Col)
+        .VALUE(ImPlot, Col, Line)
+        .VALUE(ImPlot, Col, Fill)
+        .VALUE(ImPlot, Col, MarkerOutline)
+        .VALUE(ImPlot, Col, MarkerFill)
+        .VALUE(ImPlot, Col, ErrorBar)
+        .VALUE(ImPlot, Col, FrameBg)
+        .VALUE(ImPlot, Col, PlotBg)
+        .VALUE(ImPlot, Col, PlotBorder)
+        .VALUE(ImPlot, Col, LegendBg)
+        .VALUE(ImPlot, Col, LegendBorder)
+        .VALUE(ImPlot, Col, LegendText)
+        .VALUE(ImPlot, Col, TitleText)
+        .VALUE(ImPlot, Col, InlayText)
+        .VALUE(ImPlot, Col, AxisText)
+        .VALUE(ImPlot, Col, AxisGrid)
+        .VALUE(ImPlot, Col, AxisTick)
+        .VALUE(ImPlot, Col, AxisBg)
+        .VALUE(ImPlot, Col, AxisBgHovered)
+        .VALUE(ImPlot, Col, AxisBgActive)
+        .VALUE(ImPlot, Col, Selection)
+        .VALUE(ImPlot, Col, Crosshairs);
 
-    py::enum_<ImPlotStyleVar_>(m, "StyleVar")
-        .ENUM(ImPlotStyleVar, LineWeight)
-        .ENUM(ImPlotStyleVar, Marker)
-        .ENUM(ImPlotStyleVar, MarkerSize)
-        .ENUM(ImPlotStyleVar, MarkerWeight)
-        .ENUM(ImPlotStyleVar, FillAlpha)
-        .ENUM(ImPlotStyleVar, ErrorBarSize)
-        .ENUM(ImPlotStyleVar, ErrorBarWeight)
-        .ENUM(ImPlotStyleVar, DigitalBitHeight)
-        .ENUM(ImPlotStyleVar, DigitalBitGap)
-        .ENUM(ImPlotStyleVar, PlotBorderSize)
-        .ENUM(ImPlotStyleVar, MinorAlpha)
-        .ENUM(ImPlotStyleVar, MajorTickLen)
-        .ENUM(ImPlotStyleVar, MinorTickLen)
-        .ENUM(ImPlotStyleVar, MajorTickSize)
-        .ENUM(ImPlotStyleVar, MinorTickSize)
-        .ENUM(ImPlotStyleVar, MajorGridSize)
-        .ENUM(ImPlotStyleVar, MinorGridSize)
-        .ENUM(ImPlotStyleVar, PlotPadding)
-        .ENUM(ImPlotStyleVar, LabelPadding)
-        .ENUM(ImPlotStyleVar, LegendPadding)
-        .ENUM(ImPlotStyleVar, LegendInnerPadding)
-        .ENUM(ImPlotStyleVar, LegendSpacing)
-        .ENUM(ImPlotStyleVar, MousePosPadding)
-        .ENUM(ImPlotStyleVar, AnnotationPadding)
-        .ENUM(ImPlotStyleVar, FitPadding)
-        .ENUM(ImPlotStyleVar, PlotDefaultSize)
-        .ENUM(ImPlotStyleVar, PlotMinSize);
+    ENUM(ImPlot, StyleVar)
+        .VALUE(ImPlot, StyleVar, LineWeight)
+        .VALUE(ImPlot, StyleVar, Marker)
+        .VALUE(ImPlot, StyleVar, MarkerSize)
+        .VALUE(ImPlot, StyleVar, MarkerWeight)
+        .VALUE(ImPlot, StyleVar, FillAlpha)
+        .VALUE(ImPlot, StyleVar, ErrorBarSize)
+        .VALUE(ImPlot, StyleVar, ErrorBarWeight)
+        .VALUE(ImPlot, StyleVar, DigitalBitHeight)
+        .VALUE(ImPlot, StyleVar, DigitalBitGap)
+        .VALUE(ImPlot, StyleVar, PlotBorderSize)
+        .VALUE(ImPlot, StyleVar, MinorAlpha)
+        .VALUE(ImPlot, StyleVar, MajorTickLen)
+        .VALUE(ImPlot, StyleVar, MinorTickLen)
+        .VALUE(ImPlot, StyleVar, MajorTickSize)
+        .VALUE(ImPlot, StyleVar, MinorTickSize)
+        .VALUE(ImPlot, StyleVar, MajorGridSize)
+        .VALUE(ImPlot, StyleVar, MinorGridSize)
+        .VALUE(ImPlot, StyleVar, PlotPadding)
+        .VALUE(ImPlot, StyleVar, LabelPadding)
+        .VALUE(ImPlot, StyleVar, LegendPadding)
+        .VALUE(ImPlot, StyleVar, LegendInnerPadding)
+        .VALUE(ImPlot, StyleVar, LegendSpacing)
+        .VALUE(ImPlot, StyleVar, MousePosPadding)
+        .VALUE(ImPlot, StyleVar, AnnotationPadding)
+        .VALUE(ImPlot, StyleVar, FitPadding)
+        .VALUE(ImPlot, StyleVar, PlotDefaultSize)
+        .VALUE(ImPlot, StyleVar, PlotMinSize);
 
-    py::enum_<ImPlotScale_>(m, "Scale")
-        .ENUM(ImPlotScale, Linear)
-        .ENUM(ImPlotScale, Time)
-        .ENUM(ImPlotScale, Log10)
-        .ENUM(ImPlotScale, SymLog);
+    ENUM(ImPlot, Scale)
+        .VALUE(ImPlot, Scale, Linear)
+        .VALUE(ImPlot, Scale, Time)
+        .VALUE(ImPlot, Scale, Log10)
+        .VALUE(ImPlot, Scale, SymLog);
 
-    py::enum_<ImPlotMarker_>(m, "Marker")
-        .ENUM(ImPlotMarker, None)
-        .ENUM(ImPlotMarker, Circle)
-        .ENUM(ImPlotMarker, Square)
-        .ENUM(ImPlotMarker, Diamond)
-        .ENUM(ImPlotMarker, Up)
-        .ENUM(ImPlotMarker, Down)
-        .ENUM(ImPlotMarker, Left)
-        .ENUM(ImPlotMarker, Right)
-        .ENUM(ImPlotMarker, Cross)
-        .ENUM(ImPlotMarker, Plus)
-        .ENUM(ImPlotMarker, Asterisk);
+    ENUM(ImPlot, Marker)
+        .VALUE(ImPlot, Marker, None)
+        .VALUE(ImPlot, Marker, Circle)
+        .VALUE(ImPlot, Marker, Square)
+        .VALUE(ImPlot, Marker, Diamond)
+        .VALUE(ImPlot, Marker, Up)
+        .VALUE(ImPlot, Marker, Down)
+        .VALUE(ImPlot, Marker, Left)
+        .VALUE(ImPlot, Marker, Right)
+        .VALUE(ImPlot, Marker, Cross)
+        .VALUE(ImPlot, Marker, Plus)
+        .VALUE(ImPlot, Marker, Asterisk);
 
-    py::enum_<ImPlotColormap_>(m, "ColorMap")
-        .ENUM(ImPlotColormap, Deep)
-        .ENUM(ImPlotColormap, Dark)
-        .ENUM(ImPlotColormap, Pastel)
-        .ENUM(ImPlotColormap, Paired)
-        .ENUM(ImPlotColormap, Viridis)
-        .ENUM(ImPlotColormap, Plasma)
-        .ENUM(ImPlotColormap, Hot)
-        .ENUM(ImPlotColormap, Cool)
-        .ENUM(ImPlotColormap, Pink)
-        .ENUM(ImPlotColormap, Jet)
-        .ENUM(ImPlotColormap, Twilight)
-        .ENUM(ImPlotColormap, RdBu)
-        .ENUM(ImPlotColormap, BrBG)
-        .ENUM(ImPlotColormap, PiYG)
-        .ENUM(ImPlotColormap, Spectral)
-        .ENUM(ImPlotColormap, Greys);
+    RAW_ENUM(ImPlotColormap_, ColormapEnum)
+        .VALUE(ImPlot, Colormap, Deep)
+        .VALUE(ImPlot, Colormap, Dark)
+        .VALUE(ImPlot, Colormap, Pastel)
+        .VALUE(ImPlot, Colormap, Paired)
+        .VALUE(ImPlot, Colormap, Viridis)
+        .VALUE(ImPlot, Colormap, Plasma)
+        .VALUE(ImPlot, Colormap, Hot)
+        .VALUE(ImPlot, Colormap, Cool)
+        .VALUE(ImPlot, Colormap, Pink)
+        .VALUE(ImPlot, Colormap, Jet)
+        .VALUE(ImPlot, Colormap, Twilight)
+        .VALUE(ImPlot, Colormap, RdBu)
+        .VALUE(ImPlot, Colormap, BrBG)
+        .VALUE(ImPlot, Colormap, PiYG)
+        .VALUE(ImPlot, Colormap, Spectral)
+        .VALUE(ImPlot, Colormap, Greys);
 
-    py::enum_<ImPlotLocation_>(m, "Location")
-        .ENUM(ImPlotLocation, Center)
-        .ENUM(ImPlotLocation, North)
-        .ENUM(ImPlotLocation, South)
-        .ENUM(ImPlotLocation, West)
-        .ENUM(ImPlotLocation, East)
-        .ENUM(ImPlotLocation, NorthWest)
-        .ENUM(ImPlotLocation, NorthEast)
-        .ENUM(ImPlotLocation, SouthWest)
-        .ENUM(ImPlotLocation, SouthEast);
+    ENUM(ImPlot, Location)
+        .VALUE(ImPlot, Location, Center)
+        .VALUE(ImPlot, Location, North)
+        .VALUE(ImPlot, Location, South)
+        .VALUE(ImPlot, Location, West)
+        .VALUE(ImPlot, Location, East)
+        .VALUE(ImPlot, Location, NorthWest)
+        .VALUE(ImPlot, Location, NorthEast)
+        .VALUE(ImPlot, Location, SouthWest)
+        .VALUE(ImPlot, Location, SouthEast);
 
-    py::enum_<ImPlotBin_>(m, "Bin")
-        .ENUM(ImPlotBin, Sqrt)
-        .ENUM(ImPlotBin, Sturges)
-        .ENUM(ImPlotBin, Rice)
-        .ENUM(ImPlotBin, Scott);
+    ENUM(ImPlot, Bin)
+        .VALUE(ImPlot, Bin, Sqrt)
+        .VALUE(ImPlot, Bin, Sturges)
+        .VALUE(ImPlot, Bin, Rice)
+        .VALUE(ImPlot, Bin, Scott);
 }
