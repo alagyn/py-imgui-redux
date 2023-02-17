@@ -45,22 +45,8 @@ target_link_libraries(imgui-cpp
     shell32.lib
 )
 
-# --------------- imnodes -------------
-set(imnodes_SRCS
-    imnodes/imnodes.cpp
-)
-
-add_library(imnodes-cpp
-    STATIC
-    ${imnodes_SRCS}
-)
-
-target_include_directories(imnodes-cpp
+target_compile_definitions(imgui-cpp
     PUBLIC
-    imnodes
-)
-
-target_link_libraries(imnodes-cpp
-    PRIVATE
-    imgui-cpp
+    IMGUI_DISABLE_OBSOLETE_KEYIO
+    IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 )

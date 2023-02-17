@@ -22,13 +22,13 @@ void init_stacks(py::module& m)
         "PushStyleVar",
         py::overload_cast<ImGuiStyleVar, float>(ImGui::PushStyleVar),
         "idx"_a,
-        "val"_a
+        "val"_a.noconvert()
     );
     m.def(
         "PushStyleVar",
         py::overload_cast<ImGuiStyleVar, const ImVec2&>(ImGui::PushStyleVar),
         "idx"_a,
-        "val"_a
+        "val"_a.noconvert()
     );
     m.def(IMFUNC(PopStyleVar), "count"_a = 1);
     m.def(IMFUNC(PushAllowKeyboardFocus), "allow_keyboard_focus"_a);
