@@ -2,8 +2,6 @@
 
 #include <pybind11/functional.h>
 
-#include <iostream>
-
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -12,17 +10,20 @@ GLFWerrorfun asdf;
 
 void GLFWErrCallback(int err, const char* msg)
 {
-    std::cerr << "GLFW Error Code: " << err << ", Msg: " << msg << std::endl;
+    py::print("GLFW Error Code:", err, "Msg:", msg);
 }
 
 void* init_glfw(
-    int window_width, int window_height, const char* title, int swap_interval = 1
+    int window_width,
+    int window_height,
+    const char* title,
+    int swap_interval = 1
 )
 {
     glfwSetErrorCallback(GLFWErrCallback);
     if(!glfwInit())
     {
-        std::cerr << "Cannot initialize GLFW\n";
+        py::print("Cannot initialize GLFW");
         return nullptr;
     }
 
@@ -36,7 +37,7 @@ void* init_glfw(
 
     if(window == nullptr)
     {
-        std::cerr << "Cannot create GLFW window\n";
+        py::print("Cannot create GLFW window");
         return window;
     }
 
@@ -52,13 +53,13 @@ void initContextForGLFW(void* window)
     // Setup Platform/Renderer backends
     if(!ImGui_ImplGlfw_InitForOpenGL(gWindow, true))
     {
-        std::cout << "Cannot init GLFW for OpenGL\n";
+        py::print("Cannot init GLFW for OpenGL");
         exit(1);
     }
     const char* glsl_version = "#version 130";
     if(!ImGui_ImplOpenGL3_Init(glsl_version))
     {
-        std::cout << "Cannot init OpenGL\n";
+        py::print("Cannot init OpenGL");
         exit(1);
     }
 }
