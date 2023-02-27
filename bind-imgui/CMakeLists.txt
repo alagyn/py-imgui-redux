@@ -30,3 +30,10 @@ target_compile_definitions(${PROJECT_NAME}
     PRIVATE
     PYBIND11_DETAILED_ERROR_MESSAGES
 )
+
+install(
+    TARGETS
+    ${PROJECT_NAME}
+    LIBRARY
+    DESTINATION ${PROJECT_NAME}
+)

@@ -1,8 +1,15 @@
 #include <imgui-core/inc/imgui-modules.h>
+#include <pybind11/stl.h>
 
 void init_widgets_drags(py::module& m)
 {
     // Floats
+
+    /*
+    std::array seems to be broken in pybind, so using vectors
+    and manually cheking length instead
+    */
+
     m.def(
         "DragFloat",
         [](const char* label,
@@ -47,7 +54,7 @@ void init_widgets_drags(py::module& m)
             return py::make_tuple(out, values);
         },
         "label"_a,
-        "value"_a,
+        "value"_a.noconvert(),
         "v_speed"_a = 1.0f,
         "v_min"_a = 0.0f,
         "v_max"_a = 0.0f,
@@ -76,7 +83,7 @@ void init_widgets_drags(py::module& m)
             return py::make_tuple(out, values);
         },
         "label"_a,
-        "value"_a,
+        "value"_a.noconvert(),
         "v_speed"_a = 1.0f,
         "v_min"_a = 0.0f,
         "v_max"_a = 0.0f,
@@ -105,7 +112,7 @@ void init_widgets_drags(py::module& m)
             return py::make_tuple(out, values);
         },
         "label"_a,
-        "value"_a,
+        "value"_a.noconvert(),
         "v_speed"_a = 1.0f,
         "v_min"_a = 0.0f,
         "v_max"_a = 0.0f,
@@ -140,7 +147,7 @@ void init_widgets_drags(py::module& m)
         },
         "label"_a,
         "v_cur_min"_a,
-        "v_cur_min"_a,
+        "v_cur_max"_a,
         "v_speed"_a = 1.0f,
         "v_min"_a = 0.0f,
         "v_max"_a = 0.0f,
@@ -182,6 +189,10 @@ void init_widgets_drags(py::module& m)
            const char* format,
            const int flags)
         {
+            if(values.size() != 2)
+            {
+                throw py::value_error("len(values) != 2");
+            }
             bool out = ImGui::DragInt2(
                 label,
                 values.data(),
@@ -287,7 +298,7 @@ void init_widgets_drags(py::module& m)
         },
         "label"_a,
         "v_cur_min"_a,
-        "v_cur_min"_a,
+        "v_cur_max"_a,
         "v_speed"_a = 1.0f,
         "v_min"_a = 0,
         "v_max"_a = 0,

@@ -1,4 +1,5 @@
 #include <imgui-core/inc/imgui-modules.h>
+#include <pybind11/stl.h>
 
 void init_widgets_slide(py::module& m)
 {

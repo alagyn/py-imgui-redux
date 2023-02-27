@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Test.py",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test/test.py",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "every-widget",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test/every-widget.py",
+            "cwd": "${workspaceFolder}/test",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

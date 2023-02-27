@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "py-imgui-redux"
+version = "0.1.0"
+authors = [
+    {name="Alagyn"}
+]
+description = "A python wrapper for DearImGUI and popular extensions"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: User Interfaces"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/alagyn/PyImGui-Redux"
+"Bug Tracker" = "https://github.com/alagyn/PyImGui-Redux/issues"

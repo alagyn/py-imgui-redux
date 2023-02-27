@@ -1,4 +1,5 @@
 #include <imgui-core/inc/imgui-modules.h>
+#include <pybind11/stl.h>
 
 void init_widgets_colors(py::module& m)
 {
@@ -52,8 +53,8 @@ void init_widgets_colors(py::module& m)
             }
             else
             {
-                auto x = refColor.cast<std::array<float, 4>*>();
-                out = ImGui::ColorPicker4(label, col.data(), flags, x->data());
+                auto x = refColor.cast<std::array<float, 4>>();
+                out = ImGui::ColorPicker4(label, col.data(), flags, x.data());
             }
 
             return py::make_tuple(out, col);
@@ -74,8 +75,8 @@ void init_widgets_colors(py::module& m)
     m.def(IMFUNC(SetColorEditOptions), "flags"_a);
 
     // Color Utilities
-    m.def(IMFUNC(ColorConvertU32ToFloat4), "in"_a);
-    m.def(IMFUNC(ColorConvertFloat4ToU32), "in"_a);
+    m.def(IMFUNC(ColorConvertU32ToFloat4), "inColor"_a);
+    m.def(IMFUNC(ColorConvertFloat4ToU32), "inColor"_a);
     m.def(
         "ColorConvertRGBtoHSV",
         [](float r, float g, float b)
