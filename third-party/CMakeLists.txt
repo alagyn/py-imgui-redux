@@ -42,6 +42,10 @@ target_link_libraries(imgui-cpp
     glfw
 )
 
+set_target_properties(imgui-cpp
+    PROPERTIES POSITION_INDEPENDENT_CODE ON
+)
+
 if(${MSVC})
     target_link_libraries(imgui-cpp
         PRIVATE
@@ -50,9 +54,6 @@ if(${MSVC})
         shell32.lib
     )
 else()
-    target_compile_options(imgui-cpp
-        PUBLIC -fPIC
-    )
 endif()
 
 target_compile_definitions(imgui-cpp
