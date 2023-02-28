@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.25.2)
 
 project(imgui)
 
-find_package(Python3 3.11
-    REQUIRED
+find_package(Python3
     COMPONENTS
     Interpreter Development
 )
