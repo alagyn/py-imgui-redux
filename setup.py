@@ -31,6 +31,11 @@ if "CMAKE_ARGS" in os.environ:
     cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
 
+subprocess.run(
+    ["cmake", "-S", ".", "-B", "build", *cmake_args], check=True
+)
+
+
 class CMakeExtension(Extension):
     def __init__(self, name: str, target: str) -> None:
         super().__init__(name, sources=[])
@@ -53,9 +58,6 @@ class CMakeBuild(build_ext):
         build_args += ["--target", ext.target]
 
         subprocess.run(
-            ["cmake", "-S", ".", "-B", "build", *cmake_args], check=True
-        )
-        subprocess.run(
             ["cmake", "--build", "build", "--config=Release", *build_args], check=True
         )
 
@@ -65,6 +67,5 @@ class CMakeBuild(build_ext):
 setup(
     ext_modules=[CMakeExtension("pyimgui-redux", "imgui")],
     cmdclass={"build_ext": CMakeBuild},
-    zip_safe=False,
-    python_requires=">=3.7",
+    zip_safe=False
 )

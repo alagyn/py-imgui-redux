@@ -48,4 +48,25 @@ PYBIND11_MODULE(bdd, m)
                 return 25;
             }
         );
+
+    m.def(
+        "arrint",
+        [](std::array<int, 3> vals)
+        {
+            py::print(vals[0], vals[1], vals[2]);
+            vals[0] = 16;
+            return vals;
+        },
+        "arr"_a
+    );
+    m.def(
+        "arrflt",
+        [](std::array<float, 3> vals)
+        {
+            py::print(vals[0], vals[1], vals[2]);
+            vals[0] = 16.5;
+            return vals;
+        },
+        "arr"_a
+    );
 }

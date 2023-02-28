@@ -16,5 +16,5 @@ esac
 cmake -S $HOME -B ${HOME}/build
 cmake --build ${HOME}/build --config Release ${EXTRA_ARGS}
 
-${PY_EXEC} setup.py bdist_wheel
+${PY_EXEC} -m build --wheel
 

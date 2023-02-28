@@ -1,5 +1,5 @@
 import sys
-sys.path.append("../build/bind-imgui/Release")
+# sys.path.append("../build/bind-imgui/Release")
 
 import time
 
@@ -16,115 +16,190 @@ class State:
         self.comboVal = "Select Me"
         self.listboxVal = [False, False]
 
+        self.fltVal1 = 0.0
+        self.fltVal2 = 0.0
+        self.fltVal3 = 0.0
+        self.fltVal4 = 0.0
+
+        self.intVal1 = 0
+        self.intVal2 = 0
+        self.intVal3 = 0
+        self.intVal4 = 0
+
 
 def normWidgets(state: State):
-    if imgui.Button("B1"):
-        print("B1")
-    imgui.Text("This is ")
-    imgui.SameLine()
-    if imgui.SmallButton("a small button"):
-        print("Small button")
-    imgui.Text("Invisible btn ->")
-    imgui.SameLine()
-    if imgui.InvisibleButton("invis_btn", imgui.Vec2(50, 20)):
-        print("Invis Btn")
-    if imgui.ArrowButton("arrw_btn", 0):
-        print("Arrow Btn")
+    if imgui.BeginTable("tab1", 3):
+        imgui.TableNextRow()
+        imgui.TableNextColumn()
+        if imgui.Button("B1"):
+            print("B1")
+        imgui.Text("This is ")
+        imgui.SameLine()
+        if imgui.SmallButton("a small button"):
+            print("Small button")
+        imgui.Text("Invisible btn ->")
+        imgui.SameLine()
+        if imgui.InvisibleButton("invis_btn", imgui.Vec2(50, 20)):
+            print("Invis Btn")
+        if imgui.ArrowButton("arrw_btn", 0):
+            print("Arrow Btn")
 
-    pressed, state.cb1 = imgui.CheckBox("Checkbox", state.cb1)
-    if pressed:
-        print("Checkbox")
-    # TODO checkbox flags
-    if imgui.Button("Reset Radio"):
-        state.radio = -1
-    if imgui.RadioButton("Radio0", state.radio == 0):
-        state.radio = 0
-    if imgui.RadioButton("Radio1", state.radio == 1):
-        state.radio = 1
+        pressed, state.cb1 = imgui.CheckBox("Checkbox", state.cb1)
+        if pressed:
+            print("Checkbox")
+        # TODO checkbox flags
+        if imgui.Button("Reset Radio"):
+            state.radio = -1
+        if imgui.RadioButton("Radio0", state.radio == 0):
+            state.radio = 0
+        if imgui.RadioButton("Radio1", state.radio == 1):
+            state.radio = 1
 
-    imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
-    if time.perf_counter() - state.progressTime > 0.5:
-        state.progress += 0.1
-        if state.progress > 1:
-            state.progress = 0
-        state.progressTime = time.perf_counter()
+        imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
+        if time.perf_counter() - state.progressTime > 0.5:
+            state.progress += 0.1
+            if state.progress > 1:
+                state.progress = 0
+            state.progressTime = time.perf_counter()
 
-    if imgui.BeginCombo("Combo", state.comboVal):
-        if imgui.Selectable("Select1"):
-            state.comboVal = "Select1"
-        elif imgui.Selectable("Select2"):
-            state.comboVal = "Select2"
-        imgui.EndCombo()
+        if imgui.BeginCombo("Combo", state.comboVal):
+            if imgui.Selectable("Select1"):
+                state.comboVal = "Select1"
+            elif imgui.Selectable("Select2"):
+                state.comboVal = "Select2"
+            imgui.EndCombo()
 
-    if imgui.BeginListBox("Listbox"):
-        for idx, val in enumerate(state.listboxVal):
-            if imgui.Selectable(f"Listbox{idx}", selected=val):
-                state.listboxVal[idx] = not val
-        imgui.EndListBox()
+        if imgui.BeginListBox("Listbox"):
+            for idx, val in enumerate(state.listboxVal):
+                if imgui.Selectable(f"Listbox{idx}", selected=val):
+                    state.listboxVal[idx] = not val
+            imgui.EndListBox()
 
-    if imgui.BeginMainMenuBar():
-        if imgui.MenuItem("Item1"):
-            print("Menu1")
-        elif imgui.MenuItem("Item2"):
-            print("Menu2")
-        elif imgui.BeginMenu("Menu1"):
-            if imgui.MenuItem("SubMenu1"):
-                print("SubMenu1")
-            elif imgui.MenuItem("SubMenu2"):
-                print("SubMenu2")
+        if imgui.BeginMainMenuBar():
+            if imgui.MenuItem("Item1"):
+                print("Menu1")
+            elif imgui.MenuItem("Item2"):
+                print("Menu2")
+            elif imgui.BeginMenu("Menu1"):
+                if imgui.MenuItem("SubMenu1"):
+                    print("SubMenu1")
+                elif imgui.MenuItem("SubMenu2"):
+                    print("SubMenu2")
+                imgui.EndMenu()
+            imgui.EndMainMenuBar()
+
+        if imgui.BeginMenu("Window Menu"):
+            if imgui.MenuItem("WindowMenu1"):
+                print("WindowItem1")
+            if imgui.MenuItem("WindowMenu2"):
+                print("WindowItem2")
             imgui.EndMenu()
-        imgui.EndMainMenuBar()
 
-    if imgui.BeginMenu("Window Menu"):
-        if imgui.MenuItem("WindowMenu1"):
-            print("WindowItem1")
-        if imgui.MenuItem("WindowMenu2"):
-            print("WindowItem2")
-        imgui.EndMenu()
-
-    imgui.Text("Tooltip")
-    if imgui.IsItemHovered():
-        imgui.BeginTooltip()
-        imgui.Text("This is a tooltip")
-        imgui.EndTooltip()
-
-    if imgui.BeginPopup("popup"):
-        if imgui.Selectable("Beep"):
-            print("Sheep")
-        imgui.EndPopup()
-
-    if imgui.Button("Popup"):
-        imgui.OpenPopup("popup")
-
-    visible, op = imgui.BeginPopupModal("nc-modal")
-    if visible:
-        imgui.Selectable("ASDFASDF")
-        imgui.EndPopup()
-
-    visible, op = imgui.BeginPopupModal("c-modal", True)
-    if visible:
-        imgui.Selectable("ASDFASDF")
-        imgui.Dummy(imgui.Vec2(10, 20))
-        imgui.Text("Hover to close")
+        imgui.Text("Tooltip")
         if imgui.IsItemHovered():
-            imgui.CloseCurrentPopup()
-        imgui.EndPopup()
+            imgui.BeginTooltip()
+            imgui.Text("This is a tooltip")
+            imgui.EndTooltip()
 
-    if imgui.Button("Non-Closable Modal"):
-        imgui.OpenPopup("nc-modal")
+        if imgui.BeginPopup("popup"):
+            if imgui.Selectable("Beep"):
+                print("Sheep")
+            imgui.EndPopup()
 
-    if imgui.Button("Closable Modal"):
-        imgui.OpenPopup("c-modal")
+        if imgui.Button("Popup"):
+            imgui.OpenPopup("popup")
 
-    imgui.Text("right click me")
-    if imgui.BeginPopupContextItem("ctx-item"):
-        imgui.Selectable("asdf")
-        imgui.Selectable("potato")
-        imgui.Selectable("whatever")
-        imgui.EndPopup()
+        visible, op = imgui.BeginPopupModal("nc-modal")
+        if visible:
+            imgui.Selectable("ASDFASDF")
+            imgui.EndPopup()
 
-    if imgui.IsPopupOpen("ctx-item"):
-        print("Open")
+        visible, op = imgui.BeginPopupModal("c-modal", True)
+        if visible:
+            imgui.Selectable("ASDFASDF")
+            imgui.Dummy(imgui.Vec2(10, 20))
+            imgui.Text("Hover to close")
+            if imgui.IsItemHovered():
+                imgui.CloseCurrentPopup()
+            imgui.EndPopup()
+
+        if imgui.Button("Non-Closable Modal"):
+            imgui.OpenPopup("nc-modal")
+
+        if imgui.Button("Closable Modal"):
+            imgui.OpenPopup("c-modal")
+
+        imgui.Text("right click me")
+        if imgui.BeginPopupContextItem("ctx-item"):
+            imgui.Selectable("asdf")
+            imgui.Selectable("potato")
+            imgui.Selectable("whatever")
+            imgui.EndPopup()
+
+        if imgui.IsPopupOpen("ctx-item"):
+            print("Open")
+
+        imgui.TableNextColumn()
+
+        # int drags
+        _, state.intVal1 = imgui.DragInt("int 1", state.intVal1)
+
+        x = (state.intVal1, state.intVal2)
+        edit, x = imgui.DragInt2("int 2", x)
+        if edit:
+            state.intVal1 = x[0]
+            state.intVal2 = x[1]
+
+        x = (state.intVal1, state.intVal2, state.intVal3)
+        edit, x = imgui.DragInt3("int 3", x)
+        if edit:
+            state.intVal1 = x[0]
+            state.intVal2 = x[1]
+            state.intVal3 = x[2]
+
+        x = (state.intVal1, state.intVal2, state.intVal3, state.intVal4)
+        edit, x = imgui.DragInt4("int 4", x)
+        if edit:
+            state.intVal1 = x[0]
+            state.intVal2 = x[1]
+            state.intVal3 = x[2]
+            state.intVal4 = x[3]
+
+        _, state.intVal1, state.intVal2 = imgui.DragIntRange2(
+            "int range 2",
+            state.intVal1, state.intVal2
+        )
+
+        imgui.Dummy(imgui.Vec2(10, 30))
+
+        # float drags
+        _, state.fltVal1 = imgui.DragFloat("flt 1", state.fltVal1)
+
+        edit, x = imgui.DragFloat2("flt 2", (state.fltVal1, state.fltVal2))
+        if edit:
+            state.fltVal1 = x[0]
+            state.fltVal2 = x[1]
+
+        edit, x = imgui.DragFloat3(
+            "flt 3", (state.fltVal1, state.fltVal2, state.fltVal3))
+        if edit:
+            state.fltVal1 = x[0]
+            state.fltVal2 = x[1]
+            state.fltVal3 = x[2]
+
+        edit, x = imgui.DragFloat4(
+            "flt 4", (state.fltVal1, state.fltVal2, state.fltVal3, state.fltVal4))
+        if edit:
+            state.fltVal1 = x[0]
+            state.fltVal2 = x[1]
+            state.fltVal3 = x[2]
+            state.fltVal4 = x[3]
+
+        _, state.fltVal1, state.fltVal2 = imgui.DragFloatRange2(
+            "flt range 2", state.fltVal1, state.fltVal2
+        )
+
+        imgui.EndTable()
 
 
 def tables():
