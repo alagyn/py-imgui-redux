@@ -49,6 +49,10 @@ if(${MSVC})
         gdi32.lib
         shell32.lib
     )
+else()
+    target_compile_options(imgui-cpp
+        PUBLIC -fPIC
+    )
 endif()
 
 target_compile_definitions(imgui-cpp
