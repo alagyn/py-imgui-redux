@@ -4,9 +4,9 @@
 // clang-format off
 
 // Shorthand for making simple funcs
-#define IMFUNC(fn) #fn, ImPlot::##fn
+#define IMFUNC(fn) #fn, ImPlot::fn
 
-#define QUICK(fn) m.def(#fn, ImPlot::##fn, py::return_value_policy::automatic_reference)
+#define QUICK(fn) m.def(#fn, ImPlot::fn, py::return_value_policy::automatic_reference)
 // clang-format on
 
 MODULE(implot_context);

@@ -4,10 +4,10 @@
 
 // clang-format off
 // Quick bind for a function with no args or special needs
-#define QUICK(x) m.def(#x, ImGui::##x, py::return_value_policy::automatic_reference)
+#define QUICK(x) m.def(#x, ImGui::x, py::return_value_policy::automatic_reference)
 
 // Saves typing when making typical standard defs
-#define IMFUNC(x) #x, ImGui::##x
+#define IMFUNC(x) #x, ImGui::x
 // clang-format on
 
 MODULE(imgui_context);
