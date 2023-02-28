@@ -30,6 +30,11 @@ target_compile_definitions(${PROJECT_NAME}
     PYBIND11_DETAILED_ERROR_MESSAGES
 )
 
+target_compile_options(${PROJECT_NAME}
+    PRIVATE
+    -Wno-format-security
+)
+
 install(
     TARGETS
     ${PROJECT_NAME}
