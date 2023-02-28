@@ -40,10 +40,16 @@ target_include_directories(imgui-cpp
 target_link_libraries(imgui-cpp
     PRIVATE
     glfw
-    opengl32.lib
-    gdi32.lib
-    shell32.lib
 )
+
+if(${MSVC})
+    target_link_libraries(imgui-cpp
+        PRIVATE
+        opengl32.lib
+        gdi32.lib
+        shell32.lib
+    )
+endif()
 
 target_compile_definitions(imgui-cpp
     PUBLIC
