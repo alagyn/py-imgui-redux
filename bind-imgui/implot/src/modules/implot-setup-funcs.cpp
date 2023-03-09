@@ -120,4 +120,5 @@ void init_setup_funcs(py::module& m)
         "y_max"_a,
         "cond"_a = ImPlotCond_Once
     );
+    QUICK(SetNextAxesToFit);
 }

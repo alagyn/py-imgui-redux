@@ -35,6 +35,7 @@ target_include_directories(imgui-cpp
     imgui
     imnodes
     implot
+    imconfig
 )
 
 target_link_libraries(imgui-cpp
@@ -46,6 +47,11 @@ set_target_properties(imgui-cpp
     PROPERTIES POSITION_INDEPENDENT_CODE ON
 )
 
+target_compile_definitions(imgui-cpp
+    PUBLIC
+    IMGUI_USER_CONFIG=<bind-imconfig.h>
+)
+
 if(${MSVC})
     target_link_libraries(imgui-cpp
         PRIVATE
@@ -54,6 +60,11 @@ if(${MSVC})
         shell32.lib
     )
 else()
+    find_package(OpenGL REQUIRED)
+    target_link_libraries(imgui-cpp
+        PRIVATE
+        ${OPENGL_LIBRARIES}
+    )
 endif()
 
 target_compile_definitions(imgui-cpp

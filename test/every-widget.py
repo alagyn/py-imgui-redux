@@ -1,11 +1,13 @@
 import sys
-# sys.path.append("../build/bind-imgui/Release")
-
+sys.path.append("../build/bind-imgui/Release")
+sys.path.append("../build/bind-imgui")
 import time
+import numpy as np
+import random
 
 import imgui  # type: ignore
 import imgui.glfw as glfw  # type: ignore
-
+import imgui.implot as implot # type: ignore
 
 class State:
     def __init__(self) -> None:
@@ -25,6 +27,18 @@ class State:
         self.intVal2 = 0
         self.intVal3 = 0
         self.intVal4 = 0
+
+        self.plotMode = 0
+
+        self.plotSize = 1000
+        self.plotMin = 0
+        self.plotMax = 10
+        self.plotX = np.arange(self.plotSize, dtype=np.float64)
+        self.plotY = np.array(np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64)
+        self.plotIdx = 0
+
+        self.lastUpate = time.perf_counter()
+        self.updatePeriod = 0.5
 
 
 def normWidgets(state: State):
@@ -202,6 +216,7 @@ def normWidgets(state: State):
         imgui.EndTable()
 
 
+
 def tables():
     COLS = 3
     ROWS = 10
@@ -222,6 +237,31 @@ def tables():
         imgui.EndTable()
 
 
+def plot(state: State):
+    if imgui.RadioButton("Scatter", state.plotMode == 0):
+        state.plotMode = 0
+        implot.SetNextAxesToFit()
+    if imgui.RadioButton("Heatmap", state.plotMode == 1):
+        state.plotMode = 1
+        implot.SetNextAxesToFit()
+
+    implot.BeginPlot("data", imgui.Vec2(500, 500))
+    if state.plotMode == 0:
+        if time.perf_counter() - state.lastUpate > state.updatePeriod:
+            state.plotY[state.plotIdx] = random.triangular(state.plotMin , state.plotMax)
+            state.plotIdx = (state.plotIdx + 1 ) % state.plotSize
+            state.lastUpate = time.perf_counter()
+        implot.PlotScatter("DATA", state.plotX, state.plotY)
+    elif state.plotMode == 1:
+        size = 10
+        if time.perf_counter() - state.lastUpate > state.updatePeriod:
+            state.plotY[state.plotIdx] += random.triangular(-1, 1)
+            state.plotIdx = (state.plotIdx + 1) % (size * size)
+            state.lastUpate = time.perf_counter()
+        implot.PlotHeatmap("DATA", state.plotY, size, size, state.plotMin, state.plotMax)
+    implot.EndPlot()
+
+
 def showAll(state: State):
     if imgui.Begin("Widgets", False)[0]:
         normWidgets(state)
@@ -229,6 +269,10 @@ def showAll(state: State):
 
     if imgui.Begin("Tables", False)[0]:
         tables()
+        imgui.End()
+
+    if imgui.Begin("Plot", False)[0]:
+        plot(state)
         imgui.End()
 
 
@@ -242,6 +286,8 @@ def main():
 
     print("Create ImGUI Context")
     imgui.CreateContext()
+    print("Create ImPlot Context")
+    implot.CreateContext()
     print("Init Context for GLFW")
     glfw.InitContextForGLFW(window)
     print("Set Style Colors")
@@ -268,6 +314,11 @@ def main():
         # print("Check Close")
         if glfw.ShouldClose(window):
             break
+
+    print("Destroying ImPlot Context")
+    implot.DestroyContext()
+    print("Destroying ImGui Context")
+    imgui.DestroyContext()
 
     print("Shutting down")
     glfw.Shutdown(window)

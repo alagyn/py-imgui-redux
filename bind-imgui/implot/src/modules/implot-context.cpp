@@ -12,7 +12,19 @@ void init_implot_context(py::module& m)
         }
     );
     m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
+
     QUICK(GetCurrentContext);
     m.def(IMFUNC(SetCurrentContext), "ctx"_a);
     m.def(IMFUNC(SetImGuiContext), "ctx"_a);
+
+    m.def(
+        "BeginPlot",
+        py::overload_cast<const char*, const ImVec2&, ImPlotFlags>(
+            ImPlot::BeginPlot
+        ),
+        "title_id"_a,
+        "size"_a = ImVec2(-1, 0),
+        "flags"_a = 0
+    );
+    QUICK(EndPlot);
 }

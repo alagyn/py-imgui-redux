@@ -546,9 +546,9 @@ void init_plotting(py::module& m)
            const ImPlotPoint& bounds_max,
            int flags)
         {
-            if(values.size() != rows * cols)
+            if(values.size() < rows * cols)
             {
-                throw py::value_error("len(values) != rows * cols");
+                throw py::value_error("len(values) > rows * cols");
             }
 
             ImPlot::PlotHeatmap(
