@@ -18,7 +18,17 @@ void init_imgui_context(py::module& m)
             ImGui::CreateContext();
         }
     );
+
+    /* TODO def arg doesn't work shrug
     m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
+    */
+    m.def(
+        "DestroyContext",
+        []()
+        {
+            ImGui::DestroyContext();
+        }
+    );
     QUICK(GetCurrentContext);
     m.def(IMFUNC(SetCurrentContext), "ctx"_a);
 

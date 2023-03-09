@@ -104,7 +104,7 @@ class CMakeBuild(build_ext):
             # using -j in the build_ext call, not supported by pip or PyPA-build.
             if hasattr(self, "parallel") and self.parallel:
                 # CMake 3.12+ only.
-                build_args += [f"-j{self.parallel}"]
+                build_args += [f"-j8"]
 
         build_temp = Path(self.build_temp)
         if not build_temp.exists():
