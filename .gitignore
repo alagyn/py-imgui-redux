@@ -3,6 +3,9 @@ dist
 *.egg-info/
 venv
 
+*.pyi
+*.pyd
+
 *.ini
 
 # Prerequisites
