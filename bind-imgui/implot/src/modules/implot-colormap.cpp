@@ -54,7 +54,7 @@ void init_colormaps(py::module& m)
         "label"_a,
         "scale_min"_a,
         "scale_max"_a,
-        "size"_a = ImVec2(0, 0),
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "format"_a = "%g",
         "flags"_a = 0,
         "cmap"_a = IMPLOT_AUTO
@@ -75,7 +75,7 @@ void init_colormaps(py::module& m)
     m.def(
         IMFUNC(ColormapButton),
         "label"_a,
-        "size"_a = ImVec2(0, 0),
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "cmap"_a = IMPLOT_AUTO
     );
 

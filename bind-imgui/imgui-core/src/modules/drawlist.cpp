@@ -190,8 +190,8 @@ void init_drawlist(py::module& m)
             "user_texture_id"_a,
             "p_min"_a,
             "p_max"_a,
-            "uv_min"_a = ImVec2(0, 0),
-            "uv_max"_a = ImVec2(1, 1),
+            py::arg_v("uv_min", ImVec2(0, 0), "Vec2(0, 0)"),
+            py::arg_v("uv_max", ImVec2(1, 1), "Vec2(1, 1)"),
             "col"_a = IM_COL32_WHITE
         )
         .def(
@@ -201,10 +201,10 @@ void init_drawlist(py::module& m)
             "p2"_a,
             "p3"_a,
             "p4"_a,
-            "uv1"_a = ImVec2(0, 0),
-            "uv2"_a = ImVec2(1, 0),
-            "uv3"_a = ImVec2(1, 1),
-            "uv4"_a = ImVec2(0, 1),
+            py::arg_v("uv_1", ImVec2(0, 0), "Vec2(0, 0)"),
+            py::arg_v("uv_2", ImVec2(1, 0), "Vec2(1, 0)"),
+            py::arg_v("uv_3", ImVec2(1, 1), "Vec2(0, 1)"),
+            py::arg_v("uv_4", ImVec2(0, 1), "Vec2(1, 1)"),
             "col"_a = IM_COL32_WHITE
         )
         .def(

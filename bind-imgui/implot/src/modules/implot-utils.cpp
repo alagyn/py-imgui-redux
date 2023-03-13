@@ -1,5 +1,8 @@
 #include <implot/inc/implot-modules.h>
 
+#define STR(x) #x
+#define AUTO_COL_STR STR(IMPLOT_AUTO_COL)
+
 void init_utils(py::module& m)
 {
     m.def(IMFUNC(SetAxis), "axis"_a);
@@ -65,7 +68,11 @@ void init_utils(py::module& m)
     );
     QUICK(CancelPlotSelection);
 
-    m.def(IMFUNC(HideNextItem), "hidden"_a = true, "cond"_a = ImPlotCond_Once);
+    m.def(
+        IMFUNC(HideNextItem),
+        "hidden"_a = true,
+        "cond"_a = (int)ImPlotCond_Once
+    );
     m.def(IMFUNC(BeginAlignedPlots), "group_id"_a, "vertical"_a = true);
 
     // Legend utils
@@ -127,13 +134,13 @@ void init_utils(py::module& m)
 
     m.def(
         IMFUNC(SetNextLineStyle),
-        "col"_a = IMPLOT_AUTO_COL,
+        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
         "weight"_a = IMPLOT_AUTO
     );
 
     m.def(
         IMFUNC(SetNextFillStyle),
-        "col"_a = IMPLOT_AUTO_COL,
+        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
         "alpha_mod"_a = IMPLOT_AUTO
     );
 
@@ -141,14 +148,14 @@ void init_utils(py::module& m)
         IMFUNC(SetNextMarkerStyle),
         "marker"_a = IMPLOT_AUTO,
         "size"_a = IMPLOT_AUTO,
-        "fill"_a = IMPLOT_AUTO_COL,
+        py::arg_v("fill", IMPLOT_AUTO_COL, AUTO_COL_STR),
         "weight"_a = IMPLOT_AUTO,
-        "outline"_a = IMPLOT_AUTO_COL
+        py::arg_v("outline", IMPLOT_AUTO_COL, AUTO_COL_STR)
     );
 
     m.def(
         IMFUNC(SetNextErrorBarStyle),
-        "col"_a = IMPLOT_AUTO_COL,
+        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
         "size"_a = IMPLOT_AUTO,
         "weight"_a = IMPLOT_AUTO
     );

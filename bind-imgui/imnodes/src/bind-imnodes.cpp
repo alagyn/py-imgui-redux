@@ -7,4 +7,6 @@ void init_imnodes(py::module& m)
     init_imnodes_enums(m);
     // Structs
     init_imnodes_structs(m);
+    //Context and all other functions
+    init_imnodes_context(m);
 }

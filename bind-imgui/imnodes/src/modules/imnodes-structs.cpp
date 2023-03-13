@@ -21,4 +21,6 @@ void init_imnodes_structs(py::module& m)
         .RW(ImNodesStyle, MiniMapOffset)
         .RW(ImNodesStyle, Flags)
         .def(py::init<>());
+
+    // TODO ImNodesIO
 }

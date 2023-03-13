@@ -4,17 +4,42 @@ HOME=`dirname $0`
 
 case `uname -s` in
     MINGW*)
-        PY_EXEC=${HOME}/venv/Scripts/python 
-        EXTRA_ARGS="-- /m"
+        PY_EXEC=${HOME}/venv/Scripts/python
         ;;
     *) 
         PY_EXEC=${HOME}/venv/bin/python 
-        EXTRA_ARGS="-- -j4"
         ;;
 esac
 
-cmake -S $HOME -B ${HOME}/build
-cmake --build ${HOME}/build --config Release ${EXTRA_ARGS}
+upload()
+{
+    ${PY_EXEC} -m twine upload -r imgui dist/*.whl
+    exit $?
+}
 
-${PY_EXEC} -m build --wheel
+build()
+{
+    ${PY_EXEC} -m build --wheel
+    ret=$?
+    if [ $ret != 0 ]
+    then
+        exit $ret
+    fi
+    # No exit so we can do a build and upload
+}
+
+while getopts "ub" arg
+do
+    case $arg in
+        u) 
+            upload
+            ;;
+        b)
+            build
+            ;;
+    esac
+done
+
+# Default
+build
 

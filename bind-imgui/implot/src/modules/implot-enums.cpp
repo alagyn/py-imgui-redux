@@ -12,7 +12,7 @@ void init_implot_enums(py::module& m)
         .VALUE(Im, Axis, Y3);
 
     ENUM(Im, PlotFlags)
-        .VALUE(Im, PlotFlags, None)
+        .value("None_", 0)
         .VALUE(Im, PlotFlags, NoTitle)
         .VALUE(Im, PlotFlags, NoLegend)
         .VALUE(Im, PlotFlags, NoMouseText)
@@ -26,7 +26,7 @@ void init_implot_enums(py::module& m)
         .VALUE(Im, PlotFlags, CanvasOnly);
 
     ENUM(ImPlot, AxisFlags)
-        .VALUE(ImPlot, AxisFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, AxisFlags, NoLabel)
         .VALUE(ImPlot, AxisFlags, NoGridLines)
         .VALUE(ImPlot, AxisFlags, NoTickMarks)
@@ -48,7 +48,7 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, AxisFlags, AuxDefault);
 
     ENUM(ImPlot, SubplotFlags)
-        .VALUE(ImPlot, SubplotFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, SubplotFlags, NoTitle)
         .VALUE(ImPlot, SubplotFlags, NoLegend)
         .VALUE(ImPlot, SubplotFlags, NoMenus)
@@ -62,7 +62,7 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, SubplotFlags, ColMajor);
 
     ENUM(ImPlot, LegendFlags)
-        .VALUE(ImPlot, LegendFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, LegendFlags, NoButtons)
         .VALUE(ImPlot, LegendFlags, NoHighlightItem)
         .VALUE(ImPlot, LegendFlags, NoHighlightAxis)
@@ -72,25 +72,25 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, LegendFlags, Sort);
 
     ENUM(ImPlot, MouseTextFlags)
-        .VALUE(ImPlot, MouseTextFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, MouseTextFlags, NoAuxAxes)
         .VALUE(ImPlot, MouseTextFlags, NoFormat)
         .VALUE(ImPlot, MouseTextFlags, ShowAlways);
 
     ENUM(ImPlot, DragToolFlags)
-        .VALUE(ImPlot, DragToolFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, DragToolFlags, NoCursors)
         .VALUE(ImPlot, DragToolFlags, NoFit)
         .VALUE(ImPlot, DragToolFlags, NoInputs)
         .VALUE(ImPlot, DragToolFlags, Delayed);
 
     ENUM(ImPlot, ItemFlags)
-        .VALUE(ImPlot, ItemFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, ItemFlags, NoLegend)
         .VALUE(ImPlot, ItemFlags, NoFit);
 
     ENUM(ImPlot, LineFlags)
-        .VALUE(ImPlot, LineFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, LineFlags, Segments)
         .VALUE(ImPlot, LineFlags, Loop)
         .VALUE(ImPlot, LineFlags, SkipNaN)
@@ -98,65 +98,61 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, LineFlags, Shaded);
 
     ENUM(ImPlot, ScatterFlags)
-        .VALUE(ImPlot, ScatterFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, ScatterFlags, NoClip);
 
     ENUM(ImPlot, StairsFlags)
-        .VALUE(ImPlot, StairsFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, StairsFlags, PreStep)
         .VALUE(ImPlot, StairsFlags, Shaded);
 
-    ENUM(ImPlot, ShadedFlags).VALUE(ImPlot, ShadedFlags, None);
+    ENUM(ImPlot, ShadedFlags).value("None_", 0);
 
-    ENUM(ImPlot, BarsFlags)
-        .VALUE(ImPlot, BarsFlags, None)
-        .VALUE(ImPlot, BarsFlags, Horizontal);
+    ENUM(ImPlot, BarsFlags).value("None_", 0).VALUE(ImPlot, BarsFlags, Horizontal);
 
     ENUM(ImPlot, BarGroupsFlags)
-        .VALUE(ImPlot, BarGroupsFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, BarGroupsFlags, Horizontal)
         .VALUE(ImPlot, BarGroupsFlags, Stacked);
 
     ENUM(ImPlot, ErrorBarsFlags)
-        .VALUE(ImPlot, ErrorBarsFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, ErrorBarsFlags, Horizontal);
 
     ENUM(ImPlot, StemsFlags)
-        .VALUE(ImPlot, StemsFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, StemsFlags, Horizontal);
 
     ENUM(ImPlot, InfLinesFlags)
-        .VALUE(ImPlot, InfLinesFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, InfLinesFlags, Horizontal);
 
     ENUM(ImPlot, PieChartFlags)
-        .VALUE(ImPlot, PieChartFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, PieChartFlags, Normalize);
 
     ENUM(ImPlot, HeatmapFlags)
-        .VALUE(ImPlot, HeatmapFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, HeatmapFlags, ColMajor);
 
     ENUM(ImPlot, HistogramFlags)
-        .VALUE(ImPlot, HistogramFlags, None)
+        .value("None_", 0)
         .VALUE(ImPlot, HistogramFlags, Horizontal)
         .VALUE(ImPlot, HistogramFlags, Cumulative)
         .VALUE(ImPlot, HistogramFlags, Density)
         .VALUE(ImPlot, HistogramFlags, NoOutliers)
         .VALUE(ImPlot, HistogramFlags, ColMajor);
 
-    ENUM(ImPlot, DigitalFlags).VALUE(ImPlot, DigitalFlags, None);
+    ENUM(ImPlot, DigitalFlags).value("None_", 0);
 
-    ENUM(ImPlot, ImageFlags).VALUE(ImPlot, ImageFlags, None);
+    ENUM(ImPlot, ImageFlags).value("None_", 0);
 
-    ENUM(ImPlot, TextFlags)
-        .VALUE(ImPlot, TextFlags, None)
-        .VALUE(ImPlot, TextFlags, Vertical);
+    ENUM(ImPlot, TextFlags).value("None_", 0).VALUE(ImPlot, TextFlags, Vertical);
 
-    ENUM(ImPlot, DummyFlags).VALUE(ImPlot, DummyFlags, None);
+    ENUM(ImPlot, DummyFlags).value("None_", 0);
 
     ENUM(ImPlot, Cond)
-        .VALUE(ImPlot, Cond, None)
+        .value("None_", 0)
         .VALUE(ImPlot, Cond, Always)
         .VALUE(ImPlot, Cond, Once);
 
@@ -219,7 +215,7 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, Scale, SymLog);
 
     ENUM(ImPlot, Marker)
-        .VALUE(ImPlot, Marker, None)
+        .value("None_", 0)
         .VALUE(ImPlot, Marker, Circle)
         .VALUE(ImPlot, Marker, Square)
         .VALUE(ImPlot, Marker, Diamond)

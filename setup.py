@@ -1,127 +1,311 @@
-import os
-import re
-import subprocess
-import sys
-from pathlib import Path
-
-from setuptools import Extension, setup
+from distutils.command.install_data import install_data
+from setuptools import find_packages, setup, Extension
 from setuptools.command.build_ext import build_ext
+from setuptools.command.install_lib import install_lib
+from setuptools.command.install_scripts import install_scripts
+import struct
+import os
+import shutil
+import pathlib
+import sys
+import subprocess
 
-# Convert distutils Windows platform specifiers to CMake -A arguments
-PLAT_TO_CMAKE = {
-    "win32": "Win32",
-    "win-amd64": "x64",
-    "win-arm32": "ARM",
-    "win-arm64": "ARM64",
-}
+BITS = struct.calcsize("P") * 8
+SOURCE_DIR, _ = os.path.split(__file__)
+
+
+def log(msg: str):
+    print(f"\x1b[1;33m{msg}\x1b[0m")
+
 
 class CMakeExtension(Extension):
-    def __init__(self, name: str, sourcedir: str = "") -> None:
-        super().__init__(name, sources=[])
-        self.sourcedir = os.fspath(Path(sourcedir).resolve())
+    """
+    An extension to run the cmake build
+
+    This simply overrides the base extension class so that setuptools
+    doesn't try to build your sources for you
+    """
+
+    def __init__(self, name, sources=[]):
+        super().__init__(name=name, sources=sources)
 
 
-class CMakeBuild(build_ext):
-    def build_extension(self, ext: CMakeExtension) -> None:
-        # Must be in this form due to bug in .resolve() only fixed in Python 3.10+
-        ext_fullpath = Path.cwd() / self.get_ext_fullpath(ext.name)  # type: ignore[no-untyped-call]
-        extdir = ext_fullpath.parent.resolve()
+class InstallCMakeLibsData(install_data):
+    """
+    Just a wrapper to get the install data into the egg-info
 
-        # Using this requires trailing slash for auto-detection & inclusion of
-        # auxiliary "native" libs
+    Listing the installed files in the egg-info guarantees that
+    all of the package files will be uninstalled when the user
+    uninstalls your package through pip
+    """
 
-        debug = int(os.environ.get("DEBUG", 0)) if self.debug is None else self.debug
-        cfg = "Debug" if debug else "Release"
+    def run(self):
+        """
+        Outfiles are the libraries that were built using cmake
+        """
 
-        # CMake lets you override the generator - we need to check this.
-        # Can be set with Conda-Build, for example.
-        cmake_generator = os.environ.get("CMAKE_GENERATOR", "")
+        # There seems to be no other way to do this; I tried listing the
+        # libraries during the execution of the InstallCMakeLibs.run() but
+        # setuptools never tracked them, seems like setuptools wants to
+        # track the libraries through package data more than anything...
+        # help would be appriciated
 
-        # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
-        # EXAMPLE_VERSION_INFO shows you how to pass a value into the C++ code
-        # from Python.
-        cmake_args = [
-            f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}{os.sep}",
-            f"-DCMAKE_BUILD_TYPE={cfg}",  # not used on MSVC, but no harm
+        self.outfiles = self.distribution.data_files
+
+
+class InstallCMakeLibs(install_lib):
+    """
+    Get the libraries from the parent distribution, use those as the outfiles
+
+    Skip building anything; everything is already built, forward libraries to
+    the installation step
+    """
+
+    def run(self):
+        """
+        Copy libraries from the bin directory and place them as appropriate
+        """
+
+        log("Moving library files")
+
+        # We have already built the libraries in the previous build_ext step
+
+        self.skip_build = True
+
+        bin_dir = self.distribution.bin_dir
+
+        # Depending on the files that are generated from your cmake
+        # build chain, you may need to change the below code, such that
+        # your files are moved to the appropriate location when the installation
+        # is run
+
+        FILE_TYPES = {".so", ".dll", ".pyd"}
+        libs = []
+        for file in os.listdir(bin_dir):
+            # TODO parameterize?
+            # Skip the non-renamed lib
+            if file == "imgui.so":
+                continue
+            _, ext = os.path.splitext(file)
+            if ext in FILE_TYPES:
+                libs.append(os.path.join(bin_dir, file))
+
+        log(f"Library files: {libs}")
+        log(f"Destination: {self.build_dir}")
+        """
+        libs = [os.path.join(bin_dir, _lib) for _lib in 
+                os.listdir(bin_dir) if 
+                os.path.isfile(os.path.join(bin_dir, _lib)) and 
+                os.path.splitext(_lib)[1] in [".dll", ".so"]
+                and not (_lib.startswith("python") or _lib.startswith(PACKAGE_NAME))]
+        """
+
+        for lib in libs:
+            shutil.copy(
+                lib, os.path.join(self.build_dir, os.path.basename(lib))
+            )
+
+        log("Generating stubs")
+        subprocess.check_call(
+            [
+                sys.executable,
+                "-m"
+                "pybind11_stubgen",
+                "--no-setup-py",
+                "imgui"
+            ],
+            cwd=self.build_dir
+        )
+
+        stub_dir = os.path.join(self.build_dir, "imgui")
+        if os.path.exists(stub_dir):
+            shutil.rmtree(stub_dir)
+
+        shutil.move(
+            os.path.join(self.build_dir, "stubs/imgui-stubs"), stub_dir
+        )
+
+        # Mark the libs for installation, adding them to
+        # distribution.data_files seems to ensure that setuptools' record
+        # writer appends them to installed-files.txt in the package's egg-info
+        #
+        # Also tried adding the libraries to the distribution.libraries list,
+        # but that never seemed to add them to the installed-files.txt in the
+        # egg-info, and the online recommendation seems to be adding libraries
+        # into eager_resources in the call to setup(), which I think puts them
+        # in data_files anyways.
+        #
+        # What is the best way?
+
+        # These are the additional installation files that should be
+        # included in the package, but are resultant of the cmake build
+        # step; depending on the files that are generated from your cmake
+        # build chain, you may need to modify the below code
+
+        self.distribution.data_files = [
+            os.path.join(self.install_dir, os.path.basename(lib))
+            for lib in libs
         ]
-        build_args = []
-        # Adding CMake arguments set as environment variable
-        # (needed e.g. to build for ARM OSx on conda-forge)
-        if "CMAKE_ARGS" in os.environ:
-            cmake_args += [item for item in os.environ["CMAKE_ARGS"].split(" ") if item]
 
-        # In this example, we pass in the version to C++. You might not need to.
-        cmake_args += [f"-DEXAMPLE_VERSION_INFO={self.distribution.get_version()}"]  # type: ignore[attr-defined]
+        # Must be forced to run after adding the libs to data_files
 
-        if self.compiler.compiler_type != "msvc":
-            # Using Ninja-build since it a) is available as a wheel and b)
-            # multithreads automatically. MSVC would require all variables be
-            # exported for Ninja to pick it up, which is a little tricky to do.
-            # Users can override the generator with CMAKE_GENERATOR in CMake
-            # 3.15+.
-            if not cmake_generator or cmake_generator == "Ninja":
-                try:
-                    import ninja
+        self.distribution.run_command("install_data")
 
-                    ninja_executable_path = Path(ninja.BIN_DIR) / "ninja"
-                    cmake_args += [
-                        "-GNinja",
-                        f"-DCMAKE_MAKE_PROGRAM:FILEPATH={ninja_executable_path}",
-                    ]
-                except ImportError:
-                    pass
+        super().run()
 
-        else:
-            # Single config generators are handled "normally"
-            single_config = any(x in cmake_generator for x in {"NMake", "Ninja"})
 
-            # CMake allows an arch-in-generator style for backward compatibility
-            contains_arch = any(x in cmake_generator for x in {"ARM", "Win64"})
+class InstallCMakeScripts(install_scripts):
+    """
+    Install the scripts in the build dir
+    """
 
-            # Specify the arch if using MSVC generator, but only if it doesn't
-            # contain a backward-compatibility arch spec already in the
-            # generator name.
-            if not single_config and not contains_arch:
-                cmake_args += ["-A", PLAT_TO_CMAKE[self.plat_name]]
+    def run(self):
+        """
+        Copy the required directory to the build directory and super().run()
+        """
 
-            # Multi-config generators have a different way to specify configs
-            if not single_config:
-                cmake_args += [
-                    f"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{cfg.upper()}={extdir}"
-                ]
-                build_args += ["--config", cfg]
+        log("Moving scripts files")
 
-        if sys.platform.startswith("darwin"):
-            # Cross-compile support for macOS - respect ARCHFLAGS if set
-            archs = re.findall(r"-arch (\S+)", os.environ.get("ARCHFLAGS", ""))
-            if archs:
-                cmake_args += ["-DCMAKE_OSX_ARCHITECTURES={}".format(";".join(archs))]
+        # Scripts were already built in a previous step
 
-        # Set CMAKE_BUILD_PARALLEL_LEVEL to control the parallel build level
-        # across all generators.
-        if "CMAKE_BUILD_PARALLEL_LEVEL" not in os.environ:
-            # self.parallel is a Python 3 only way to set parallel jobs by hand
-            # using -j in the build_ext call, not supported by pip or PyPA-build.
-            if hasattr(self, "parallel") and self.parallel:
-                # CMake 3.12+ only.
-                build_args += [f"-j8"]
+        self.skip_build = True
 
-        build_temp = Path(self.build_temp)
-        if not build_temp.exists():
-            build_temp.mkdir(parents=True)
+        bin_dir = self.distribution.bin_dir
+        # TODO? no scripts for now, and this is copying all the CMake directory which is bad
+        scripts_dirs = []
+        """
+        scripts_dirs = [
+            os.path.join(bin_dir, _dir) for _dir in os.listdir(bin_dir)
+            if os.path.isdir(os.path.join(bin_dir, _dir))
+        ]
+        """
 
-        print(ext.sourcedir)
+        log(f"Script dirs: {scripts_dirs}")
+        log(f"Destination: {self.build_dir}")
 
-        subprocess.run(
-            ["cmake", ext.sourcedir, *cmake_args], cwd=build_temp, check=True
+        for scripts_dir in scripts_dirs:
+
+            shutil.move(
+                scripts_dir,
+                os.path.join(self.build_dir, os.path.basename(scripts_dir))
+            )
+
+        # Mark the scripts for installation, adding them to
+        # distribution.scripts seems to ensure that the setuptools' record
+        # writer appends them to installed-files.txt in the package's egg-info
+
+        self.distribution.scripts = scripts_dirs
+
+        super().run()
+
+
+class BuildCMakeExt(build_ext):
+    """
+    Builds using cmake instead of the python setuptools implicit build
+    """
+
+    def run(self):
+        """
+        Perform build_cmake before doing the 'normal' stuff
+        """
+
+        for extension in self.extensions:
+            if isinstance(extension, CMakeExtension):
+                self.build_cmake(extension)
+
+        super().run()
+
+    def build_cmake(self, extension: Extension):
+        """
+        The steps required to build the extension
+        """
+
+        log("Preparing the build environment")
+
+        build_dir = pathlib.Path(self.build_temp)
+
+        extension_path = pathlib.Path(self.get_ext_fullpath(extension.name))
+
+        os.makedirs(build_dir, exist_ok=True)
+        os.makedirs(extension_path.parent.absolute(), exist_ok=True)
+
+        # Now that the necessary directories are created, build
+
+        log("Configuring cmake project")
+
+        # Change your cmake arguments below as necessary
+        # Below is just an example set of arguments for building Blender as a Python module
+
+        self.spawn(
+            [
+                "cmake",
+                "-E",
+                "env",
+                "CMAKE_BUILD_PARALLEL_LEVEL=8",
+                "--",
+                'cmake',
+                '-S',
+                SOURCE_DIR,
+                '-B',
+                self.build_temp
+            ]
         )
-        subprocess.run(
-            ["cmake", "--build", ".", *build_args], cwd=build_temp, check=True
+
+        log("Building binaries")
+
+        self.spawn(
+            [
+                "cmake",
+                "-E",
+                "env",
+                "CMAKE_BUILD_PARALLEL_LEVEL=8",
+                "--",
+                "cmake",
+                "--build",
+                self.build_temp,
+                "--target",
+                extension.name,
+                "--config",
+                "Debug"
+            ]
         )
-# The information here can also be placed in setup.cfg - better separation of
-# logic and declaration, and simpler if you include description/version in a file.
+
+        # Build finished, now copy the files into the copy directory
+        # The copy directory is the parent directory of the extension (.pyd)
+
+        bin_dir = os.path.join(build_dir, "bind-imgui")
+
+        pyd_path = [
+            os.path.join(bin_dir, _pyd) for _pyd in os.listdir(bin_dir)
+            if os.path.isfile(os.path.join(bin_dir, _pyd))
+            and os.path.splitext(_pyd)[0].startswith(extension.name)
+            and os.path.splitext(_pyd)[1] in [".pyd", ".so"]
+        ][0]
+
+        self.distribution.bin_dir = bin_dir
+
+        log("Moving built python module")
+        shutil.copy(pyd_path, extension_path)
+
+        # After build_ext is run, the following commands will run:
+        #
+        # install_lib
+        # install_scripts
+        #
+        # These commands are subclassed above to avoid pitfalls that
+        # setuptools tries to impose when installing these, as it usually
+        # wants to build those libs and scripts as well or move them to a
+        # different place. See comments above for additional information
+
+
+# Most of this is pulled from pyproject.toml
 setup(
-    ext_modules=[CMakeExtension("pyimgui-redux", "")],
-    cmdclass={"build_ext": CMakeBuild},
-    zip_safe=False
+    ext_modules=[CMakeExtension(name="imgui")],
+    packages=[],
+    cmdclass={
+        'build_ext': BuildCMakeExt,
+        'install_data': InstallCMakeLibsData,
+        'install_lib': InstallCMakeLibs,
+        'install_scripts': InstallCMakeScripts
+    }
 )

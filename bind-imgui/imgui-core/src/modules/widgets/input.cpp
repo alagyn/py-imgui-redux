@@ -44,7 +44,7 @@ void init_widgets_input(py::module& m)
         "label"_a,
         "value"_a,
         "max_size"_a,
-        "size"_a = ImVec2(0, 0),
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );

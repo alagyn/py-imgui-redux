@@ -70,7 +70,7 @@ void init_widgets_colors(py::module& m)
         "desc_id"_a,
         "col"_a,
         "flags"_a = 0,
-        "size"_a = ImVec2(0, 0)
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)")
     );
     m.def(IMFUNC(SetColorEditOptions), "flags"_a);
 

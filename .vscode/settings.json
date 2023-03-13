@@ -90,5 +90,8 @@
     "C_Cpp.default.defines": [
         "IMGUI_DISABLE_OBSOLETE_KEYIO=1",
         "IMGUI_DISABLE_OBSOLETE_FUNCTIONS=1"
+    ],
+    "python.analysis.exclude": [
+        "third-party"
     ]
 }

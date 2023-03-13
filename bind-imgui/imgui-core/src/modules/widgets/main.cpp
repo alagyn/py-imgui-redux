@@ -4,7 +4,11 @@
 
 void init_widgets_main(py::module& m)
 {
-    m.def(IMFUNC(Button), "label"_a, "size"_a = ImVec2(0, 0));
+    m.def(
+        IMFUNC(Button),
+        "label"_a,
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)")
+    );
     m.def(IMFUNC(SmallButton), "label"_a);
     m.def(IMFUNC(InvisibleButton), "str_id"_a, "size"_a, "flags"_a = 0);
     m.def(IMFUNC(ArrowButton), "str_id"_a, "dir"_a);
@@ -38,7 +42,7 @@ void init_widgets_main(py::module& m)
     m.def(
         IMFUNC(ProgressBar),
         "fraction"_a,
-        "size_arg"_a = ImVec2(-FLT_MIN, 0),
+        py::arg_v("size_arg", ImVec2(-FLT_MIN, 0), "Vec2(-FLT_MIN, 0)"),
         "overlay"_a = nullptr
     );
     QUICK(Bullet);
@@ -55,7 +59,11 @@ void init_widgets_main(py::module& m)
     // Use Selectable instead
 
     // Listbox
-    m.def(IMFUNC(BeginListBox), "label"_a, "size"_a = ImVec2(0, 0));
+    m.def(
+        IMFUNC(BeginListBox),
+        "label"_a,
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)")
+    );
     QUICK(EndListBox);
     // Ignoreing old ListBox() funcs
     // Use Selectable instead
@@ -68,7 +76,7 @@ void init_widgets_main(py::module& m)
         "label"_a,
         "selected"_a = false,
         "flags"_a = 0,
-        "size"_a = ImVec2(0, 0)
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)")
     );
 
     // Ignoring core ImGUI plotting in favor of ImPlot

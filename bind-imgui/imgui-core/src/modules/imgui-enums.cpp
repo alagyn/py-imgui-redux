@@ -4,7 +4,7 @@
 void init_imgui_enums(py::module& m)
 {
     ENUM(ImGui, WindowFlags)
-        .VALUE(ImGui, WindowFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, WindowFlags, NoTitleBar)
         .VALUE(ImGui, WindowFlags, NoResize)
         .VALUE(ImGui, WindowFlags, NoMove)
@@ -30,7 +30,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, WindowFlags, NoInputs);
 
     ENUM(ImGui, InputTextFlags)
-        .VALUE(ImGui, InputTextFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, InputTextFlags, CharsDecimal)
         .VALUE(ImGui, InputTextFlags, CharsHexadecimal)
         .VALUE(ImGui, InputTextFlags, CharsUppercase)
@@ -54,7 +54,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, InputTextFlags, EscapeClearsAll);
 
     ENUM(ImGui, TreeNodeFlags)
-        .VALUE(ImGui, TreeNodeFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TreeNodeFlags, Selected)
         .VALUE(ImGui, TreeNodeFlags, Framed)
         .VALUE(ImGui, TreeNodeFlags, AllowItemOverlap)
@@ -71,7 +71,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TreeNodeFlags, CollapsingHeader);
 
     ENUM(ImGui, PopupFlags)
-        .VALUE(ImGui, PopupFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, PopupFlags, MouseButtonLeft)
         .VALUE(ImGui, PopupFlags, MouseButtonRight)
         .VALUE(ImGui, PopupFlags, MouseButtonMiddle)
@@ -84,7 +84,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, PopupFlags, AnyPopup);
 
     ENUM(ImGui, SelectableFlags)
-        .VALUE(ImGui, SelectableFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, SelectableFlags, DontClosePopups)
         .VALUE(ImGui, SelectableFlags, SpanAllColumns)
         .VALUE(ImGui, SelectableFlags, AllowDoubleClick)
@@ -92,7 +92,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, SelectableFlags, AllowItemOverlap);
 
     ENUM(ImGui, ComboFlags)
-        .VALUE(ImGui, ComboFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, ComboFlags, PopupAlignLeft)
         .VALUE(ImGui, ComboFlags, HeightSmall)
         .VALUE(ImGui, ComboFlags, HeightRegular)
@@ -103,7 +103,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, ComboFlags, HeightMask_);
 
     ENUM(ImGui, TabBarFlags)
-        .VALUE(ImGui, TabBarFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TabBarFlags, Reorderable)
         .VALUE(ImGui, TabBarFlags, AutoSelectNewTabs)
         .VALUE(ImGui, TabBarFlags, TabListPopupButton)
@@ -116,7 +116,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TabBarFlags, FittingPolicyDefault_);
 
     ENUM(ImGui, TabItemFlags)
-        .VALUE(ImGui, TabItemFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TabItemFlags, UnsavedDocument)
         .VALUE(ImGui, TabItemFlags, SetSelected)
         .VALUE(ImGui, TabItemFlags, NoCloseWithMiddleMouseButton)
@@ -127,7 +127,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TabItemFlags, Trailing);
 
     ENUM(ImGui, TableFlags)
-        .VALUE(ImGui, TableFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TableFlags, Resizable)
         .VALUE(ImGui, TableFlags, Reorderable)
         .VALUE(ImGui, TableFlags, Hideable)
@@ -164,7 +164,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TableFlags, SortTristate);
 
     ENUM(ImGui, TableColumnFlags)
-        .VALUE(ImGui, TableColumnFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TableColumnFlags, Disabled)
         .VALUE(ImGui, TableColumnFlags, DefaultHide)
         .VALUE(ImGui, TableColumnFlags, DefaultSort)
@@ -189,17 +189,17 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TableColumnFlags, IsHovered);
 
     ENUM(ImGui, TableRowFlags)
-        .VALUE(ImGui, TableRowFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, TableRowFlags, Headers);
 
     ENUM(ImGui, TableBgTarget)
-        .VALUE(ImGui, TableBgTarget, None)
+        .value("None_", 0)
         .VALUE(ImGui, TableBgTarget, RowBg0)
         .VALUE(ImGui, TableBgTarget, RowBg1)
         .VALUE(ImGui, TableBgTarget, CellBg);
 
     ENUM(ImGui, FocusedFlags)
-        .VALUE(ImGui, FocusedFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, FocusedFlags, ChildWindows)
         .VALUE(ImGui, FocusedFlags, RootWindow)
         .VALUE(ImGui, FocusedFlags, AnyWindow)
@@ -207,7 +207,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, FocusedFlags, RootAndChildWindows);
 
     ENUM(ImGui, HoveredFlags)
-        .VALUE(ImGui, HoveredFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, HoveredFlags, ChildWindows)
         .VALUE(ImGui, HoveredFlags, RootWindow)
         .VALUE(ImGui, HoveredFlags, AnyWindow)
@@ -224,7 +224,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, HoveredFlags, NoSharedDelay);
 
     ENUM(ImGui, DragDropFlags)
-        .VALUE(ImGui, DragDropFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, DragDropFlags, SourceNoPreviewTooltip)
         .VALUE(ImGui, DragDropFlags, SourceNoDisableHover)
         .VALUE(ImGui, DragDropFlags, SourceNoHoldToOpenOthers)
@@ -237,19 +237,19 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, DragDropFlags, AcceptPeekOnly);
 
     ENUM(ImGui, Dir)
-        .VALUE(ImGui, Dir, None)
+        .value("None_", 0)
         .VALUE(ImGui, Dir, Left)
         .VALUE(ImGui, Dir, Right)
         .VALUE(ImGui, Dir, Up)
         .VALUE(ImGui, Dir, Down);
 
     ENUM(ImGui, SortDirection)
-        .VALUE(ImGui, SortDirection, None)
+        .value("None_", 0)
         .VALUE(ImGui, SortDirection, Ascending)
         .VALUE(ImGui, SortDirection, Descending);
 
-    py::enum_<ImGuiKey>(m, "ImKey")
-        .VALUE(ImGui, Key, None)
+    RAW_ENUM(ImGuiKey, ImKey)
+        .value("None_", 0)
         .VALUE(ImGui, Key, Tab)
         .VALUE(ImGui, Key, LeftArrow)
         .VALUE(ImGui, Key, RightArrow)
@@ -397,7 +397,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, Key, NamedKey_END);
 
     ENUM(ImGui, ConfigFlags)
-        .VALUE(ImGui, ConfigFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, ConfigFlags, NavEnableKeyboard)
         .VALUE(ImGui, ConfigFlags, NavEnableGamepad)
         .VALUE(ImGui, ConfigFlags, NavEnableSetMousePos)
@@ -408,7 +408,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, ConfigFlags, IsTouchScreen);
 
     ENUM(ImGui, BackendFlags)
-        .VALUE(ImGui, BackendFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, BackendFlags, HasGamepad)
         .VALUE(ImGui, BackendFlags, HasMouseCursors)
         .VALUE(ImGui, BackendFlags, HasSetMousePos)
@@ -497,13 +497,13 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, StyleVar, SelectableTextAlign);
 
     ENUM(ImGui, ButtonFlags)
-        .VALUE(ImGui, ButtonFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, ButtonFlags, MouseButtonLeft)
         .VALUE(ImGui, ButtonFlags, MouseButtonRight)
         .VALUE(ImGui, ButtonFlags, MouseButtonMiddle);
 
     ENUM(ImGui, ColorEditFlags)
-        .VALUE(ImGui, ColorEditFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, ColorEditFlags, NoAlpha)
         .VALUE(ImGui, ColorEditFlags, NoPicker)
         .VALUE(ImGui, ColorEditFlags, NoOptions)
@@ -530,7 +530,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, ColorEditFlags, DefaultOptions_);
 
     ENUM(ImGui, SliderFlags)
-        .VALUE(ImGui, SliderFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, SliderFlags, AlwaysClamp)
         .VALUE(ImGui, SliderFlags, Logarithmic)
         .VALUE(ImGui, SliderFlags, NoRoundToFormat)
@@ -543,7 +543,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, MouseButton, Middle);
 
     ENUM(ImGui, MouseCursor)
-        .VALUE(ImGui, MouseCursor, None)
+        .value("None_", 0)
         .VALUE(ImGui, MouseCursor, Arrow)
         .VALUE(ImGui, MouseCursor, TextInput)
         .VALUE(ImGui, MouseCursor, ResizeAll)
@@ -555,14 +555,14 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, MouseCursor, NotAllowed);
 
     ENUM(ImGui, Cond)
-        .VALUE(ImGui, Cond, None)
+        .value("None_", 0)
         .VALUE(ImGui, Cond, Always)
         .VALUE(ImGui, Cond, Once)
         .VALUE(ImGui, Cond, FirstUseEver)
         .VALUE(ImGui, Cond, Appearing);
 
     ENUM(Im, DrawFlags)
-        .VALUE(Im, DrawFlags, None)
+        .value("None_", 0)
         .VALUE(Im, DrawFlags, Closed)
         .VALUE(Im, DrawFlags, RoundCornersTopLeft)
         .VALUE(Im, DrawFlags, RoundCornersTopRight)
@@ -578,14 +578,14 @@ void init_imgui_enums(py::module& m)
         .VALUE(Im, DrawFlags, RoundCornersMask_);
 
     ENUM(Im, DrawListFlags)
-        .VALUE(Im, DrawListFlags, None)
+        .value("None_", 0)
         .VALUE(Im, DrawListFlags, AntiAliasedLines)
         .VALUE(Im, DrawListFlags, AntiAliasedLinesUseTex)
         .VALUE(Im, DrawListFlags, AntiAliasedFill)
         .VALUE(Im, DrawListFlags, AllowVtxOffset);
 
     ENUM(ImGui, ViewportFlags)
-        .VALUE(ImGui, ViewportFlags, None)
+        .value("None_", 0)
         .VALUE(ImGui, ViewportFlags, IsPlatformWindow)
         .VALUE(ImGui, ViewportFlags, IsPlatformMonitor)
         .VALUE(ImGui, ViewportFlags, OwnedByApp);

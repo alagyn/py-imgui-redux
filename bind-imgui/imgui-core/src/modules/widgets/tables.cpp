@@ -7,7 +7,7 @@ void init_widgets_tables(py::module& m)
         "str_id"_a,
         "column"_a,
         "flags"_a = 0,
-        "outer_size"_a = ImVec2(0, 0),
+        py::arg_v("outer_size", ImVec2(0, 0), "Vec2(0, 0)"),
         "inner_width"_a = 0.0f
     );
     QUICK(EndTable);

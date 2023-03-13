@@ -9,7 +9,7 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "v_min"_a,
         "v_max"_a,
-        "cond"_a = ImPlotCond_Once
+        "cond"_a = (int)ImPlotCond_Once
     );
     // TODO SetupAxisLinks? Has pointers to values, maybe unusable
     m.def(
@@ -97,7 +97,7 @@ void init_setup_funcs(py::module& m)
         "x_max"_a,
         "y_min"_a,
         "y_max"_a,
-        "cond"_a = ImPlotCond_Once
+        "cond"_a = (int)ImPlotCond_Once
     );
     m.def(IMFUNC(SetupLegend), "location"_a, "flags"_a = 0);
     m.def(IMFUNC(SetupMouseText), "location"_a, "flags"_a = 0);
@@ -108,7 +108,7 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "v_min"_a,
         "v_max"_a,
-        "cond"_a = ImPlotCond_Once
+        "cond"_a = (int)ImPlotCond_Once
     );
     // TODO SetNextAxisLinks?
     m.def(IMFUNC(SetNextAxisToFit), "axis"_a);
@@ -118,7 +118,7 @@ void init_setup_funcs(py::module& m)
         "x_max"_a,
         "y_min"_a,
         "y_max"_a,
-        "cond"_a = ImPlotCond_Once
+        "cond"_a = (int)ImPlotCond_Once
     );
     QUICK(SetNextAxesToFit);
 }

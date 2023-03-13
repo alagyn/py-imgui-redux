@@ -1,12 +1,30 @@
 #include <imnodes/inc/imnodes-modules.h>
 #include <imnodes_internal.h>
+#include <pybind11/stl.h>
 
 void init_imnodes_context(py::module& m)
 {
+    /* TODO
     QUICK(CreateContext);
     m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
     QUICK(GetCurrentContext);
     m.def(IMFUNC(SetCurrentContext), "ctx"_a);
+    */
+
+    m.def(
+        "CreateContext",
+        []()
+        {
+            ImNodes::CreateContext();
+        }
+    );
+    m.def(
+        "DestroyContext",
+        []()
+        {
+            ImNodes::DestroyContext();
+        }
+    );
 
     QUICK(EditorContextCreate);
     m.def(IMFUNC(EditorContextFree), "ctx"_a);
@@ -32,7 +50,7 @@ void init_imnodes_context(py::module& m)
             ImNodes::MiniMap(size_fraction, loc);
         },
         "size_fraction"_a = 0.2f,
-        "location"_a = ImNodesMiniMapLocation_TopLeft
+        "location"_a = (int)ImNodesMiniMapLocation_TopLeft
     );
 
     m.def(IMFUNC(PushColorStyle), "item"_a, "color"_a);
@@ -63,14 +81,14 @@ void init_imnodes_context(py::module& m)
     m.def(
         IMFUNC(BeginInputAttribute),
         "id"_a,
-        "shape"_a = ImNodesPinShape_CircleFilled
+        "shape"_a = (int)ImNodesPinShape_CircleFilled
     );
     QUICK(EndInputAttribute);
 
     m.def(
         IMFUNC(BeginOutputAttribute),
         "id"_a,
-        "shape"_a = ImNodesPinShape_CircleFilled
+        "shape"_a = (int)ImNodesPinShape_CircleFilled
     );
     QUICK(EndOutputAttribute);
 
@@ -163,6 +181,9 @@ void init_imnodes_context(py::module& m)
     m.def(IMFUNC(IsLinkSelected), "link_id"_a);
 
     QUICK(IsAttributeActive);
+
+    // TODO make structs with named variables for these tuple returns
+
     m.def(
         "IsAnyAttributeActive",
         []()
@@ -207,14 +228,12 @@ void init_imnodes_context(py::module& m)
             );
 
             return py::make_tuple(
-                startN,
-                startAttr,
-                endN,
-                endAttr,
-                createdFromSnap
+                out,
+                py::make_tuple(startN, startAttr, endN, endAttr, createdFromSnap)
             );
         }
     );
+
     m.def(
         "IsLinkDestroyed",
         []()

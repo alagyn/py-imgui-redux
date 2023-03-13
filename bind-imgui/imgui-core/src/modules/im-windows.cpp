@@ -34,7 +34,7 @@ void init_windows(py::module& m)
             &ImGui::BeginChild
         ),
         "str_id"_a,
-        "size"_a = ImVec2(0, 0),
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "border"_a = false,
         "flags"_a = 0
     );
@@ -44,7 +44,7 @@ void init_windows(py::module& m)
             &ImGui::BeginChild
         ),
         "id"_a,
-        "size"_a = ImVec2(0, 0),
+        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "border"_a = false,
         "flags"_a = 0
     );
@@ -66,7 +66,7 @@ void init_windows(py::module& m)
         IMFUNC(SetNextWindowPos),
         "pos"_a,
         "cond"_a = 0,
-        "pivot"_a = ImVec2(0, 0)
+        py::arg_v("pivot", ImVec2(0, 0), "Vec2(0, 0)")
     );
     m.def(IMFUNC(SetNextWindowSize), "size"_a, "cond"_a = 0);
     // Ignoring SetNextWindowSizeConstraints

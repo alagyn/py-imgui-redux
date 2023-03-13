@@ -37,7 +37,7 @@ void init_implot_context(py::module& m)
             ImPlot::BeginPlot
         ),
         "title_id"_a,
-        "size"_a = ImVec2(-1, 0),
+        py::arg_v("size", ImVec2(-1, 0), "Vec2(-1, 0)"),
         "flags"_a = 0
     );
     QUICK(EndPlot);

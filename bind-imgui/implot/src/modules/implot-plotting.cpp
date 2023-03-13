@@ -571,8 +571,8 @@ void init_plotting(py::module& m)
         "scale_min"_a = 0,
         "scale_max"_a = 0,
         "label_fmt"_a = "%.1f",
-        "bounds_min"_a = ImPlotPoint(0, 0),
-        "bounds_max"_a = ImPlotPoint(1, 1),
+        py::arg_v("bounds_min", ImPlotPoint(0, 0), "Point(0, 0)"),
+        py::arg_v("bounds_max", ImPlotPoint(1, 1), "Point(1, 1)"),
         "flags"_a = 0
     );
 
@@ -597,9 +597,9 @@ void init_plotting(py::module& m)
         },
         "label_id"_a,
         "values"_a,
-        "bins"_a = ImPlotBin_Sturges,
+        "bins"_a = (int)ImPlotBin_Sturges,
         "bar_scale"_a = 1.0,
-        "range"_a = ImPlotRange(),
+        py::arg_v("range", ImPlotRange(), "Range(0, 0)"),
         "flags"_a = 0
     );
 
@@ -631,9 +631,9 @@ void init_plotting(py::module& m)
         "label_id"_a,
         "xs"_a,
         "ys"_a,
-        "x_bins"_a = ImPlotBin_Sturges,
-        "y_bins"_a = ImPlotBin_Sturges,
-        "range"_a = ImPlotRect(),
+        "x_bins"_a = (int)ImPlotBin_Sturges,
+        "y_bins"_a = (int)ImPlotBin_Sturges,
+        py::arg_v("range", ImPlotRect(), "Rect(0, 0)"),
         "flags"_a = 0
     );
 
@@ -670,7 +670,7 @@ void init_plotting(py::module& m)
         "text"_a,
         "x"_a,
         "y"_a,
-        "pix_offset"_a = ImVec2(0, 0),
+        py::arg_v("pix_offset", ImVec2(0, 0), "Vec2(0, 0)"),
         "flags"_a = 0
     );
 
