@@ -4,27 +4,13 @@
 
 void init_imnodes_context(py::module& m)
 {
-    /* TODO
-    QUICK(CreateContext);
-    m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
-    QUICK(GetCurrentContext);
-    m.def(IMFUNC(SetCurrentContext), "ctx"_a);
-    */
+    // Define this with no data, it's opaque
+    py::class_<ImNodesContext>(m, "Context");
 
-    m.def(
-        "CreateContext",
-        []()
-        {
-            ImNodes::CreateContext();
-        }
-    );
-    m.def(
-        "DestroyContext",
-        []()
-        {
-            ImNodes::DestroyContext();
-        }
-    );
+    m.def(IMFUNC(CreateContext), py::return_value_policy::reference);
+    m.def(IMFUNC(GetCurrentContext), py::return_value_policy::reference);
+    m.def(IMFUNC(SetCurrentContext), "ctx"_a);
+    m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
 
     QUICK(EditorContextCreate);
     m.def(IMFUNC(EditorContextFree), "ctx"_a);
@@ -33,7 +19,7 @@ void init_imnodes_context(py::module& m)
     m.def(IMFUNC(EditorContextResetPanning), "pos"_a);
     m.def(IMFUNC(EditorContextMoveToNode), "node_id"_a);
 
-    QUICK(GetIO);
+    m.def(IMFUNC(GetIO), py::return_value_policy::reference);
     QUICK(GetStyle);
     m.def(IMFUNC(StyleColorsDark), "dest"_a = nullptr);
     m.def(IMFUNC(StyleColorsClassic), "dest"_a = nullptr);
