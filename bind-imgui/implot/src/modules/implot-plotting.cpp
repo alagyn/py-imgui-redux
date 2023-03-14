@@ -1,7 +1,5 @@
+#include <binder/inc/numpy.h>
 #include <implot/inc/implot-modules.h>
-#include <pybind11/numpy.h>
-
-template<typename T> using arr = py::array_t<T, py::array::c_style>;
 
 void init_plotting(py::module& m)
 {

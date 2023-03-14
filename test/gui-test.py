@@ -1,5 +1,10 @@
 import sys
-sys.path.append("../build/bind-imgui/Release")
+import os
+import numpy as np
+
+ROOT, _ = os.path.split(__file__)
+sys.path.append(os.path.join(ROOT, "../build/bind-imgui"))
+sys.path.append(os.path.join(ROOT, "../build/bind-imgui/Release"))
 
 import imgui  # type: ignore
 import imgui.glfw as glfw  # type: ignore
@@ -25,13 +30,19 @@ print("Making Clear Color")
 clearColor = imgui.Vec4(0.45, 0.55, 0.6, 1.0)
 
 print("Starting Loop")
+p_open = imgui.BoolRef(True)
+values = imgui.IntList([0, 5, 10])
 while True:
     # print("GLFW NewFrame")
     glfw.NewFrame()
     # print("ImGUI NewFrame")
     imgui.NewFrame()
-    # print("ShowDemo")
-    implot.ShowDemoWindow()
+    if imgui.Begin("Test"):
+        if imgui.DragInt3("Vals", values):
+            print(values)
+
+        imgui.End()
+
     # print("ImGUI Render")
     imgui.Render()
     # print("GLFW Render")

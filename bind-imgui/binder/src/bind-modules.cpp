@@ -1,8 +1,11 @@
 #include <binder/inc/bind-modules.h>
+#include <binder/inc/wraps.h>
 
 PYBIND11_MODULE(imgui, m)
 {
     m.doc() = "DearImGui Framework";
+
+    init_wraps(m);
 
     init_core_imgui(m);
 

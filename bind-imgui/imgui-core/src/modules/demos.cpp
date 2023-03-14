@@ -1,92 +1,83 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
+#include <pybind11/stl.h>
 
 void init_demos(py::module& m)
 {
     m.def(
         "ShowDemoWindow",
-        [](py::object closable) -> bool
+        [](std::optional<BoolRef*> p_open)
         {
-            bool p_open = true;
-            if(closable.is_none())
+            if(p_open.has_value())
             {
-                ImGui::ShowDemoWindow();
+                ImGui::ShowDemoWindow(&(p_open.value()->val));
             }
             else
             {
-                p_open = closable.cast<bool>();
-                ImGui::ShowDemoWindow(&p_open);
+                ImGui::ShowDemoWindow();
             }
-            return p_open;
         },
-        "closable"_a = py::none()
+        "p_open"_a = std::nullopt
     );
     m.def(
         "ShowMetricsWindow",
-        [](bool closable) -> bool
+        [](std::optional<BoolRef*> p_open)
         {
-            bool p_open = true;
-            if(closable)
+            if(p_open.has_value())
             {
-                ImGui::ShowMetricsWindow(&p_open);
+                ImGui::ShowMetricsWindow(&(p_open.value()->val));
             }
             else
             {
                 ImGui::ShowMetricsWindow();
             }
-            return p_open;
         },
-        "closable"_a
+        "p_open"_a = std::nullopt
     );
     m.def(
         "ShowDebugLogWindow",
-        [](bool closable) -> bool
+        [](std::optional<BoolRef*> p_open)
         {
-            bool p_open = true;
-            if(closable)
+            if(p_open.has_value())
             {
-                ImGui::ShowDebugLogWindow(&p_open);
+                ImGui::ShowDebugLogWindow(&(p_open.value()->val));
             }
             else
             {
                 ImGui::ShowDebugLogWindow();
             }
-            return p_open;
         },
-        "closable"_a
+        "p_open"_a = std::nullopt
     );
     m.def(
         "ShowStackToolWindow",
-        [](bool closable) -> bool
+        [](std::optional<BoolRef*> p_open)
         {
-            bool p_open = true;
-            if(closable)
+            if(p_open.has_value())
             {
-                ImGui::ShowStackToolWindow(&p_open);
+                ImGui::ShowStackToolWindow(&(p_open.value()->val));
             }
             else
             {
                 ImGui::ShowStackToolWindow();
             }
-            return p_open;
         },
-        "closable"_a
+        "p_open"_a = std::nullopt
     );
     m.def(
         "ShowAboutWindow",
-        [](bool closable) -> bool
+        [](std::optional<BoolRef*> p_open)
         {
-            bool p_open = true;
-            if(closable)
+            if(p_open.has_value())
             {
-                ImGui::ShowAboutWindow(&p_open);
+                ImGui::ShowAboutWindow(&(p_open.value()->val));
             }
             else
             {
                 ImGui::ShowAboutWindow();
             }
-            return p_open;
         },
-        "closable"_a
+        "p_open"_a
     );
     m.def(IMFUNC(ShowStyleEditor), "ref"_a = nullptr);
     m.def(IMFUNC(ShowStyleSelector), "label"_a);

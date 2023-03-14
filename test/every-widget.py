@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append("../build/bind-imgui/Release")
 sys.path.append("../build/bind-imgui")
 import time
@@ -7,9 +8,11 @@ import random
 
 import imgui  # type: ignore
 import imgui.glfw as glfw  # type: ignore
-import imgui.implot as implot # type: ignore
+import imgui.implot as implot  # type: ignore
+
 
 class State:
+
     def __init__(self) -> None:
         self.cb1 = False
         self.radio = -1
@@ -18,15 +21,15 @@ class State:
         self.comboVal = "Select Me"
         self.listboxVal = [False, False]
 
-        self.fltVal1 = 0.0
-        self.fltVal2 = 0.0
-        self.fltVal3 = 0.0
-        self.fltVal4 = 0.0
+        self.fltVal1 = imgui.FloatRef(0.0)
+        self.fltVal2 = imgui.FloatRef(0.0)
+        self.fltVal3 = imgui.FloatRef(0.0)
+        self.fltList = imgui.FloatList([0.0, 0.0, 0.0, 0.0])
 
-        self.intVal1 = 0
-        self.intVal2 = 0
-        self.intVal3 = 0
-        self.intVal4 = 0
+        self.intVal1 = imgui.IntRef(0)
+        self.intVal2 = imgui.IntRef(0)
+        self.intVal3 = imgui.IntRef(0)
+        self.intList = imgui.IntList([0, 0, 0, 0])
 
         self.plotMode = 0
 
@@ -34,7 +37,9 @@ class State:
         self.plotMin = 0
         self.plotMax = 10
         self.plotX = np.arange(self.plotSize, dtype=np.float64)
-        self.plotY = np.array(np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64)
+        self.plotY = np.array(
+            np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64
+        )
         self.plotIdx = 0
 
         self.lastUpate = time.perf_counter()
@@ -156,83 +161,43 @@ def normWidgets(state: State):
         imgui.TableNextColumn()
 
         # int drags
-        _, state.intVal1 = imgui.DragInt("int 1", state.intVal1)
-
-        x = (state.intVal1, state.intVal2)
-        edit, x = imgui.DragInt2("int 2", x)
-        if edit:
-            state.intVal1 = x[0]
-            state.intVal2 = x[1]
-
-        x = (state.intVal1, state.intVal2, state.intVal3)
-        edit, x = imgui.DragInt3("int 3", x)
-        if edit:
-            state.intVal1 = x[0]
-            state.intVal2 = x[1]
-            state.intVal3 = x[2]
-
-        x = (state.intVal1, state.intVal2, state.intVal3, state.intVal4)
-        edit, x = imgui.DragInt4("int 4", x)
-        if edit:
-            state.intVal1 = x[0]
-            state.intVal2 = x[1]
-            state.intVal3 = x[2]
-            state.intVal4 = x[3]
-
-        _, state.intVal1, state.intVal2 = imgui.DragIntRange2(
-            "int range 2",
-            state.intVal1, state.intVal2
-        )
+        imgui.DragInt("int 1", state.intVal1)
+        imgui.DragInt2("int 2", state.intList)
+        imgui.DragInt3("int 3", state.intList)
+        imgui.DragInt4("int 4", state.intList)
+        imgui.DragIntRange2("int range 2", state.intVal2, state.intVal3)
 
         imgui.Dummy(imgui.Vec2(10, 30))
 
         # float drags
-        _, state.fltVal1 = imgui.DragFloat("flt 1", state.fltVal1)
-
-        edit, x = imgui.DragFloat2("flt 2", (state.fltVal1, state.fltVal2))
-        if edit:
-            state.fltVal1 = x[0]
-            state.fltVal2 = x[1]
-
-        edit, x = imgui.DragFloat3(
-            "flt 3", (state.fltVal1, state.fltVal2, state.fltVal3))
-        if edit:
-            state.fltVal1 = x[0]
-            state.fltVal2 = x[1]
-            state.fltVal3 = x[2]
-
-        edit, x = imgui.DragFloat4(
-            "flt 4", (state.fltVal1, state.fltVal2, state.fltVal3, state.fltVal4))
-        if edit:
-            state.fltVal1 = x[0]
-            state.fltVal2 = x[1]
-            state.fltVal3 = x[2]
-            state.fltVal4 = x[3]
-
-        _, state.fltVal1, state.fltVal2 = imgui.DragFloatRange2(
-            "flt range 2", state.fltVal1, state.fltVal2
-        )
+        imgui.DragFloat("flt 1", state.fltVal1)
+        imgui.DragFloat2("flt 2", state.fltList)
+        imgui.DragFloat3("flt 3", state.fltList)
+        imgui.DragFloat4("flt 4", state.fltList)
+        imgui.DragFloatRange2("flt range 2", state.fltVal2, state.fltVal3)
 
         imgui.EndTable()
-
 
 
 def tables():
     COLS = 3
     ROWS = 10
     flags = (
-        imgui.TableFlags.BordersInnerH |
-        imgui.TableFlags.BordersOuterV |
-        imgui.TableFlags.BordersOuterH
+        imgui.TableFlags.BordersInnerH | imgui.TableFlags.BordersOuterV
+        | imgui.TableFlags.BordersOuterH
     )
     if imgui.BeginTable("tab-id", COLS, flags):
         for x in range(ROWS):
             imgui.TableNextRow()
             for c in range(COLS):
                 imgui.TableNextColumn()
-                col = imgui.Vec4(x / ROWS, c / COLS, 1 - (x + c) / (ROWS + COLS), 1.0)
+                col = imgui.Vec4(
+                    x / ROWS, c / COLS, 1 - (x + c) / (ROWS + COLS), 1.0
+                )
                 imgui.TextColored(
-                    col, f"({int(col.x * 255)}, {int(col.y * 255)}, {int(col.z * 255)})")
+                    col,
+                    f"({int(col.x * 255)}, {int(col.y * 255)}, {int(col.z * 255)})"
+                )
 
         imgui.EndTable()
 
@@ -248,8 +213,9 @@ def plot(state: State):
     implot.BeginPlot("data", imgui.Vec2(500, 500))
     if state.plotMode == 0:
         if time.perf_counter() - state.lastUpate > state.updatePeriod:
-            state.plotY[state.plotIdx] = random.triangular(state.plotMin , state.plotMax)
-            state.plotIdx = (state.plotIdx + 1 ) % state.plotSize
+            state.plotY[state.plotIdx
+                        ] = random.triangular(state.plotMin, state.plotMax)
+            state.plotIdx = (state.plotIdx + 1) % state.plotSize
             state.lastUpate = time.perf_counter()
         implot.PlotScatter("DATA", state.plotX, state.plotY)
     elif state.plotMode == 1:
@@ -258,20 +224,22 @@ def plot(state: State):
             state.plotY[state.plotIdx] += random.triangular(-1, 1)
             state.plotIdx = (state.plotIdx + 1) % (size * size)
             state.lastUpate = time.perf_counter()
-        implot.PlotHeatmap("DATA", state.plotY, size, size, state.plotMin, state.plotMax)
+        implot.PlotHeatmap(
+            "DATA", state.plotY, size, size, state.plotMin, state.plotMax
+        )
     implot.EndPlot()
 
 
 def showAll(state: State):
-    if imgui.Begin("Widgets", False)[0]:
+    if imgui.Begin("Widgets"):
         normWidgets(state)
         imgui.End()
 
-    if imgui.Begin("Tables", False)[0]:
+    if imgui.Begin("Tables"):
         tables()
         imgui.End()
 
-    if imgui.Begin("Plot", False)[0]:
+    if imgui.Begin("Plot"):
         plot(state)
         imgui.End()
 

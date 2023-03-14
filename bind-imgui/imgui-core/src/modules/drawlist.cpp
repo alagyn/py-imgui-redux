@@ -121,7 +121,7 @@ void init_drawlist(py::module& m)
                         pos,
                         col,
                         text,
-                        nullptr,
+                        nullptr, // this is null since the str will be zero terminated
                         wrap_width,
                         cpu_fine_clip_rect
                     );

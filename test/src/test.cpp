@@ -2,6 +2,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <sstream>
+
 using namespace pybind11::literals;
 namespace py = pybind11;
 
@@ -28,8 +30,50 @@ public:
     }
 };
 
-PYBIND11_MODULE(bdd, m)
+class IntWrap
 {
+public:
+    IntWrap(int val = 0)
+        : val(val)
+    {
+    }
+
+    int toInt()
+    {
+        return val;
+    }
+
+    float toFloat()
+    {
+        return (float)val;
+    }
+
+    const char* toStr()
+    {
+        std::stringstream ss;
+        ss << "IntWrapper (" << val << ")";
+        return ss.str().c_str();
+    }
+
+    int add(int other)
+    {
+        return val + other;
+    }
+
+    int val;
+};
+
+PYBIND11_MODULE(bdd, m)
+
+{
+    py::class_<IntWrap>(m, "Wrap")
+        .def(py::init<int>(), "val"_a = 0)
+        .def("__int__", &IntWrap::toInt)
+        .def("__float__", &IntWrap::toFloat)
+        .def("__str__", &IntWrap::toStr)
+        .def("__add__", &IntWrap::add)
+        .def_readwrite("val", &IntWrap::val);
+
     py::class_<Test>(m, "Test")
         .def(py::init<int>(), "value"_a)
         .def("inc", &Test::inc)

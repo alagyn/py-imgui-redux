@@ -1,28 +1,28 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-#include <pybind11/stl.h>
 
 void init_widgets_drags(py::module& m)
 {
     // Floats
-
-    /*
-    std::array seems to be broken in pybind, so using vectors
-    and manually cheking length instead
-    */
-
     m.def(
         "DragFloat",
         [](const char* label,
-           float val,
+           FloatRef* val,
            const float v_speed,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::DragFloat(label, &val, v_speed, v_min, v_max, format, flags);
-            return py::make_tuple(out, val);
+            return ImGui::DragFloat(
+                label,
+                &(val->val),
+                v_speed,
+                v_min,
+                v_max,
+                format,
+                flags
+            );
         },
         "label"_a,
         "value"_a,
@@ -35,23 +35,27 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat2",
         [](const char* label,
-           std::array<float, 2> values,
+           FloatList* values,
            const float v_speed,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::DragFloat2(
+            if(values->size() < 2)
+            {
+                throw std::out_of_range("DragFloat2(): len(values) < 2");
+            }
+
+            return ImGui::DragFloat2(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a.noconvert(),
@@ -64,23 +68,26 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat3",
         [](const char* label,
-           std::array<float, 3> values,
+           FloatList* values,
            const float v_speed,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::DragFloat3(
+            if(values->size() < 3)
+            {
+                throw std::out_of_range("DragFloat3(): len(values) < 3");
+            }
+            return ImGui::DragFloat3(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a.noconvert(),
@@ -93,23 +100,27 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat4",
         [](const char* label,
-           std::array<float, 4> values,
+           FloatList* values,
            const float v_speed,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::DragFloat4(
+            if(values->size() < 4)
+            {
+                throw std::out_of_range("DragFloat4(): len(values) < 4");
+            }
+
+            return ImGui::DragFloat4(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a.noconvert(),
@@ -123,8 +134,8 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloatRange2",
         [](const char* label,
-           float curMin,
-           float curMax,
+           FloatRef* curMin,
+           FloatRef* curMax,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -132,10 +143,10 @@ void init_widgets_drags(py::module& m)
            const char* format_max,
            const int flags)
         {
-            bool out = ImGui::DragFloatRange2(
+            return ImGui::DragFloatRange2(
                 label,
-                &curMin,
-                &curMax,
+                &curMin->val,
+                &curMax->val,
                 v_speed,
                 v_min,
                 v_max,
@@ -143,11 +154,10 @@ void init_widgets_drags(py::module& m)
                 format_max,
                 flags
             );
-            return py::make_tuple(out, curMin, curMax);
         },
         "label"_a,
-        "v_cur_min"_a,
-        "v_cur_max"_a,
+        "v_current_min"_a,
+        "v_current_max"_a,
         "v_speed"_a = 1.0f,
         "v_min"_a = 0.0f,
         "v_max"_a = 0.0f,
@@ -160,16 +170,22 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt",
         [](const char* label,
-           int val,
+           IntRef* val,
            const float v_speed,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::DragInt(label, &val, v_speed, v_min, v_max, format, flags);
-            return py::make_tuple(out, val);
+            return ImGui::DragInt(
+                label,
+                &val->val,
+                v_speed,
+                v_min,
+                v_max,
+                format,
+                flags
+            );
         },
         "label"_a,
         "value"_a,
@@ -182,27 +198,27 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt2",
         [](const char* label,
-           std::array<int, 2> values,
+           IntList* values,
            const float v_speed,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            if(values.size() != 2)
+            if(values->size() < 2)
             {
-                throw py::value_error("len(values) != 2");
+                throw py::value_error("DragInt2(): len(values) < 2");
             }
-            bool out = ImGui::DragInt2(
+
+            return ImGui::DragInt2(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a,
@@ -215,23 +231,27 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt3",
         [](const char* label,
-           std::array<int, 3> values,
+           IntList* values,
            const float v_speed,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::DragInt3(
+            if(values->size() < 3)
+            {
+                throw std::out_of_range("DragInt3(): len(values) < 3");
+            }
+
+            return ImGui::DragInt3(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a,
@@ -244,23 +264,27 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt4",
         [](const char* label,
-           std::array<int, 4> values,
+           IntList* values,
            const float v_speed,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::DragInt4(
+            if(values->size() < 4)
+            {
+                throw std::out_of_range("DragInt4(): len(values) < 4");
+            }
+
+            return ImGui::DragInt4(
                 label,
-                values.data(),
+                values->data(),
                 v_speed,
                 v_min,
                 v_max,
                 format,
                 flags
             );
-            return py::make_tuple(out, values);
         },
         "label"_a,
         "value"_a,
@@ -274,8 +298,8 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragIntRange2",
         [](const char* label,
-           int curMin,
-           int curMax,
+           IntRef* curMin,
+           IntRef* curMax,
            const float v_speed,
            const int v_min,
            const int v_max,
@@ -285,8 +309,8 @@ void init_widgets_drags(py::module& m)
         {
             bool out = ImGui::DragIntRange2(
                 label,
-                &curMin,
-                &curMax,
+                &curMin->val,
+                &curMax->val,
                 v_speed,
                 v_min,
                 v_max,
@@ -297,8 +321,8 @@ void init_widgets_drags(py::module& m)
             return py::make_tuple(out, curMin, curMax);
         },
         "label"_a,
-        "v_cur_min"_a,
-        "v_cur_max"_a,
+        "v_current_min"_a,
+        "v_current_max"_a,
         "v_speed"_a = 1.0f,
         "v_min"_a = 0,
         "v_max"_a = 0,

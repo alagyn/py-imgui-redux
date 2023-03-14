@@ -1,27 +1,27 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
+#include <pybind11/stl.h>
 
 void init_windows(py::module& m)
 {
     // Windows
     m.def(
         "Begin",
-        [](const char* name, bool closable, ImGuiWindowFlags flags) -> py::tuple
+        [](const char* name,
+           std::optional<BoolRef*> p_open,
+           ImGuiWindowFlags flags) -> bool
         {
-            bool p_open = true;
-            bool ret;
-            if(closable)
+            if(p_open.has_value())
             {
-                ret = ImGui::Begin(name, &p_open, flags);
+                return ImGui::Begin(name, &(p_open.value()->val), flags);
             }
             else
             {
-                ret = ImGui::Begin(name, nullptr, flags);
+                return ImGui::Begin(name, nullptr, flags);
             }
-
-            return py::make_tuple(ret, p_open);
         },
         "name"_a,
-        "closable"_a = false,
+        "p_open"_a = std::nullopt,
         "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );

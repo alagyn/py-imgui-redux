@@ -2,6 +2,7 @@
 set(${PROJECT_NAME}_SRCS
     binder/src/bind-modules.cpp
     binder/src/enum-utility.cpp
+    binder/src/wraps.cpp
 )
 
 include(imgui-core.cmake)
