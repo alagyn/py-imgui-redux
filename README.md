@@ -27,18 +27,18 @@ API as intact as possible. This is because:
 
 However, there are some minor comprimises that have to be made in order to make this happen, primarily in the case of pointers.
 
-Take for instance the function
+Take for instance the function:
 ```c++
 bool DragIntRange2(const char* label, int* v_current_min, int* v_current_max, /* other args... */);
 ```
-1. This function returns true if there was a change made
+1. This function returns true if the state changed
 2. `v_current_min` and `v_current_max` are pointers to state, and will be read and updated if a change is made
 
 Typical C++ usage
 ```c++
 int min = 0;
 int max = 5;
-/* Code ... */
+// Code ...
 if(imgui::DragIntRange2("Label", &min, &max))
 {
     // Code that happens if a change was made
@@ -66,6 +66,8 @@ myNum = imgui.IntRef(25)
 myNum.val += 2
 ```
 
+---
+
 The second concession is with lists.  
 Take for instance the function
 ```c++
@@ -74,7 +76,7 @@ bool DragInt3(const char* label, int v[3], /* args ... */);
 
 A standard python list is stored sequentially in memory, but the raw *values* themselves are wrapped in a python object. Therefore, we cannot easily iterate over *just* the ints/floats, let alone get a pointer to give to ImGui.
 
-This is solved in two ways.  
+This is solved in one of two ways.  
 
 Method 1: PyImgui-Redux Wrappers
 ```python
