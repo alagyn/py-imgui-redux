@@ -4,7 +4,12 @@ void init_tools(py::module& m)
 {
     m.def(
         "DragPoint",
-        [](int id, double x, double y, const ImVec4& col, float size, int flags)
+        [](int id,
+           double x,
+           double y,
+           const ImVec4& col,
+           float size,
+           ImPlotDragToolFlags flags)
         {
             bool out = ImPlot::DragPoint(id, &x, &y, col, size, flags);
             return py::make_tuple(out, x, y);
@@ -19,7 +24,11 @@ void init_tools(py::module& m)
 
     m.def(
         "DragLineX",
-        [](int id, double x, const ImVec4& col, float thickness, int flags)
+        [](int id,
+           double x,
+           const ImVec4& col,
+           float thickness,
+           ImPlotDragToolFlags flags)
         {
             bool out = ImPlot::DragLineX(id, &x, col, thickness, flags);
             return py::make_tuple(out, x);
@@ -32,7 +41,11 @@ void init_tools(py::module& m)
     );
     m.def(
         "DragLineY",
-        [](int id, double y, const ImVec4& col, float thickness, int flags)
+        [](int id,
+           double y,
+           const ImVec4& col,
+           float thickness,
+           ImPlotDragToolFlags flags)
         {
             bool out = ImPlot::DragLineY(id, &y, col, thickness, flags);
             return py::make_tuple(out, y);
@@ -51,7 +64,7 @@ void init_tools(py::module& m)
            double x2,
            double y2,
            const ImVec4& col,
-           int flags)
+           ImPlotDragToolFlags flags)
         {
             bool out = ImPlot::DragRect(id, &x1, &y1, &x2, &y2, col, flags);
             return py::make_tuple(out, x1, y1, x2, y2);

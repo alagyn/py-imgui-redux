@@ -1,5 +1,7 @@
+# Set binder srcs
 set(${PROJECT_NAME}_SRCS
     binder/src/bind-modules.cpp
+    binder/src/enum-utility.cpp
 )
 
 include(imgui-core.cmake)
@@ -33,6 +35,7 @@ target_compile_definitions(${PROJECT_NAME}
 target_compile_options(${PROJECT_NAME}
     PRIVATE
     -Wno-format-security
+    -fvisibility=hidden
 )
 
 install(

@@ -9,9 +9,12 @@ import shutil
 import pathlib
 import sys
 import subprocess
+import pybind11_stubgen
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
+
+IS_WINDOWS = sys.platform == "win32"
 
 
 def log(msg: str):
@@ -104,16 +107,36 @@ class InstallCMakeLibs(install_lib):
             shutil.copy(
                 lib, os.path.join(self.build_dir, os.path.basename(lib))
             )
+        """
+        log("Copying imgui python helpers")
+        helper_dir = os.path.join(self.build_dir, "imgui_helpers")
+        if os.path.exists(helper_dir):
+            shutil.rmtree(helper_dir)
+        shutil.copytree(os.path.join(SOURCE_DIR, "python-helpers"), helper_dir)
+        """
 
         log("Generating stubs")
+        env = dict(os.environ)
+        try:
+            oldPath = env["PYTHONPATH"]
+        except KeyError:
+            oldPath = ""
+
+        if IS_WINDOWS:
+            oldPath += f";{self.build_dir}"
+        else:
+            oldPath += f":{self.build_dir}"
+
+        env["PYTHONPATH"] = oldPath
+
         subprocess.check_call(
             [
                 sys.executable,
-                "-m"
-                "pybind11_stubgen",
+                os.path.join(SOURCE_DIR, "pybind11_stubgen.py"),
                 "--no-setup-py",
                 "imgui"
             ],
+            env=env,
             cwd=self.build_dir
         )
 
@@ -124,7 +147,6 @@ class InstallCMakeLibs(install_lib):
         shutil.move(
             os.path.join(self.build_dir, "stubs/imgui-stubs"), stub_dir
         )
-
         # Mark the libs for installation, adding them to
         # distribution.data_files seems to ensure that setuptools' record
         # writer appends them to installed-files.txt in the package's egg-info

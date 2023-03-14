@@ -53,7 +53,7 @@ void init_imnodes_enums(py::module& m)
         .VALUE(ImNodes, StyleVar, MiniMapOffset);
 
     ENUM(ImNodes, StyleFlags)
-        .value("None_", 0)
+        .RAW_VALUE(None_, ImNodesStyleFlags_None)
         .VALUE(ImNodes, StyleFlags, NodeOutline)
         .VALUE(ImNodes, StyleFlags, GridLines)
         .VALUE(ImNodes, StyleFlags, GridLinesPrimary)
@@ -68,7 +68,7 @@ void init_imnodes_enums(py::module& m)
         .VALUE(ImNodes, PinShape, QuadFilled);
 
     ENUM(ImNodes, AttributeFlags)
-        .value("None_", 0)
+        .RAW_VALUE(None_, ImNodesAttributeFlags_None)
         .VALUE(ImNodes, AttributeFlags, EnableLinkDetachWithDragClick)
         .VALUE(ImNodes, AttributeFlags, EnableLinkCreationOnSnap);
 

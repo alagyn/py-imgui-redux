@@ -63,7 +63,7 @@ void init_plotting(py::module& m)
            arr<double> values,
            double xscale,
            double xstart,
-           int flags,
+           ImPlotScatterFlags flags,
            int offset)
         {
             ImPlot::PlotScatter(
@@ -86,8 +86,11 @@ void init_plotting(py::module& m)
 
     m.def(
         "PlotScatter",
-        [](const char* label_id, arr<double> xs, arr<double> ys, int flags, int offset
-        )
+        [](const char* label_id,
+           arr<double> xs,
+           arr<double> ys,
+           ImPlotScatterFlags flags,
+           int offset)
         {
             if(xs.size() != ys.size())
             {
@@ -115,7 +118,7 @@ void init_plotting(py::module& m)
            arr<double> values,
            double xscale,
            double xstart,
-           int flags,
+           ImPlotStairsFlags flags,
            int offset)
         {
             ImPlot::PlotStairs(
@@ -137,8 +140,11 @@ void init_plotting(py::module& m)
     );
     m.def(
         "PlotStairs",
-        [](const char* label_id, arr<double> xs, arr<double> ys, int flags, int offset
-        )
+        [](const char* label_id,
+           arr<double> xs,
+           arr<double> ys,
+           ImPlotStairsFlags flags,
+           int offset)
         {
             if(xs.size() != ys.size())
             {
@@ -167,7 +173,7 @@ void init_plotting(py::module& m)
            double yref,
            double xscale,
            double xstart,
-           int flags,
+           ImPlotShadedFlags flags,
            int offset)
         {
             ImPlot::PlotShaded(
@@ -196,7 +202,7 @@ void init_plotting(py::module& m)
            arr<double> xs,
            arr<double> ys,
            double yref,
-           int flags,
+           ImPlotShadedFlags flags,
            int offset)
         {
             if(xs.size() != ys.size())
@@ -227,7 +233,7 @@ void init_plotting(py::module& m)
            arr<double> xs,
            arr<double> ys1,
            arr<double> ys2,
-           int flags,
+           ImPlotShadedFlags flags,
            int offset)
         {
             if(xs.size() != ys1.size() || xs.size() != ys2.size())
@@ -258,7 +264,7 @@ void init_plotting(py::module& m)
            arr<double> values,
            double bar_size,
            double shift,
-           int flags,
+           ImPlotBarsFlags flags,
            int offset)
         {
             ImPlot::PlotBars(
@@ -285,7 +291,7 @@ void init_plotting(py::module& m)
            arr<double> xs,
            arr<double> ys,
            double bar_size,
-           int flags,
+           ImPlotBarsFlags flags,
            int offset)
         {
             if(xs.size() != ys.size())
@@ -318,7 +324,7 @@ void init_plotting(py::module& m)
            int group_count,
            double group_size,
            double shift,
-           int flags)
+           ImPlotBarGroupsFlags flags)
         {
             if(labels.size() != item_count)
             {
@@ -354,7 +360,7 @@ void init_plotting(py::module& m)
            arr<double> xs,
            arr<double> ys,
            arr<double> err,
-           int flags,
+           ImPlotErrorBarsFlags flags,
            int offset)
         {
             if(xs.size() != ys.size() || xs.size() != err.size())
@@ -387,7 +393,7 @@ void init_plotting(py::module& m)
            arr<double> ys,
            arr<double> neg,
            arr<double> pos,
-           int flags,
+           ImPlotErrorBarsFlags flags,
            int offset)
         {
             if(xs.size() != ys.size() || xs.size() != neg.size()
@@ -425,7 +431,7 @@ void init_plotting(py::module& m)
            int ref,
            double scale,
            double start,
-           int flags,
+           ImPlotStemsFlags flags,
            int offset)
         {
             ImPlot::PlotStems(
@@ -453,7 +459,7 @@ void init_plotting(py::module& m)
            arr<double> xs,
            arr<double> ys,
            int ref,
-           int flags,
+           ImPlotStemsFlags flags,
            int offset)
         {
             if(xs.size() != ys.size())
@@ -480,7 +486,10 @@ void init_plotting(py::module& m)
 
     m.def(
         "PlotInfLines",
-        [](const char* label_id, arr<double> values, int flags, int offset)
+        [](const char* label_id,
+           arr<double> values,
+           ImPlotInfLinesFlags flags,
+           int offset)
         {
             ImPlot::PlotInfLines(
                 label_id,
@@ -505,7 +514,7 @@ void init_plotting(py::module& m)
            double radius,
            const char* label_fmt,
            double angle0,
-           int flags)
+           ImPlotPieChartFlags flags)
         {
             if(label_ids.size() != values.size())
             {
@@ -544,7 +553,7 @@ void init_plotting(py::module& m)
            const char* label_fmt,
            const ImPlotPoint& bounds_min,
            const ImPlotPoint& bounds_max,
-           int flags)
+           ImPlotHeatmapFlags flags)
         {
             if(values.size() < rows * cols)
             {
@@ -583,7 +592,7 @@ void init_plotting(py::module& m)
            int bins,
            double bar_scale,
            ImPlotRange range,
-           int flags)
+           ImPlotHistogramFlags flags)
         {
             ImPlot::PlotHistogram(
                 label_id,
@@ -611,7 +620,7 @@ void init_plotting(py::module& m)
            int x_bins,
            int y_bins,
            ImPlotRect range,
-           int flags)
+           ImPlotHistogramFlags flags)
         {
             if(xs.size() != ys.size())
             {
@@ -639,8 +648,11 @@ void init_plotting(py::module& m)
 
     m.def(
         "PlotDigital",
-        [](const char* label_id, arr<double> xs, arr<double> ys, int flags, int offset
-        )
+        [](const char* label_id,
+           arr<double> xs,
+           arr<double> ys,
+           ImPlotDigitalFlags flags,
+           int offset)
         {
             if(xs.size() != ys.size())
             {

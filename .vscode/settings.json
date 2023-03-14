@@ -1,6 +1,7 @@
 {
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     "files.associations": {
+        ".style.yapf": "properties",
         "algorithm": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -85,7 +86,8 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "*.tcc": "cpp"
     },
     "C_Cpp.default.defines": [
         "IMGUI_DISABLE_OBSOLETE_KEYIO=1",

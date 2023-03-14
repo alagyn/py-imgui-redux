@@ -76,7 +76,11 @@ void init_utils(py::module& m)
     m.def(IMFUNC(BeginAlignedPlots), "group_id"_a, "vertical"_a = true);
 
     // Legend utils
-    m.def(IMFUNC(BeginLegendPopup), "label_id"_a, "mouse_button"_a = 1);
+    m.def(
+        IMFUNC(BeginLegendPopup),
+        "label_id"_a,
+        "mouse_button"_a = (int)ImGuiMouseButton_Right
+    );
     QUICK(EndLegendPopup);
     m.def(IMFUNC(IsLegendEntryHovered), "label_id"_a);
 
