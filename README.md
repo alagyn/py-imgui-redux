@@ -1,6 +1,8 @@
 # PyImGui-Redux
 DearImGui wrapper for python made with PyBind11
 
+## Hardhats needed ahead, this is an active construction zone. Come back later if you really want to use this.
+
 Read below for adjustments made to the standard APIs.
 Otherwise, all documentation from the original libraries remains 100% valid.
 Check out the examples folder for some concrete code.
