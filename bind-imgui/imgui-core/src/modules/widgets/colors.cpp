@@ -1,69 +1,69 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-#include <pybind11/stl.h>
 
 void init_widgets_colors(py::module& m)
 {
     m.def(
         "ColorEdit3",
-        [](const char* label, std::array<float, 3> col, const int flags)
+        [](const char* label, FloatList col, const int flags)
         {
-            bool out = ImGui::ColorEdit3(label, col.data(), flags);
-            return py::make_tuple(out, col);
+            if(col->size() < 3)
+            {
+                throw std::out_of_range("ColorEdit3(): len(col) < 3");
+            }
+
+            return ImGui::ColorEdit3(label, col->data(), flags);
         },
         "label"_a,
         "col"_a,
-        "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "flags"_a = 0
     );
     m.def(
         "ColorEdit4",
-        [](const char* label, std::array<float, 4> col, const int flags)
+        [](const char* label, FloatList col, const int flags)
         {
-            bool out = ImGui::ColorEdit4(label, col.data(), flags);
-            return py::make_tuple(out, col);
+            if(col->size() < 4)
+            {
+                throw std::out_of_range("ColorEdit4(): len(col) < 4");
+            }
+
+            return ImGui::ColorEdit4(label, col->data(), flags);
         },
         "label"_a,
         "col"_a,
-        "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "flags"_a = 0
     );
     m.def(
         "ColorPicker3",
-        [](const char* label, std::array<float, 3> col, const int flags)
+        [](const char* label, FloatList col, const int flags)
         {
-            bool out = ImGui::ColorPicker3(label, col.data(), flags);
-            return py::make_tuple(out, col);
+            if(col->size() < 3)
+            {
+                throw std::out_of_range("ColorPicker3(): len(col) < 3");
+            }
+
+            return ImGui::ColorPicker3(label, col->data(), flags);
         },
         "label"_a,
         "col"_a,
-        "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "flags"_a = 0
     );
     m.def(
         "ColorPicker4",
-        [](const char* label,
-           std::array<float, 4> col,
-           const int flags,
-           py::object refColor)
+        [](const char* label, FloatList col, const int flags, const float* refColor
+        )
         {
-            bool out = false;
-            if(refColor.is_none())
+            if(col->size() < 4)
             {
-                out = ImGui::ColorPicker4(label, col.data(), flags, nullptr);
-            }
-            else
-            {
-                auto x = refColor.cast<std::array<float, 4>>();
-                out = ImGui::ColorPicker4(label, col.data(), flags, x.data());
+                throw std::out_of_range("ColorPicker4(): len(col) < 4");
             }
 
-            return py::make_tuple(out, col);
+            return ImGui::ColorPicker4(label, col->data(), flags, refColor);
         },
         "label"_a,
         "col"_a,
         "flags"_a = 0,
-        "ref_col"_a = py::none(),
-        py::return_value_policy::automatic_reference
+        "ref_col"_a = nullptr
     );
     m.def(
         IMFUNC(ColorButton),

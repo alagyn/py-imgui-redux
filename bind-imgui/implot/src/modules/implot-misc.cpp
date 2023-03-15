@@ -1,3 +1,4 @@
+#include <binder/inc/wraps.h>
 #include <implot/inc/implot-modules.h>
 
 void init_misc(py::module& m)
@@ -35,39 +36,31 @@ void init_misc(py::module& m)
     QUICK(ShowUserGuide);
     m.def(
         "ShowMetricsWindow",
-        [](bool closable)
+        [](BoolRef p_open)
         {
-            bool open = true;
-            if(closable)
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImPlot::ShowMetricsWindow(&open);
-            }
-            else
-            {
-                ImPlot::ShowMetricsWindow();
+                xxx = &(p_open->val);
             }
 
-            return open;
+            ImPlot::ShowMetricsWindow(xxx);
         },
-        "closable"_a = false
+        "p_open"_a = nullptr
     );
 
     m.def(
         "ShowDemoWindow",
-        [](bool closable)
+        [](BoolRef p_open)
         {
-            bool open = true;
-            if(closable)
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImPlot::ShowDemoWindow(&open);
-            }
-            else
-            {
-                ImPlot::ShowDemoWindow();
+                xxx = &(p_open->val);
             }
 
-            return open;
+            ImPlot::ShowDemoWindow(xxx);
         },
-        "closable"_a = false
+        "p_open"_a = nullptr
     );
 }

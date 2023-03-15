@@ -14,8 +14,8 @@ import imgui.implot as implot  # type: ignore
 class State:
 
     def __init__(self) -> None:
-        self.cb1 = False
-        self.radio = -1
+        self.cb1 = imgui.BoolRef(False)
+        self.radio = imgui.IntRef(-1)
         self.progress = 0.0
         self.progressTime = time.perf_counter()
         self.comboVal = "Select Me"
@@ -63,16 +63,14 @@ def normWidgets(state: State):
         if imgui.ArrowButton("arrw_btn", 0):
             print("Arrow Btn")
 
-        pressed, state.cb1 = imgui.CheckBox("Checkbox", state.cb1)
-        if pressed:
+        if imgui.CheckBox("Checkbox", state.cb1):
             print("Checkbox")
         # TODO checkbox flags
         if imgui.Button("Reset Radio"):
-            state.radio = -1
+            state.radio.val = -1
         if imgui.RadioButton("Radio0", state.radio == 0):
-            state.radio = 0
-        if imgui.RadioButton("Radio1", state.radio == 1):
-            state.radio = 1
+            state.radio.val = 0
+        imgui.RadioButton("Radio1", state.radio, 1)
 
         imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
         if time.perf_counter() - state.progressTime > 0.5:
@@ -128,13 +126,12 @@ def normWidgets(state: State):
         if imgui.Button("Popup"):
             imgui.OpenPopup("popup")
 
-        visible, op = imgui.BeginPopupModal("nc-modal")
-        if visible:
+        if imgui.BeginPopupModal("nc-modal"):
             imgui.Selectable("ASDFASDF")
             imgui.EndPopup()
 
-        visible, op = imgui.BeginPopupModal("c-modal", True)
-        if visible:
+        if imgui.BeginPopupModal("c-modal", imgui.BoolRef(True)):
+            imgui.SetWindowFocus()
             imgui.Selectable("ASDFASDF")
             imgui.Dummy(imgui.Vec2(10, 20))
             imgui.Text("Hover to close")
@@ -143,6 +140,7 @@ def normWidgets(state: State):
             imgui.EndPopup()
 
         if imgui.Button("Non-Closable Modal"):
+            imgui.SetWindowFocus()
             imgui.OpenPopup("nc-modal")
 
         if imgui.Button("Closable Modal"):

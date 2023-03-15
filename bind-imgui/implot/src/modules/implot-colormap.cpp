@@ -1,13 +1,12 @@
+#include <binder/inc/numpy.h>
+#include <binder/inc/wraps.h>
 #include <implot/inc/implot-modules.h>
-#include <pybind11/numpy.h>
 
 void init_colormaps(py::module& m)
 {
     m.def(
         "AddColorMap",
-        [](const char* name,
-           py::array_t<ImVec4, py::array::c_style> cols,
-           bool qual)
+        [](const char* name, arr<ImVec4> cols, bool qual)
         {
             return ImPlot::AddColormap(name, cols.data(), cols.size(), qual);
         },
@@ -17,9 +16,7 @@ void init_colormaps(py::module& m)
     );
     m.def(
         "AddColorMap",
-        [](const char* name,
-           py::array_t<ImU32, py::array::c_style> cols,
-           bool qual)
+        [](const char* name, arr<ImU32> cols, bool qual)
         {
             return ImPlot::AddColormap(name, cols.data(), cols.size(), qual);
         },
@@ -61,14 +58,17 @@ void init_colormaps(py::module& m)
     );
     m.def(
         "ColormapSlider",
-        [](const char* label, float t, const char* format, ImPlotColormap cmap)
+        [](const char* label,
+           FloatRef t,
+           ImVec4* out,
+           const char* format,
+           ImPlotColormap cmap)
         {
-            ImVec4 outC;
-            bool out = ImPlot::ColormapSlider(label, &t, &outC, format, cmap);
-            return py::make_tuple(out, outC);
+            return ImPlot::ColormapSlider(label, &t->val, out, format, cmap);
         },
         "label"_a,
         "t"_a,
+        "out"_a = nullptr,
         "format"_a = "",
         "cmap"_a = IMPLOT_AUTO
     );

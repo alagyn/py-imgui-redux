@@ -1,5 +1,5 @@
 #pragma once
-#include <pybind11/stl.h>
+#include <pybind11/pybind11.h>
 #include <sstream>
 #include <vector>
 
@@ -24,13 +24,18 @@ public:
     }
 };
 
-using BoolRef = Wrapper<bool>;
-using FloatRef = Wrapper<float>;
-using IntRef = Wrapper<int>;
+using BoolRef_ = Wrapper<bool>;
+using BoolRef = BoolRef_*;
+
+using FloatRef_ = Wrapper<float>;
+using FloatRef = FloatRef_*;
+
+using IntRef_ = Wrapper<int>;
+using IntRef = IntRef_*;
 
 template<class T> class ImList
 {
-private:
+protected:
     std::vector<T> vals;
 
 public:
@@ -75,7 +80,33 @@ public:
     {
         return vals.data();
     }
+
+    virtual void resize(size_t size)
+    {
+        vals.resize(size);
+    }
 };
 
-using IntList = ImList<int>;
-using FloatList = ImList<float>;
+using IntList_ = ImList<int>;
+using IntList = IntList_*;
+
+using FloatList_ = ImList<float>;
+using FloatList = FloatList_*;
+
+using DoubleList_ = ImList<double>;
+using DoubleList = DoubleList_*;
+
+using StrList_ = ImList<const char*>;
+using StrList = StrList_*;
+
+class StrRef_ : public ImList<char>
+{
+public:
+    StrRef_(size_t maxSize);
+    StrRef_(const char* val, size_t maxSize = 0);
+    void set(const char* newVal, size_t maxSize = 0);
+    virtual void resize(size_t size) override;
+    size_t strSize();
+};
+
+using StrRef = StrRef_*;

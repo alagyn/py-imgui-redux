@@ -1,51 +1,25 @@
+#include <cstdint>
 #include <iostream>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-
 #include <sstream>
 
 using namespace pybind11::literals;
 namespace py = pybind11;
 
-class Test
-{
-private:
-    int value;
-
-public:
-    Test(int value)
-        : value(value)
-    {
-    }
-
-    int inc()
-    {
-        return ++value;
-    }
-
-    int dec(int num)
-    {
-        value -= num;
-        return value;
-    }
-};
-
 class IntWrap
 {
 public:
-    IntWrap(int val = 0)
+    IntWrap(int val)
         : val(val)
     {
     }
 
+    int val;
+
     int toInt()
     {
         return val;
-    }
-
-    float toFloat()
-    {
-        return (float)val;
     }
 
     const char* toStr()
@@ -54,63 +28,94 @@ public:
         ss << "IntWrapper (" << val << ")";
         return ss.str().c_str();
     }
+};
 
-    int add(int other)
-    {
-        return val + other;
-    }
+typedef int* IntPtr;
 
+struct inty
+{
     int val;
 };
 
-PYBIND11_MODULE(bdd, m)
+namespace PYBIND11_NAMESPACE {
+    namespace detail {
+        template<> struct type_caster<int*>
+        {
+            // Declares a var named "value"
+            PYBIND11_TYPE_CASTER(int*, const_name("int_"));
 
+            bool load(py::handle handle, bool)
+            {
+                std::cout << "Casting to int\n" << std::flush;
+
+                IntWrap* wrapper = handle.cast<IntWrap*>();
+                if(!wrapper)
+                {
+                    std::cout << "Failed to cast\n" << std::flush;
+                    return false;
+                }
+                std::cout << "CAST\n" << std::flush;
+                value = &wrapper->val;
+                return true;
+            }
+        };
+
+        template<> struct type_caster<inty>
+        {
+            // Declares a var named "value"
+            PYBIND11_TYPE_CASTER(inty, const_name("inty"));
+
+            bool load(py::handle handle, bool)
+            {
+                std::cout << "Casting to inty\n" << std::flush;
+
+                IntWrap* wrapper = handle.cast<IntWrap*>();
+                if(!wrapper)
+                {
+                    std::cout << "Failed to cast\n" << std::flush;
+                    return false;
+                }
+                std::cout << "CAST\n" << std::flush;
+                value.val = wrapper->val;
+                return true;
+            }
+        };
+    } //namespace detail
+
+} //namespace PYBIND11_NAMESPACE
+
+void normFunc(int num)
 {
+    num += 5;
+}
+
+void ptrFunc(int* num)
+{
+    *num += 5;
+}
+
+void wrapFunc(IntWrap* num)
+{
+    num->val += 5;
+}
+
+void intyFunc(inty num)
+{
+    num.val += 5;
+}
+
+PYBIND11_MODULE(bdd, m)
+{
+    //py::class_<int*>(m, "__intPtr");
     py::class_<IntWrap>(m, "Wrap")
         .def(py::init<int>(), "val"_a = 0)
-        .def("__int__", &IntWrap::toInt)
-        .def("__float__", &IntWrap::toFloat)
+        //.def("__int__", &IntWrap::toInt)
+        //.def("__float__", &IntWrap::toFloat)
         .def("__str__", &IntWrap::toStr)
-        .def("__add__", &IntWrap::add)
         .def_readwrite("val", &IntWrap::val);
 
-    py::class_<Test>(m, "Test")
-        .def(py::init<int>(), "value"_a)
-        .def("inc", &Test::inc)
-        .def(
-            "dec",
-            [](Test* self, int num)
-            {
-                return self->dec(num);
-            },
-            "num"_a
-        )
-        .def_property_readonly_static(
-            "stat",
-            [](py::type)
-            {
-                return 25;
-            }
-        );
-
-    m.def(
-        "arrint",
-        [](std::array<int, 3> vals)
-        {
-            py::print(vals[0], vals[1], vals[2]);
-            vals[0] = 16;
-            return vals;
-        },
-        "arr"_a
-    );
-    m.def(
-        "arrflt",
-        [](std::array<float, 3> vals)
-        {
-            py::print(vals[0], vals[1], vals[2]);
-            vals[0] = 16.5;
-            return vals;
-        },
-        "arr"_a
-    );
+    m.def("normal", normFunc, "num"_a);
+    m.def("ptr", ptrFunc, "num"_a);
+    m.def("wrap", wrapFunc, "num"_a);
+    m.def("inty", intyFunc, "num"_a);
 }

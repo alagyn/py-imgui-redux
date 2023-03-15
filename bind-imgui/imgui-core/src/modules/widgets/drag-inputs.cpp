@@ -7,7 +7,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat",
         [](const char* label,
-           FloatRef* val,
+           FloatRef val,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -35,7 +35,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat2",
         [](const char* label,
-           FloatList* values,
+           FloatList values,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -68,7 +68,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat3",
         [](const char* label,
-           FloatList* values,
+           FloatList values,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -100,7 +100,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloat4",
         [](const char* label,
-           FloatList* values,
+           FloatList values,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -134,8 +134,8 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragFloatRange2",
         [](const char* label,
-           FloatRef* curMin,
-           FloatRef* curMax,
+           FloatRef curMin,
+           FloatRef curMax,
            const float v_speed,
            const float v_min,
            const float v_max,
@@ -170,7 +170,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt",
         [](const char* label,
-           IntRef* val,
+           IntRef val,
            const float v_speed,
            const int v_min,
            const int v_max,
@@ -198,7 +198,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt2",
         [](const char* label,
-           IntList* values,
+           IntList values,
            const float v_speed,
            const int v_min,
            const int v_max,
@@ -231,7 +231,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt3",
         [](const char* label,
-           IntList* values,
+           IntList values,
            const float v_speed,
            const int v_min,
            const int v_max,
@@ -264,7 +264,7 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragInt4",
         [](const char* label,
-           IntList* values,
+           IntList values,
            const float v_speed,
            const int v_min,
            const int v_max,
@@ -298,8 +298,8 @@ void init_widgets_drags(py::module& m)
     m.def(
         "DragIntRange2",
         [](const char* label,
-           IntRef* curMin,
-           IntRef* curMax,
+           IntRef curMin,
+           IntRef curMax,
            const float v_speed,
            const int v_min,
            const int v_max,

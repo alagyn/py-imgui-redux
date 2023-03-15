@@ -1,5 +1,5 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-
 #include <imgui_internal.h>
 
 void init_widgets_main(py::module& m)
@@ -14,30 +14,47 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(ArrowButton), "str_id"_a, "dir"_a);
     m.def(
         "CheckBox",
-        [](const char* label, bool cur_state) -> py::tuple
+        [](const char* label, BoolRef cur_state)
         {
-            bool pressed = ImGui::Checkbox(label, &cur_state);
-            return py::make_tuple(pressed, cur_state);
+            return ImGui::Checkbox(label, &cur_state->val);
         },
         "label"_a,
         "cur_state"_a
     );
     m.def(
         "CheckBoxFlags",
-        [](const char* label, int cur_flags, int flags_mask) -> py::tuple
+        [](const char* label, IntRef cur_flags, int flags_value)
         {
-            bool pressed = ImGui::CheckboxFlags(label, &cur_flags, flags_mask);
-            return py::make_tuple(pressed, cur_flags);
+            return ImGui::CheckboxFlags(label, &cur_flags->val, flags_value);
         },
         "label"_a,
         "cur_flags"_a,
-        "flags_mask"_a
+        "flags_value"_a
     );
     m.def(
         "RadioButton",
         py::overload_cast<const char*, bool>(ImGui::RadioButton),
         "label"_a,
-        "value"_a
+        "value"_a,
+        "Create a radio button, returns true if pressed"
+    );
+    m.def(
+        "RadioButton",
+        [](const char* label, IntRef v, int v_button)
+        {
+            return ImGui::RadioButton(label, &v->val, v_button);
+        },
+        "label"_a,
+        "v"_a,
+        "v_button"_a,
+        R"<>(
+        Shorthand for:
+        ::
+        curButton = 0
+        if imgui.RadioButton("label", curButton == 1):
+            curButton = 1
+        ::\n
+        )<>"
     );
     m.def(
         IMFUNC(ProgressBar),
@@ -48,8 +65,6 @@ void init_widgets_main(py::module& m)
     QUICK(Bullet);
 
     // TODO Images
-
-    // TODO make context managers for Begin/End pairs
 
     // Combo
     m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flag"_a = 0);
@@ -115,23 +130,18 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(BeginPopup), "str_id"_a, "flags"_a = 0);
     m.def(
         "BeginPopupModal",
-        [](const char* name, bool closable, int flags)
+        [](const char* name, BoolRef p_open, int flags)
         {
-            bool open = true;
-            bool out = false;
-            if(!closable)
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                out = ImGui::BeginPopupModal(name, nullptr, flags);
-            }
-            else
-            {
-                out = ImGui::BeginPopupModal(name, &open, flags);
+                xxx = &(p_open->val);
             }
 
-            return py::make_tuple(out, open);
+            return ImGui::BeginPopupModal(name, xxx, flags);
         },
         "name"_a,
-        "closable"_a = false,
+        "p_open"_a = nullptr,
         "flags"_a = 0
     );
     QUICK(EndPopup);

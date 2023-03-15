@@ -1,5 +1,5 @@
+#include <binder/inc/wraps.h>
 #include <implot/inc/implot-modules.h>
-#include <pybind11/stl.h>
 
 void init_setup_funcs(py::module& m)
 {
@@ -21,27 +21,24 @@ void init_setup_funcs(py::module& m)
     // TODO SetupAxisFormat with callback, need to wrap in an object?
     m.def(
         "SetupAxisTicks",
-        [](ImAxis axis,
-           std::vector<double> values,
-           std::vector<const char*> labels,
-           bool keep_default)
+        [](ImAxis axis, DoubleList values, StrList labels, bool keep_default)
         {
             const char** labelPtr = nullptr;
-            if(!labels.empty())
+            if(labels)
             {
-                labelPtr = labels.data();
+                labelPtr = labels->data();
             }
             ImPlot::SetupAxisTicks(
                 axis,
-                values.data(),
-                values.size(),
+                values->data(),
+                values->size(),
                 labelPtr,
                 keep_default
             );
         },
         "axis"_a,
         "values"_a,
-        "labels"_a = std::vector<const char*>(),
+        "labels"_a = nullptr,
         "keep_default"_a = false
     );
     m.def(
@@ -50,13 +47,13 @@ void init_setup_funcs(py::module& m)
            double v_min,
            double v_max,
            int n_ticks,
-           std::vector<const char*> labels,
+           StrList labels,
            bool keep_default)
         {
             const char** labelPtr = nullptr;
-            if(!labels.empty())
+            if(labels)
             {
-                labelPtr = labels.data();
+                labelPtr = labels->data();
             }
 
             ImPlot::SetupAxisTicks(
@@ -72,7 +69,7 @@ void init_setup_funcs(py::module& m)
         "v_min"_a,
         "v_max"_a,
         "n_ticks"_a,
-        "labels"_a = std::vector<const char*>(),
+        "labels"_a = nullptr,
         "keep_default"_a = false
     );
     m.def(

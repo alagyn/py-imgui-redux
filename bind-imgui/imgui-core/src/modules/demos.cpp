@@ -1,83 +1,77 @@
 #include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-#include <pybind11/stl.h>
 
 void init_demos(py::module& m)
 {
     m.def(
         "ShowDemoWindow",
-        [](std::optional<BoolRef*> p_open)
+        [](BoolRef p_open)
         {
-            if(p_open.has_value())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImGui::ShowDemoWindow(&(p_open.value()->val));
+                xxx = &p_open->val;
             }
-            else
-            {
-                ImGui::ShowDemoWindow();
-            }
+
+            ImGui::ShowDemoWindow(xxx);
         },
-        "p_open"_a = std::nullopt
+        "p_open"_a = nullptr
     );
     m.def(
         "ShowMetricsWindow",
-        [](std::optional<BoolRef*> p_open)
+        [](BoolRef p_open)
         {
-            if(p_open.has_value())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImGui::ShowMetricsWindow(&(p_open.value()->val));
+                xxx = &p_open->val;
             }
-            else
-            {
-                ImGui::ShowMetricsWindow();
-            }
+
+            ImGui::ShowMetricsWindow(xxx);
         },
-        "p_open"_a = std::nullopt
+        "p_open"_a = nullptr
     );
     m.def(
         "ShowDebugLogWindow",
-        [](std::optional<BoolRef*> p_open)
+        [](BoolRef p_open)
         {
-            if(p_open.has_value())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImGui::ShowDebugLogWindow(&(p_open.value()->val));
+                xxx = &p_open->val;
             }
-            else
-            {
-                ImGui::ShowDebugLogWindow();
-            }
+
+            ImGui::ShowDebugLogWindow(xxx);
         },
-        "p_open"_a = std::nullopt
+        "p_open"_a = nullptr
     );
     m.def(
         "ShowStackToolWindow",
-        [](std::optional<BoolRef*> p_open)
+        [](BoolRef p_open)
         {
-            if(p_open.has_value())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImGui::ShowStackToolWindow(&(p_open.value()->val));
+                xxx = &p_open->val;
             }
-            else
-            {
-                ImGui::ShowStackToolWindow();
-            }
+
+            ImGui::ShowStackToolWindow(xxx);
         },
-        "p_open"_a = std::nullopt
+        "p_open"_a = nullptr
     );
     m.def(
         "ShowAboutWindow",
-        [](std::optional<BoolRef*> p_open)
+        [](BoolRef p_open)
         {
-            if(p_open.has_value())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                ImGui::ShowAboutWindow(&(p_open.value()->val));
+                xxx = &p_open->val;
             }
-            else
-            {
-                ImGui::ShowAboutWindow();
-            }
+
+            ImGui::ShowAboutWindow(xxx);
         },
-        "p_open"_a
+        "p_open"_a = nullptr
     );
     m.def(IMFUNC(ShowStyleEditor), "ref"_a = nullptr);
     m.def(IMFUNC(ShowStyleSelector), "label"_a);

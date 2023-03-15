@@ -1,3 +1,4 @@
+#include <binder/inc/wraps.h>
 #include <imnodes/inc/imnodes-modules.h>
 #include <imnodes_internal.h>
 #include <pybind11/stl.h>
@@ -28,7 +29,7 @@ void init_imnodes_context(py::module& m)
     QUICK(BeginNodeEditor);
     QUICK(EndNodeEditor);
 
-    // TODO wrap callbacks
+    // TODO wrap callbacks?
     m.def(
         "MiniMap",
         [](float size_fraction, ImNodesMiniMapLocation loc)
@@ -111,53 +112,52 @@ void init_imnodes_context(py::module& m)
 
     m.def(
         "GetSelectedNodes",
-        []()
+        [](IntList out)
         {
-            std::vector<int> out(ImNodes::NumSelectedNodes(), 0);
-            ImNodes::GetSelectedNodes(out.data());
-            return out;
-        }
+            out->resize(ImNodes::NumSelectedNodes());
+            ImNodes::GetSelectedNodes(out->data());
+        },
+        "node_ids"_a
     );
     m.def(
         "GetSelectedLinks",
-        []()
+        [](IntList out)
         {
-            std::vector<int> out(ImNodes::NumSelectedLinks(), 0);
-            ImNodes::GetSelectedLinks(out.data());
-            return out;
+            out->resize(ImNodes::NumSelectedLinks());
+            ImNodes::GetSelectedLinks(out->data());
         }
     );
 
     m.def(
         "ClearNodeSelection",
-        [](py::int_ node_id)
+        [](std::optional<int> node_id)
         {
-            if(node_id.is_none())
+            if(node_id.has_value())
             {
-                ImNodes::ClearNodeSelection();
+                ImNodes::ClearNodeSelection(node_id.value());
             }
             else
             {
-                ImNodes::ClearNodeSelection(node_id.cast<int>());
+                ImNodes::ClearNodeSelection();
             }
         },
-        "node_id"_a = py::none()
+        "node_id"_a = std::nullopt
     );
 
     m.def(
         "ClearLinkSelection",
-        [](py::int_ link_id)
+        [](std::optional<int> link_id)
         {
-            if(link_id.is_none())
+            if(link_id.has_value())
             {
-                ImNodes::ClearLinkSelection();
+                ImNodes::ClearLinkSelection(link_id.value());
             }
             else
             {
-                ImNodes::ClearLinkSelection(link_id.cast<int>());
+                ImNodes::ClearLinkSelection();
             }
         },
-        "link_id"_a = py::none()
+        "link_id"_a = std::nullopt
     );
 
     m.def(IMFUNC(SelectNode), "node_id"_a);
@@ -168,65 +168,108 @@ void init_imnodes_context(py::module& m)
 
     QUICK(IsAttributeActive);
 
-    // TODO make structs with named variables for these tuple returns
-
     m.def(
         "IsAnyAttributeActive",
-        []()
+        [](IntRef attribute_id)
         {
-            int x = 0;
-            bool out = ImNodes::IsAnyAttributeActive(&x);
-            return py::make_tuple(out, x);
-        }
+            int* xxx = nullptr;
+            if(attribute_id)
+            {
+                xxx = &(attribute_id->val);
+            }
+
+            return ImNodes::IsAnyAttributeActive(xxx);
+        },
+        "attribute_id"_a = nullptr,
+        R"(
+        Returns true if any attribute is active, I.E. clicked on.
+        If not None, sets the passed reference to the ID of the active attribute.
+        )"
     );
 
     m.def(
         "IsLinkStarted",
-        []()
+        [](IntRef attrId)
         {
-            int x = 0;
-            bool out = ImNodes::IsLinkStarted(&x);
-            return py::make_tuple(out, x);
-        }
+            return ImNodes::IsLinkStarted(&attrId->val);
+        },
+        "started_at_attribute_id"_a,
+        R"(
+        Returns true if a new link has been started, but not completed.
+        Sets the the passed reference to the ID of the starting attribute.
+        )"
     );
     m.def(
         "IsLinkDropped",
-        [](bool include_detach)
+        [](IntRef attrID, bool include_detach)
         {
-            int x = 0;
-            bool out = ImNodes::IsLinkDropped(&x, include_detach);
-            return py::make_tuple(out, x);
+            int* xxx;
+            if(attrID)
+            {
+                xxx = &(attrID->val);
+            }
+            return ImNodes::IsLinkDropped(xxx, include_detach);
         },
-        "including_detached_links"_a = true
+        "started_at_attribute_id"_a = nullptr,
+        "including_detached_links"_a = true,
+        R"(
+        Did the user drop the dragged link before attaching it to a pin?
+        There are two different kinds of situations to consider when handling this event:
+        1) a link which is created at a pin and then dropped
+        2) an existing link which is detached from a pin and then dropped
+        Use the including_detached_links flag to control whether this function triggers when the user
+        detaches a link and drops it.
+        )"
     );
     m.def(
         "IsLinkCreated",
-        []()
+        [](IntRef startAttrID, IntRef endAttrID, BoolRef madeFromSnap)
         {
-            int startN = 0, startAttr = 0, endN = 0, endAttr = 0;
-            bool createdFromSnap = false;
-            bool out = ImNodes::IsLinkCreated(
-                &startN,
-                &startAttr,
-                &endN,
-                &endAttr,
-                &createdFromSnap
-            );
+            bool* xxx = nullptr;
+            if(madeFromSnap)
+            {
+                xxx = &(madeFromSnap->val);
+            }
+            return ImNodes::IsLinkCreated(&startAttrID->val, &endAttrID->val, xxx);
+        },
+        "started_at_attribute_id"_a,
+        "ended_at_attribute_id"_a,
+        "created_from_snap"_a = nullptr
+    );
 
-            return py::make_tuple(
-                out,
-                py::make_tuple(startN, startAttr, endN, endAttr, createdFromSnap)
+    m.def(
+        "IsLinkCreated",
+        [](IntRef startNodeID,
+           IntRef startAttrID,
+           IntRef endNodeID,
+           IntRef endAttrID,
+           BoolRef madeFromSnap)
+        {
+            bool* xxx = nullptr;
+            if(madeFromSnap)
+            {
+                xxx = &(madeFromSnap->val);
+            }
+            return ImNodes::IsLinkCreated(
+                &startNodeID->val,
+                &startAttrID->val,
+                &endNodeID->val,
+                &endAttrID->val,
+                xxx
             );
-        }
+        },
+        "started_at_node_id"_a,
+        "started_at_attribute_id"_a,
+        "ended_at_node_id"_a,
+        "ended_at_attribute_id"_a,
+        "created_from_snap"_a = nullptr
     );
 
     m.def(
         "IsLinkDestroyed",
-        []()
+        [](IntRef linkID)
         {
-            int x = 0;
-            bool out = ImNodes::IsLinkDestroyed(&x);
-            return py::make_tuple(out, x);
+            return ImNodes::IsLinkDestroyed(&linkID->val);
         }
     );
 

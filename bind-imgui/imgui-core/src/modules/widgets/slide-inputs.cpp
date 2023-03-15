@@ -1,5 +1,5 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-#include <pybind11/stl.h>
 
 void init_widgets_slide(py::module& m)
 {
@@ -7,15 +7,13 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat",
         [](const char* label,
-           float v,
+           FloatRef v,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderFloat(label, &v, v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            return ImGui::SliderFloat(label, &v->val, v_min, v_max, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -27,15 +25,25 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat2",
         [](const char* label,
-           std::array<float, 2> v,
+           FloatList v,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderFloat2(label, v.data(), v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 2)
+            {
+                throw std::out_of_range("SliderFloat2(): len(v) < 2");
+            }
+
+            return ImGui::SliderFloat2(
+                label,
+                v->data(),
+                v_min,
+                v_max,
+                format,
+                flags
+            );
         },
         "label"_a,
         "v"_a,
@@ -47,15 +55,25 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat3",
         [](const char* label,
-           std::array<float, 3> v,
+           FloatList v,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderFloat3(label, v.data(), v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 3)
+            {
+                throw std::out_of_range("SliderFloat3(): len(v) < 3");
+            }
+
+            return ImGui::SliderFloat3(
+                label,
+                v->data(),
+                v_min,
+                v_max,
+                format,
+                flags
+            );
         },
         "label"_a,
         "v"_a,
@@ -67,14 +85,14 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat4",
         [](const char* label,
-           std::array<float, 4> v,
+           FloatList v,
            const float v_min,
            const float v_max,
            const char* format,
            const int flags)
         {
             bool out =
-                ImGui::SliderFloat4(label, v.data(), v_min, v_max, format, flags);
+                ImGui::SliderFloat4(label, v->data(), v_min, v_max, format, flags);
             return py::make_tuple(out, v);
         },
         "label"_a,
@@ -137,14 +155,13 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt",
         [](const char* label,
-           int v,
+           IntRef v,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out = ImGui::SliderInt(label, &v, v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            return ImGui::SliderInt(label, &v->val, v_min, v_max, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -156,15 +173,18 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt2",
         [](const char* label,
-           std::array<int, 2> v,
+           IntList v,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderInt2(label, v.data(), v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 2)
+            {
+                throw std::out_of_range("SliderInt2(): len(v) < 2");
+            }
+
+            return ImGui::SliderInt2(label, v->data(), v_min, v_max, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -176,15 +196,17 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt3",
         [](const char* label,
-           std::array<int, 3> v,
+           IntList v,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderInt3(label, v.data(), v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 3)
+            {
+                throw std::out_of_range("SliderInt3(): len(v) < 3");
+            }
+            return ImGui::SliderInt3(label, v->data(), v_min, v_max, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -196,15 +218,17 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt4",
         [](const char* label,
-           std::array<int, 4> v,
+           IntList v,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::SliderInt4(label, v.data(), v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 4)
+            {
+                throw std::out_of_range("SliderInt4(): len(v) < 4");
+            }
+            return ImGui::SliderInt4(label, v->data(), v_min, v_max, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -217,15 +241,21 @@ void init_widgets_slide(py::module& m)
         "VSliderInt",
         [](const char* label,
            const ImVec2& size,
-           int v,
+           IntRef v,
            const int v_min,
            const int v_max,
            const char* format,
            const int flags)
         {
-            bool out =
-                ImGui::VSliderInt(label, size, &v, v_min, v_max, format, flags);
-            return py::make_tuple(out, v);
+            return ImGui::VSliderInt(
+                label,
+                size,
+                &v->val,
+                v_min,
+                v_max,
+                format,
+                flags
+            );
         },
         "label"_a,
         "size"_a,

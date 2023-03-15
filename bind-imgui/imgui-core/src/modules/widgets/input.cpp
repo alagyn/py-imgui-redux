@@ -1,91 +1,66 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
-#include <pybind11/stl.h>
 
 void init_widgets_input(py::module& m)
 {
     // Ignoring callbacks and user-data
     m.def(
         "InputText",
-        [](const char* label,
-           const char* value,
-           const size_t max_size,
-           const int flags)
+        [](const char* label, StrRef value, const int flags)
         {
-            std::string outBuf(max_size, '\0');
-            std::strncpy(outBuf.data(), value, max_size);
-            bool out = ImGui::InputText(label, outBuf.data(), max_size, flags);
-            return py::make_tuple(out, outBuf);
+            return ImGui::InputText(label, value->data(), value->size(), flags);
         },
         "label"_a,
         "value"_a,
-        "max_size"_a,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Single line text input"
     );
     m.def(
-        "InputTextMultiLink",
-        [](const char* label,
-           const char* value,
-           const size_t max_size,
-           const ImVec2& size,
-           const int flags)
+        "InputTextMultiline",
+        [](const char* label, StrRef value, const ImVec2& size, const int flags)
         {
-            std::string outBuf(max_size, '\0');
-            std::strncpy(outBuf.data(), value, max_size);
-            bool out = ImGui::InputTextMultiline(
+            return ImGui::InputTextMultiline(
                 label,
-                outBuf.data(),
-                max_size,
+                value->data(),
+                value->size(),
                 size,
                 flags
             );
-            return py::make_tuple(out, outBuf);
         },
         "label"_a,
         "value"_a,
-        "max_size"_a,
         py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Multiline text input"
     );
     m.def(
         "InputTextWithHint",
-        [](const char* label,
-           const char* hint,
-           const char* value,
-           const size_t max_size,
-           const int flags)
+        [](const char* label, const char* hint, StrRef value, const int flags)
         {
-            std::string outBuf(max_size, '\0');
-            std::strncpy(outBuf.data(), value, max_size);
-            bool out = ImGui::InputTextWithHint(
+            return ImGui::InputTextWithHint(
                 label,
                 hint,
-                outBuf.data(),
-                max_size,
+                value->data(),
+                value->size(),
                 flags
             );
-            return py::make_tuple(out, outBuf);
         },
         "label"_a,
         "hint"_a,
         "value"_a,
-        "max_size"_a,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Single line text input with placeholder hint"
     );
     m.def(
         "InputFloat",
         [](const char* label,
-           float v,
+           FloatRef v,
            const float step,
            const float step_fast,
            const char* format,
            int flags)
         {
-            bool out =
-                ImGui::InputFloat(label, &v, step, step_fast, format, flags);
-            return py::make_tuple(out, v);
+            return ImGui::InputFloat(label, &v->val, step, step_fast, format, flags);
         },
         "label"_a,
         "v"_a,
@@ -93,110 +68,126 @@ void init_widgets_input(py::module& m)
         "step_fast"_a = 0.0f,
         "format"_a = "%.3f",
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a single float value"
     );
     m.def(
         "InputFloat2",
-        [](const char* label,
-           std::array<float, 2> v,
-           const char* format,
-           const int flags)
+        [](const char* label, FloatList v, const char* format, const int flags)
         {
-            bool out = ImGui::InputFloat2(label, v.data(), format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 2)
+            {
+                throw std::out_of_range("InputFloat2(): len(v) < 2");
+            }
+
+            return ImGui::InputFloat2(label, v->data(), format, flags);
         },
         "label"_a,
         "v"_a,
         "format"_a = "%.3f",
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a pair of float values"
     );
     m.def(
         "InputFloat3",
-        [](const char* label,
-           std::array<float, 3> v,
-           const char* format,
-           const int flags)
+        [](const char* label, FloatList v, const char* format, const int flags)
         {
-            bool out = ImGui::InputFloat3(label, v.data(), format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 3)
+            {
+                throw std::out_of_range("InputFloat3(): len(v) < 3");
+            }
+
+            return ImGui::InputFloat3(label, v->data(), format, flags);
         },
         "label"_a,
         "v"_a,
         "format"_a = "%.3f",
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a triplet of floats"
     );
     m.def(
         "InputFloat4",
-        [](const char* label,
-           std::array<float, 4> v,
-           const char* format,
-           const int flags)
+        [](const char* label, FloatList v, const char* format, const int flags)
         {
-            bool out = ImGui::InputFloat4(label, v.data(), format, flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 4)
+            {
+                throw std::out_of_range("InputFloat4(): len(v) < 4");
+            }
+
+            return ImGui::InputFloat4(label, v->data(), format, flags);
         },
         "label"_a,
         "v"_a,
         "format"_a = "%.3f",
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for four floats"
     );
     m.def(
         "InputInt",
         [](const char* label,
-           int v,
+           IntRef v,
            const int step,
            const int step_fast,
            const int flags)
         {
-            bool out = ImGui::InputInt(label, &v, step, step_fast, flags);
-            return py::make_tuple(out, v);
+            return ImGui::InputInt(label, &v->val, step, step_fast, flags);
         },
         "label"_a,
         "v"_a,
         "step"_a = 1,
         "step_fast"_a = 100,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a single int"
     );
     m.def(
         "InputInt2",
-        [](const char* label, std::array<int, 2> v, const int flags)
+        [](const char* label, IntList v, const int flags)
         {
-            bool out = ImGui::InputInt2(label, v.data(), flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 2)
+            {
+                throw std::out_of_range("InputInt2(): len(v) < 2");
+            }
+
+            return ImGui::InputInt2(label, v->data(), flags);
         },
         "label"_a,
         "v"_a,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a pair of ints"
     );
     m.def(
         "InputInt3",
-        [](const char* label, std::array<int, 3> v, const int flags)
+        [](const char* label, IntList v, const int flags)
         {
-            bool out = ImGui::InputInt3(label, v.data(), flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 3)
+            {
+                throw std::out_of_range("InputInt3(): len(v) < 3");
+            }
+
+            return ImGui::InputInt3(label, v->data(), flags);
         },
         "label"_a,
         "v"_a,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for a triplet of ints"
     );
     m.def(
         "InputInt4",
-        [](const char* label, std::array<int, 4> v, const int flags)
+        [](const char* label, IntList v, const int flags)
         {
-            bool out = ImGui::InputInt4(label, v.data(), flags);
-            return py::make_tuple(out, v);
+            if(v->size() < 4)
+            {
+                throw std::out_of_range("InputInt4(): len(v) < 4");
+            }
+
+            return ImGui::InputInt4(label, v->data(), flags);
         },
         "label"_a,
         "v"_a,
         "flags"_a = 0,
-        py::return_value_policy::automatic_reference
+        "Input for four ints"
     );
+
+    /* TODO?
     m.def(
         "InputDouble",
         [](const char* label,
@@ -218,5 +209,6 @@ void init_widgets_input(py::module& m)
         "flags"_a = 0,
         py::return_value_policy::automatic_reference
     );
+    */
     // Ignoring InputScalar
 }

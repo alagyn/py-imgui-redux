@@ -1,3 +1,4 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
 
 void init_widgets_tabs(py::module& m)
@@ -6,24 +7,18 @@ void init_widgets_tabs(py::module& m)
     QUICK(EndTabBar);
     m.def(
         "BeginTabItem",
-        [](const char* label, py::object open, int flags)
+        [](const char* label, BoolRef p_open, int flags)
         {
-            bool outOpen = false;
-            bool out = false;
-            if(open.is_none())
+            bool* xxx = nullptr;
+            if(p_open)
             {
-                out = ImGui::BeginTabItem(label, nullptr, flags);
-            }
-            else
-            {
-                outOpen = open.cast<bool>();
-                out = ImGui::BeginTabItem(label, &outOpen, flags);
+                xxx = &(p_open->val);
             }
 
-            return py::make_tuple(out, outOpen);
+            return ImGui::BeginTabItem(label, xxx, flags);
         },
         "label"_a,
-        "open"_a = py::none(),
+        "p_open"_a = nullptr,
         "flags"_a = 0
     );
     QUICK(EndTabItem);

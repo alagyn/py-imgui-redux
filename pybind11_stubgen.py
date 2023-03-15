@@ -540,11 +540,9 @@ class AttributeStubsGenerator(StubsGenerator):
 
     def to_lines(self):  # type: () -> List[str]
         if self.is_safe_to_use_repr(self.attr):
-            print("Safe", self.name, self.attr)
             return [
                 "{name} = {repr}".format(name=self.name, repr=repr(self.attr))
             ]
-        print("Unsafe", self.name, self.attr)
         # special case for modules
         # https://github.com/sizmailov/pybind11-stubgen/issues/43
         if type(self.attr) is type(os) and hasattr(self.attr, "__name__"):
@@ -804,7 +802,6 @@ class ClassStubsGenerator(StubsGenerator):
                                                                   member):
                 continue
             if name.startswith("__pybind11_module"):
-                print("module", name)
                 continue
             if (inspect.isroutine(member)
                     or inspect.isclass(member)) and name != member.__name__:
@@ -819,8 +816,6 @@ class ClassStubsGenerator(StubsGenerator):
                 if (member.__name__ not in self.class_name_blacklist
                         and member.__name__.isidentifier()):
                     self.classes.append(ClassStubsGenerator(member))
-                else:
-                    print("blacklisted", name)
             elif isinstance(member, property):
                 self.properties.append(
                     PropertyStubsGenerator(

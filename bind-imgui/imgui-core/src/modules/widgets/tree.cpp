@@ -1,3 +1,4 @@
+#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
 
 void init_widgets_tree(py::module& m)
@@ -41,13 +42,12 @@ void init_widgets_tree(py::module& m)
     );
     m.def(
         "CollapsingHeader",
-        [](const char* label, bool visible, int flags)
+        [](const char* label, BoolRef p_visible, int flags)
         {
-            bool out = ImGui::CollapsingHeader(label, &visible, flags);
-            return py::make_tuple(out, visible);
+            return ImGui::CollapsingHeader(label, &p_visible->val, flags);
         },
         "label"_a,
-        "visible"_a,
+        "p_visible"_a,
         "flags"_a = 0
     );
     m.def(IMFUNC(SetNextItemOpen), "is_open"_a, "cond"_a = 0);
