@@ -4,6 +4,8 @@
 PYBIND11_MODULE(imgui, m)
 {
     m.doc() = "DearImGui Framework";
+    py::options options;
+    //options.disable_function_signatures();
 
     init_wraps(m);
 

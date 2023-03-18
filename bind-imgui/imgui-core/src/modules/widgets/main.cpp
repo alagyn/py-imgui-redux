@@ -48,13 +48,13 @@ void init_widgets_main(py::module& m)
         "v"_a,
         "v_button"_a,
         R"<>(
-        Shorthand for:
-        ::
-        curButton = 0
-        if imgui.RadioButton("label", curButton == 1):
-            curButton = 1
-        ::\n
-        )<>"
+            Shorthand for
+
+            .. code-block:: python
+
+                curButton = 0
+                if imgui.RadioButton("label", curButton == 1):
+                    curButton = 1)<>"
     );
     m.def(
         IMFUNC(ProgressBar),

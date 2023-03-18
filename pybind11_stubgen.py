@@ -41,6 +41,8 @@ derivative works thereof, in binary and source code form.
 ---
 
 Modified by Ben Kimbrough
+- Changes all arguments with defaults to None to be typing.Optional
+- Allows some extra class types to be printed
 
 """
 
@@ -311,6 +313,11 @@ def replace_typing_types(match):
     return "typing." + capitalized
 
 
+def make_optional(match):
+    t = match.group("type")
+    return f": typing.Optional[{t}] = None"
+
+
 class StubsGenerator(object):
     INDENT = " " * 4
 
@@ -324,6 +331,8 @@ class StubsGenerator(object):
             r"|Optional|Set|Tuple|Union|ItemsView|KeysView|ValuesView)(?!\w)"
         ):
         replace_typing_types,
+        re.compile(": (?P<type>\w+) = None"):
+        make_optional
     }
 
     def parse(self):
