@@ -9,7 +9,6 @@ import shutil
 import pathlib
 import sys
 import subprocess
-import pybind11_stubgen
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
