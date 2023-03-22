@@ -6,7 +6,7 @@ find_package(Python3
     COMPONENTS
     REQUIRED
     Interpreter
-    Development.Module
+    Development
 )
 
 add_subdirectory(third-party)

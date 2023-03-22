@@ -254,9 +254,6 @@ class BuildCMakeExt(build_ext):
 
         log("Configuring cmake project")
 
-        # Change your cmake arguments below as necessary
-        # Below is just an example set of arguments for building Blender as a Python module
-
         self.spawn(
             [
                 "cmake",
@@ -287,7 +284,7 @@ class BuildCMakeExt(build_ext):
                 "--target",
                 extension.name,
                 "--config",
-                "Debug"
+                "Release"
             ]
         )
 
@@ -295,6 +292,9 @@ class BuildCMakeExt(build_ext):
         # The copy directory is the parent directory of the extension (.pyd)
 
         bin_dir = os.path.join(build_dir, "bind-imgui")
+
+        if IS_WINDOWS:
+            bin_dir = os.path.join(bin_dir, "Release")
 
         pyd_path = [
             os.path.join(bin_dir, _pyd) for _pyd in os.listdir(bin_dir)
