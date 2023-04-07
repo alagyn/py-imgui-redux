@@ -86,7 +86,7 @@ class InstallCMakeLibs(install_lib):
         for file in os.listdir(bin_dir):
             # TODO parameterize?
             # Skip the non-renamed lib
-            if file == "imgui.so":
+            if file == "imgui.so" or file == "imgui.pyd":
                 continue
             _, ext = os.path.splitext(file)
             if ext in FILE_TYPES:
@@ -254,12 +254,15 @@ class BuildCMakeExt(build_ext):
 
         log("Configuring cmake project")
 
+        PY_ROOT, _ = os.path.split(sys.executable)
+
         self.spawn(
             [
                 "cmake",
                 "-E",
                 "env",
                 "CMAKE_BUILD_PARALLEL_LEVEL=8",
+                f"Python3_ROOT_DIR={PY_ROOT}"
                 "--",
                 'cmake',
                 '-S',
