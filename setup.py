@@ -254,23 +254,27 @@ class BuildCMakeExt(build_ext):
 
         log("Configuring cmake project")
 
-        PY_ROOT, _ = os.path.split(sys.executable)
+        if IS_WINDOWS:
+            PY_ROOT, _ = os.path.split(sys.executable)
+        else:
+            PY_ROOT = os.environ['PY_ROOT']
+        log(f"Using Py Root: {PY_ROOT}")
 
-        self.spawn(
-            [
-                "cmake",
-                "-E",
-                "env",
-                "CMAKE_BUILD_PARALLEL_LEVEL=8",
-                f"Python3_ROOT_DIR={PY_ROOT}"
-                "--",
-                'cmake',
-                '-S',
-                SOURCE_DIR,
-                '-B',
-                self.build_temp
-            ]
-        )
+        args = [
+            "cmake",
+            "-E",
+            "env",
+            "CMAKE_BUILD_PARALLEL_LEVEL=8",
+            f"Python3_ROOT_DIR={PY_ROOT}"
+            "--",
+            'cmake',
+            '-S',
+            SOURCE_DIR,
+            '-B',
+            self.build_temp
+        ]
+
+        self.spawn(args)
 
         log("Building binaries")
 

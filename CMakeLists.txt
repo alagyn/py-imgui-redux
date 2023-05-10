@@ -4,11 +4,16 @@ project(imgui)
 
 set(Python3_FIND_REGISTRY NEVER)
 
+if(${MSVC})
+    set(PY_COMPONENTS Interpreter Development)
+else()
+    set(PY_COMPONENTS Interpreter Development.Module)
+endif()
+
 find_package(Python3
     COMPONENTS
     REQUIRED
-    Interpreter
-    Development
+    ${PY_COMPONENTS}
 )
 
 add_subdirectory(third-party)
