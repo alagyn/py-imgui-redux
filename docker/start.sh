@@ -16,7 +16,8 @@ fi
 
 docker run \
     $MISC_ARGS \
-    -v $SRC_ROOT:/src \
-    -w /src \
+    --volume $SRC_ROOT:/src \
+    --workdir /src \
+    --user $UID \
     $CONTAINER \
     $COMMAND

@@ -9,6 +9,8 @@ venv
 
 *.ini
 
+wheelhouse
+
 # Prerequisites
 *.d
 

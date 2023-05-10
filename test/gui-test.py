@@ -10,6 +10,7 @@ sys.path.append(os.path.join(ROOT, "../build/bind-imgui/Release"))
 import imgui
 import imgui.glfw as glfw
 import imgui.implot as implot
+import imgui.imnodes as imnodes
 
 print("Init GLFW")
 window = glfw.Init(window_width=500, window_height=500, title="Test")
@@ -26,6 +27,8 @@ print("Set Style Colors")
 imgui.StyleColorsDark()
 print("Create ImPlot Context")
 implot.CreateContext()
+print("Create ImNodes context")
+imnodes.CreateContext()
 
 print("Making Clear Color")
 clearColor = imgui.Vec4(0.45, 0.55, 0.6, 1.0)
@@ -53,6 +56,10 @@ while True:
     # print("Check Close")
     if glfw.ShouldClose(window):
         break
+
+imnodes.DestroyContext()
+implot.DestroyContext()
+imgui.DestroyContext()
 
 print("Shutting down")
 glfw.Shutdown(window)

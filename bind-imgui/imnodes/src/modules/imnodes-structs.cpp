@@ -49,7 +49,7 @@ void init_imnodes_structs(py::module& m)
     py::class_<ImNodesIO>(m, "IO")
         .def(
             "SetEmulateThreeButtonMouseMod",
-            [](ImNodesIO* self, int key)
+            [](ImNodesIO* self, ImGuiKey key)
             {
                 self->EmulateThreeButtonMouse.Modifier = getIOPointer(key);
             },
@@ -64,7 +64,7 @@ void init_imnodes_structs(py::module& m)
         )
         .def(
             "SetLinkDetachedWithModifierClick",
-            [](ImNodesIO* self, int key)
+            [](ImNodesIO* self, ImGuiKey key)
             {
                 self->LinkDetachWithModifierClick.Modifier = getIOPointer(key);
             },
@@ -79,7 +79,7 @@ void init_imnodes_structs(py::module& m)
         )
         .def(
             "SetMultipleSelectMod",
-            [](ImNodesIO* self, int key)
+            [](ImNodesIO* self, ImGuiKey key)
             {
                 self->MultipleSelectModifier.Modifier = getIOPointer(key);
             },

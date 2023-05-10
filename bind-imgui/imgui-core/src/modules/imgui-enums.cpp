@@ -248,7 +248,11 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, SortDirection, Ascending)
         .VALUE(ImGui, SortDirection, Descending);
 
-    RAW_ENUM(ImGuiKey, ImKey)
+    /*
+    This has to be a normal enum since it's the only
+    imgui enum that is actually used as an enum
+    */
+    py::enum_<ImGuiKey>(m, "ImKey")
         .RAW_VALUE(None_, ImGuiKey_None)
         .VALUE(ImGui, Key, Tab)
         .VALUE(ImGui, Key, LeftArrow)
