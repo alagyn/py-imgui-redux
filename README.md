@@ -5,6 +5,13 @@ Read below for adjustments made to the standard APIs.
 Otherwise, all documentation from the original libraries remains 100% valid.
 Check out the examples folder for some concrete code.
 
+## Install
+
+Install the latest version with pip
+```
+pip install py-imgui-redux
+```
+
 ## Modules:
 
 `imgui` - [Core DearImGUI](https://github.com/ocornut/imgui)  
