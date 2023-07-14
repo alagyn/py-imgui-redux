@@ -17,5 +17,11 @@ find_package(Python3
 )
 
 add_subdirectory(third-party)
-add_subdirectory(test)
+
+set(BUILD_TEST OFF CACHE BOOL "Build test directory")
+
+if(${BUILD_TEST})
+    add_subdirectory(test)
+endif()
+
 add_subdirectory(bind-imgui)

@@ -254,10 +254,11 @@ class BuildCMakeExt(build_ext):
 
         log("Configuring cmake project")
 
-        if IS_WINDOWS:
-            PY_ROOT, _ = os.path.split(sys.executable)
-        else:
+        PY_ROOT, _ = os.path.split(sys.executable)
+        try:
             PY_ROOT = os.environ['PY_ROOT']
+        except KeyError:
+            pass
         log(f"Using Py Root: {PY_ROOT}")
 
         args = [

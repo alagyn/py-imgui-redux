@@ -13,7 +13,7 @@ esac
 
 upload()
 {
-    ${PY_EXEC} -m twine upload -r imgui dist/*.whl
+    ${PY_EXEC} -m twine upload -r imgui wheelhouse/*.whl
     exit $?
 }
 

@@ -1,0 +1,4 @@
+include CMakeLists.txt
+recursive-include imgui *
+recursive-include third-party *
+prune test

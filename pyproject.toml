@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-imgui-redux"
-version = "1.0.3"
+version = "1.0.4"
 authors = [
     {name="Alagyn"}
 ]
