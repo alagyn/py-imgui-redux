@@ -32,7 +32,7 @@ API as intact as possible. This is because:
 1. I want to keep all C++ examples and documentation as relevant as possible since I am lazy and don't want to rewrite everything.
 2. I have a love-hate relationship with snake-case.
 
-However, there are some minor comprimises that have to be made in order to make this happen, primarily in the case of pointers and lists.
+However, there are some minor compromises that have to be made in order to make this happen, primarily in the case of pointers and lists.
 
 Take for instance the function:
 ```c++
