@@ -106,13 +106,6 @@ class InstallCMakeLibs(install_lib):
             shutil.copy(
                 lib, os.path.join(self.build_dir, os.path.basename(lib))
             )
-        """
-        log("Copying imgui python helpers")
-        helper_dir = os.path.join(self.build_dir, "imgui_helpers")
-        if os.path.exists(helper_dir):
-            shutil.rmtree(helper_dir)
-        shutil.copytree(os.path.join(SOURCE_DIR, "python-helpers"), helper_dir)
-        """
 
         log("Generating stubs")
         env = dict(os.environ)
