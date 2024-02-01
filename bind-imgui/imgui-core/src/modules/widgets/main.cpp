@@ -64,7 +64,61 @@ void init_widgets_main(py::module& m)
     );
     QUICK(Bullet);
 
-    // TODO Images
+    // Images
+    m.def(
+        "Image",
+        [](unsigned int texID,
+           ImVec2 size,
+           ImVec2 uv0,
+           ImVec2 uv1,
+           ImVec4 tint_col,
+           ImVec4 border_col)
+        {
+            ImGui::Image(
+                (void*)(intptr_t)texID,
+                size,
+                uv0,
+                uv1,
+                tint_col,
+                border_col
+            );
+        },
+        "texID"_a,
+        "size"_a,
+        py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
+        py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)"),
+        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)"),
+        py::arg_v("border_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)")
+    );
+
+    m.def(
+        "ImageButton",
+        [](const char* str_id,
+           unsigned int texID,
+           ImVec2 size,
+           ImVec2 uv0,
+           ImVec2 uv1,
+           ImVec4 bg_col,
+           ImVec4 tint_col)
+        {
+            return ImGui::ImageButton(
+                str_id,
+                (void*)(intptr_t)texID,
+                size,
+                uv0,
+                uv1,
+                bg_col,
+                tint_col
+            );
+        },
+        "str_id"_a,
+        "texID"_a,
+        "size"_a,
+        py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
+        py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)"),
+        py::arg_v("bg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
+        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
+    );
 
     // Combo
     m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flag"_a = 0);

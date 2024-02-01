@@ -1,3 +1,4 @@
+#include <binder/inc/struct-utility.h>
 #include <imgui-core/inc/imgui-modules.h>
 
 #include <pybind11/functional.h>
@@ -8,7 +9,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
-GLFWerrorfun asdf;
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 void GLFWErrCallback(int err, const char* msg)
 {
@@ -111,6 +113,53 @@ bool ShouldClose(void* window)
     return glfwWindowShouldClose(static_cast<GLFWwindow*>(window));
 }
 
+class Texture
+{
+public:
+    int width;
+    int height;
+    int numChannels;
+
+    GLuint texID;
+
+    Texture()
+        : width(0)
+        , height(0)
+        , numChannels(0)
+        , texID(0)
+    {
+    }
+};
+
+Texture loadTexture(const char* filename, int mipMapLevel = 0)
+{
+    Texture out;
+    unsigned char* data =
+        stbi_load(filename, &out.width, &out.height, &out.numChannels, 0);
+    glGenTextures(1, &out.texID);
+    glBindTexture(GL_TEXTURE_2D, out.texID);
+    glTexImage2D(
+        GL_TEXTURE_2D,
+        mipMapLevel, // TODO: Mipmap level?
+        GL_RGB,
+        out.width,
+        out.height,
+        0, // Always zero
+        GL_RGB,
+        GL_UNSIGNED_BYTE,
+        data
+    );
+    glGenerateMipmap(GL_TEXTURE_2D);
+    stbi_image_free(data);
+
+    return out;
+}
+
+void unloadTexture(Texture tex)
+{
+    glDeleteTextures(1, &tex.texID);
+}
+
 void init_backend_glfw(py::module& m)
 {
     m.def(
@@ -127,6 +176,15 @@ void init_backend_glfw(py::module& m)
     m.def("NewFrame", NewFrame);
     m.def("Render", Render, "window"_a, "clear_color"_a);
     m.def("ShouldClose", ShouldClose, "window"_a);
+    m.def("LoadTexture", loadTexture, "filename"_a);
+    m.def("UnloadTexture", unloadTexture, "texture");
+
+    py::class_<Texture>(m, "Texture")
+        .RW(Texture, width)
+        .RW(Texture, height)
+        .RW(Texture, numChannels)
+        .RW(Texture, texID);
+
     /*
     m.def(
         "InitForOpenGL",

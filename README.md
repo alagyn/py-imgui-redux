@@ -34,6 +34,8 @@ API as intact as possible. This is because:
 
 However, there are some minor compromises that have to be made in order to make this happen, primarily in the case of pointers and lists.
 
+### Pointers
+
 Take for instance the function:
 ```c++
 bool DragIntRange2(const char* label, int* v_current_min, int* v_current_max, /* other args... */);
@@ -75,7 +77,8 @@ myNum.val += 2
 
 ---
 
-The second concession is with lists.  
+### Lists
+
 Take for instance the function
 ```c++
 bool DragInt3(const char* label, int v[3], /* args ... */);
@@ -168,7 +171,24 @@ x = myStr.copy()
 # lest ye summon the dreaded seg-fault
 print(myStr.view())
 ```
-See the docs for more info
 
+---
+
+### Images
+
+Loading images for rendering is simple
+```python
+import imgui.glfw as glfw
+import imgui
+
+texture = glfw.LoadTexture("myImage.jpg")
+imgui.Image(texture.texID, imgui.ImVec2(texture.width, texture.height))
+# ...
+# Eventually
+glfw.UnloadTexture(texture)
+# texture can no longer be used without a call to LoadTexture
+```
+
+Image loading is handled via [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and supports various common file formats.
 
 ---

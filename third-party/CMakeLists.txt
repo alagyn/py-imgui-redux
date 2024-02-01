@@ -83,3 +83,9 @@ add_library(glad
 target_include_directories(glad PUBLIC
     glad/include
 )
+set_target_properties(glad PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
+
+add_library(stb INTERFACE)
+target_include_directories(stb INTERFACE stb)

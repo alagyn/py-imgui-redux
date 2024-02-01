@@ -22,6 +22,7 @@ target_link_libraries(${PROJECT_NAME}
     imgui-cpp
     glfw
     glad
+    stb
 )
 
 target_include_directories(${PROJECT_NAME}
