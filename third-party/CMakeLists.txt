@@ -77,7 +77,7 @@ target_compile_definitions(imgui-cpp
 )
 
 add_library(glad
-    SHARED
+    STATIC
     glad/src/gl.c
 )
 target_include_directories(glad PUBLIC
