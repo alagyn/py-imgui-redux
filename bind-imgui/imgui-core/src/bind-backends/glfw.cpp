@@ -176,8 +176,8 @@ void init_backend_glfw(py::module& m)
     m.def("NewFrame", NewFrame);
     m.def("Render", Render, "window"_a, "clear_color"_a);
     m.def("ShouldClose", ShouldClose, "window"_a);
-    m.def("LoadTexture", loadTexture, "filename"_a);
-    m.def("UnloadTexture", unloadTexture, "texture");
+    m.def("LoadTexture", loadTexture, "filename"_a, "mipMapLevel"_a = 0);
+    m.def("UnloadTexture", unloadTexture, "texture"_a);
 
     py::class_<Texture>(m, "Texture")
         .RW(Texture, width)
