@@ -21,6 +21,7 @@ target_link_libraries(${PROJECT_NAME}
     pybind11::headers
     imgui-cpp
     glfw
+    glad
 )
 
 target_include_directories(${PROJECT_NAME}

@@ -1,7 +1,7 @@
 import sys
 
-sys.path.append("../build/bind-imgui/Release")
-sys.path.append("../build/bind-imgui")
+#sys.path.append("../build/bind-imgui/Release")
+#sys.path.append("../build/bind-imgui")
 import time
 import numpy as np
 import random
@@ -208,24 +208,25 @@ def plot(state: State):
         state.plotMode = 1
         implot.SetNextAxesToFit()
 
-    implot.BeginPlot("data", imgui.Vec2(500, 500))
-    if state.plotMode == 0:
-        if time.perf_counter() - state.lastUpate > state.updatePeriod:
-            state.plotY[state.plotIdx
-                        ] = random.triangular(state.plotMin, state.plotMax)
-            state.plotIdx = (state.plotIdx + 1) % state.plotSize
-            state.lastUpate = time.perf_counter()
-        implot.PlotScatter("DATA", state.plotX, state.plotY)
-    elif state.plotMode == 1:
-        size = 10
-        if time.perf_counter() - state.lastUpate > state.updatePeriod:
-            state.plotY[state.plotIdx] += random.triangular(-1, 1)
-            state.plotIdx = (state.plotIdx + 1) % (size * size)
-            state.lastUpate = time.perf_counter()
-        implot.PlotHeatmap(
-            "DATA", state.plotY, size, size, state.plotMin, state.plotMax
-        )
-    implot.EndPlot()
+    if implot.BeginPlot("data", imgui.Vec2(500, 500)):
+        if state.plotMode == 0:
+            if time.perf_counter() - state.lastUpate > state.updatePeriod:
+                state.plotY[state.plotIdx] = random.triangular(
+                    state.plotMin, state.plotMax
+                )
+                state.plotIdx = (state.plotIdx + 1) % state.plotSize
+                state.lastUpate = time.perf_counter()
+            implot.PlotScatter("DATA", state.plotX, state.plotY)
+        elif state.plotMode == 1:
+            size = 10
+            if time.perf_counter() - state.lastUpate > state.updatePeriod:
+                state.plotY[state.plotIdx] += random.triangular(-1, 1)
+                state.plotIdx = (state.plotIdx + 1) % (size * size)
+                state.lastUpate = time.perf_counter()
+            implot.PlotHeatmap(
+                "DATA", state.plotY, size, size, state.plotMin, state.plotMax
+            )
+        implot.EndPlot()
 
 
 def showAll(state: State):
@@ -244,7 +245,7 @@ def showAll(state: State):
 
 def main():
     print("Init GLFW")
-    window = glfw.Init(window_width=800, window_height=600, title="Test")
+    window = glfw.Init(window_width=1024, window_height=600, title="Test")
 
     if window is None:
         print("Error during GLFW init")

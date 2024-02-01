@@ -2,6 +2,8 @@
 
 #include <pybind11/functional.h>
 
+#include <glad/gl.h>
+
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -29,8 +31,8 @@ void* init_glfw(
 
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 
     GLFWwindow* window =
         glfwCreateWindow(window_width, window_height, title, nullptr, nullptr);
@@ -42,6 +44,15 @@ void* init_glfw(
     }
 
     glfwMakeContextCurrent(window);
+
+    int version = gladLoadGL(glfwGetProcAddress);
+    if(version == 0)
+    {
+        py::print("Failed to initialize the OpenGL context");
+        glfwDestroyWindow(window);
+        return nullptr;
+    }
+
     glfwSwapInterval(swap_interval);
 
     return window;

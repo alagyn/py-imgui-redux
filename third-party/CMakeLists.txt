@@ -1,6 +1,9 @@
 # Third Party Libraries
+set(PYBIND11_INSTALL OFF CACHE BOOL "" FORCE)
+set(PYBIND11_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(pybind11)
 
+set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -71,4 +74,12 @@ target_compile_definitions(imgui-cpp
     PUBLIC
     IMGUI_DISABLE_OBSOLETE_KEYIO
     IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+)
+
+add_library(glad
+    SHARED
+    glad/src/gl.c
+)
+target_include_directories(glad PUBLIC
+    glad/include
 )
