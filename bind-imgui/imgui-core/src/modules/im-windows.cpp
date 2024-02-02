@@ -25,23 +25,23 @@ void init_windows(py::module& m)
     // Child Windows
     m.def(
         "BeginChild",
-        py::overload_cast<const char*, const ImVec2&, bool, ImGuiWindowFlags>(
+        py::overload_cast<const char*, const ImVec2&, ImGuiChildFlags, ImGuiWindowFlags>(
             &ImGui::BeginChild
         ),
         "str_id"_a,
         py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
-        "border"_a = false,
-        "flags"_a = 0
+        "child_flags"_a = 0,
+        "window_flags"_a = 0
     );
     m.def(
         "BeginChild",
-        py::overload_cast<ImGuiID, const ImVec2&, bool, ImGuiWindowFlags>(
+        py::overload_cast<ImGuiID, const ImVec2&, ImGuiChildFlags, ImGuiWindowFlags>(
             &ImGui::BeginChild
         ),
         "id"_a,
         py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
-        "border"_a = false,
-        "flags"_a = 0
+        "child_flags"_a = 0,
+        "window_flags"_a = 0
     );
     QUICK(EndChild);
 
@@ -64,7 +64,7 @@ void init_windows(py::module& m)
         py::arg_v("pivot", ImVec2(0, 0), "Vec2(0, 0)")
     );
     m.def(IMFUNC(SetNextWindowSize), "size"_a, "cond"_a = 0);
-    // Ignoring SetNextWindowSizeConstraints
+    // Ignoring SetNextWindowSizeConstraints because func pointer
     m.def(IMFUNC(SetNextWindowContentSize), "size"_a);
     m.def(IMFUNC(SetNextWindowCollapsed), "collapsed"_a, "cond"_a = 0);
     QUICK(SetNextWindowFocus);

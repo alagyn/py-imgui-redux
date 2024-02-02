@@ -60,7 +60,7 @@ Texture LoadTexture(
     glBindTexture(GL_TEXTURE_2D, out.texID);
     glTexImage2D(
         GL_TEXTURE_2D,
-        mipMapLevel, // TODO: Mipmap level?
+        mipMapLevel,
         format,
         out.width,
         out.height,

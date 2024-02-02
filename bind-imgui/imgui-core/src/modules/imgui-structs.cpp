@@ -61,6 +61,12 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, CurveTessellationTol)
         .RW(ImGuiStyle, CircleTessellationMaxError)
         .RO(ImGuiStyle, Colors)
+        .RW(ImGuiStyle, HoverStationaryDelay)
+        .RW(ImGuiStyle, HoverDelayShort)
+        .RW(ImGuiStyle, HoverDelayNormal)
+        .RW(ImGuiStyle, HoverFlagsForTooltipMouse)
+        .RW(ImGuiStyle, HoverFlagsForTooltipNav)
+
         .def(py::init<>())
         .def(DEF(ImGuiStyle, ScaleAllSizes), "scale_factor"_a);
 
@@ -78,13 +84,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, IniSavingRate)
         .RW(ImGuiIO, IniFilename)
         .RW(ImGuiIO, LogFilename)
-        .RW(ImGuiIO, MouseDoubleClickTime)
-        .RW(ImGuiIO, MouseDoubleClickMaxDist)
-        .RW(ImGuiIO, MouseDragThreshold)
-        .RW(ImGuiIO, KeyRepeatDelay)
-        .RW(ImGuiIO, KeyRepeatRate)
-        .RW(ImGuiIO, HoverDelayNormal)
-        .RW(ImGuiIO, HoverDelayShort)
         // Fonts
         .RW(ImGuiIO, Fonts)
         .RW(ImGuiIO, FontGlobalScale)
@@ -101,6 +100,17 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, ConfigWindowsResizeFromEdges)
         .RW(ImGuiIO, ConfigWindowsMoveFromTitleBarOnly)
         .RW(ImGuiIO, ConfigMemoryCompactTimer)
+        // Input
+        .RW(ImGuiIO, MouseDoubleClickTime)
+        .RW(ImGuiIO, MouseDoubleClickMaxDist)
+        .RW(ImGuiIO, MouseDragThreshold)
+        .RW(ImGuiIO, KeyRepeatDelay)
+        .RW(ImGuiIO, KeyRepeatRate)
+        .RW(ImGuiIO, ConfigDebugIsDebuggerPresent)
+        .RW(ImGuiIO, ConfigDebugBeginReturnValueOnce)
+        .RW(ImGuiIO, ConfigDebugBeginReturnValueLoop)
+        .RW(ImGuiIO, ConfigDebugIgnoreFocusLoss)
+        .RW(ImGuiIO, ConfigDebugIniSettings)
         // Optional names
         .RW(ImGuiIO, BackendPlatformName)
         .RW(ImGuiIO, BackendRendererName)
@@ -113,8 +123,10 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImGuiIO, AddMousePosEvent), "x"_a, "y"_a)
         .def(DEF(ImGuiIO, AddMouseButtonEvent), "button"_a, "down"_a)
         .def(DEF(ImGuiIO, AddMouseWheelEvent), "wh_x"_a, "wh_y"_a)
+        .def(DEF(ImGuiIO, AddMouseSourceEvent), "source"_a)
         .def(DEF(ImGuiIO, AddFocusEvent), "focused"_a)
         .def(DEF(ImGuiIO, AddInputCharacter), "c"_a)
+        .def(DEF(ImGuiIO, AddInputCharacterUTF16), "c"_a)
         .def(DEF(ImGuiIO, AddInputCharactersUTF8), "str"_a)
         .def(
             DEF(ImGuiIO, SetKeyEventNativeData),
@@ -124,7 +136,7 @@ void init_imgui_structs(py::module& m)
             "native_legacy_index"_a = -1
         )
         .def(DEF(ImGuiIO, SetAppAcceptingEvents), "accepting_events"_a)
-        .def(DEF(ImGuiIO, ClearInputCharacters))
+        .def(DEF(ImGuiIO, ClearEventsQueue))
         .def(DEF(ImGuiIO, ClearInputKeys))
         .RW(ImGuiIO, WantCaptureMouse)
         .RW(ImGuiIO, WantCaptureKeyboard)
@@ -138,21 +150,35 @@ void init_imgui_structs(py::module& m)
         .RO(ImGuiIO, MetricsRenderIndices)
         .RO(ImGuiIO, MetricsRenderWindows)
         .RO(ImGuiIO, MetricsActiveWindows)
-        .RO(ImGuiIO, MetricsActiveAllocations)
         .RO(ImGuiIO, MouseDelta)
         // Main  Input State
-        // TODO?
-        /*
         .RW(ImGuiIO, MousePos)
-        .RW(ImGuiIO, MouseDown)
+        // TODO how to handle array?
+        //.RW(ImGuiIO, MouseDown)
         .RW(ImGuiIO, MouseWheel)
         .RW(ImGuiIO, MouseWheelH)
         .RW(ImGuiIO, KeyCtrl)
         .RW(ImGuiIO, KeyShift)
         .RW(ImGuiIO, KeyAlt)
         .RW(ImGuiIO, KeySuper)
-        */
+        // TODO the rest?
         .def(py::init<>());
+
+    py::class_<ImGuiListClipper>(m, "ListClipper")
+        .def(py::init<>())
+        .def(
+            DEF(ImGuiListClipper, Begin),
+            "items_count"_a,
+            "items_height"_a = -1.0f
+        )
+        .def(DEF(ImGuiListClipper, End))
+        .def(DEF(ImGuiListClipper, Step))
+        .def(DEF(ImGuiListClipper, IncludeItemByIndex), "item_index"_a)
+        .def(
+            DEF(ImGuiListClipper, IncludeItemsByIndex),
+            "item_begin"_a,
+            "item_end"_a
+        );
 
     py::class_<ImGuiTableColumnSortSpecs>(m, "TableColumnSortSpecs")
         .RW(ImGuiTableColumnSortSpecs, ColumnUserID)
@@ -174,4 +200,6 @@ void init_imgui_structs(py::module& m)
         .def(py::init<int, int, int, int>(), "r"_a, "g"_a, "b"_a, "a"_a = 255)
         .def(DEF(ImColor, SetHSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f)
         .def_static(DEF(ImColor, HSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f);
+
+    // TODO ImFontConfig, ImFontGlyph
 }

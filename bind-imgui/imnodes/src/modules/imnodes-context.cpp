@@ -1,5 +1,11 @@
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+    #define IMGUI_DEFINE_MATH_OPERATORS
+#endif
+
 #include <binder/inc/wraps.h>
 #include <imnodes/inc/imnodes-modules.h>
+
+// Include internal to get context class def
 #include <imnodes_internal.h>
 #include <pybind11/stl.h>
 

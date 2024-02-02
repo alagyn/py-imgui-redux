@@ -180,6 +180,16 @@ void init_widgets_main(py::module& m)
         "value"_a
     );
 
+    QUICK(BeginItemTooltip);
+    m.def(
+        "SetItemTooltip",
+        [](const char* value)
+        {
+            ImGui::SetItemTooltip(value);
+        },
+        "value"_a
+    );
+
     // Popups
     m.def(IMFUNC(BeginPopup), "str_id"_a, "flags"_a = 0);
     m.def(
@@ -277,6 +287,7 @@ void init_widgets_main(py::module& m)
     // Focus
     QUICK(SetItemDefaultFocus);
     m.def(IMFUNC(SetKeyboardFocusHere), "offset"_a = 0);
+    QUICK(SetNextItemAllowOverlap);
 
     // Widget Queries
     m.def(IMFUNC(IsItemHovered), "flags"_a = 0);
@@ -296,7 +307,6 @@ void init_widgets_main(py::module& m)
     QUICK(GetItemRectMin);
     QUICK(GetItemRectMax);
     QUICK(GetItemRectSize);
-    QUICK(SetItemAllowOverlap);
 
     // Viewports
     QUICK(GetMainViewport);
@@ -329,16 +339,25 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(GetStyleColorName), "idx"_a);
     m.def(IMFUNC(SetStateStorage), "storage"_a);
     QUICK(GetStateStorage);
-    m.def(IMFUNC(BeginChildFrame), "id"_a, "size"_a, "flags"_a = 0);
-    QUICK(EndChildFrame);
 
     // Input Utilities
+    // These need overload casts because imgui_internal has overloads
     m.def("IsKeyDown", py::overload_cast<ImGuiKey>(ImGui::IsKeyDown), "key"_a);
     m.def(
         "IsKeyPressed",
         py::overload_cast<ImGuiKey, bool>(ImGui::IsKeyPressed),
         "key"_a,
         "repeat"_a = true
+    );
+    m.def(
+        "IsKeyReleased",
+        py::overload_cast<ImGuiKey>(ImGui::IsKeyReleased),
+        "key"_a
+    );
+    m.def(
+        "IsKeyChordPressed",
+        py::overload_cast<ImGuiKeyChord>(ImGui::IsKeyChordPressed),
+        "key_chord"_a
     );
     m.def(IMFUNC(GetKeyPressedAmount), "key"_a, "repeat_delay"_a, "rate"_a);
     m.def(IMFUNC(GetKeyName), "key"_a);
@@ -361,7 +380,12 @@ void init_widgets_main(py::module& m)
         py::overload_cast<ImGuiMouseButton>(ImGui::IsMouseReleased),
         "button"_a
     );
-    m.def(IMFUNC(IsMouseDoubleClicked), "button"_a);
+    //m.def(IMFUNC(IsMouseDoubleClicked), "button"_a);
+    m.def(
+        "IsMouseDoubleClicked",
+        py::overload_cast<ImGuiMouseButton>(ImGui::IsMouseDoubleClicked),
+        "button"_a
+    );
     m.def(IMFUNC(IsMouseHoveringRect), "r_min"_a, "r_max"_a, "clip"_a = true);
     m.def(IMFUNC(IsMousePosValid), "mouse_pos"_a = nullptr);
     // Ignoreing IsAnyMouseDown()

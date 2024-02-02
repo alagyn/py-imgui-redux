@@ -1,5 +1,0 @@
-ImGui
-=====
-
-.. automodule:: imgui
-    :members:

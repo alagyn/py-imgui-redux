@@ -31,8 +31,8 @@ void init_stacks(py::module& m)
         "val"_a.noconvert()
     );
     m.def(IMFUNC(PopStyleVar), "count"_a = 1);
-    m.def(IMFUNC(PushAllowKeyboardFocus), "allow_keyboard_focus"_a);
-    QUICK(PopAllowKeyboardFocus);
+    m.def(IMFUNC(PushTabStop), "tab_stop"_a);
+    QUICK(PopTabStop);
     m.def(IMFUNC(PushButtonRepeat), "repeat"_a);
     QUICK(PopButtonRepeat);
 

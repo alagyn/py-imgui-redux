@@ -53,6 +53,7 @@ void init_widgets_text(py::module& m)
         },
         "text"_a
     );
+    m.def("SeparatorText", ImGui::SeparatorText, "label"_a);
 
     // Text utils
     m.def(

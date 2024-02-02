@@ -1,4 +1,10 @@
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+    #define IMGUI_DEFINE_MATH_OPERATORS
+#endif
+
 #include <implot/inc/implot-modules.h>
+
+// Import internal so that we get the context class def
 #include <implot_internal.h>
 
 void init_implot_context(py::module& m)

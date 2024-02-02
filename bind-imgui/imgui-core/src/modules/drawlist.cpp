@@ -97,6 +97,25 @@ void init_drawlist(py::module& m)
             "col"_a,
             "num_segments"_a
         )
+        .def(
+            DEF(ImDrawList, AddEllipse),
+            "center"_a,
+            "radius_x"_a,
+            "radius_y"_a,
+            "col"_a,
+            "rot"_a = 0.0f,
+            "num_segments"_a = 0,
+            "thickness"_a = 1.0f
+        )
+        .def(
+            DEF(ImDrawList, AddEllipseFilled),
+            "center"_a,
+            "radius_x"_a,
+            "radius_y"_a,
+            "col"_a,
+            "rot"_a = 0.0f,
+            "num_segments"_a = 0
+        )
         // Combining AddText()
         .def(
             "AddText",

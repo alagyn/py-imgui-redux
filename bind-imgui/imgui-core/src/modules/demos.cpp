@@ -55,7 +55,7 @@ void init_demos(py::module& m)
                 xxx = &p_open->val;
             }
 
-            ImGui::ShowStackToolWindow(xxx);
+            ImGui::ShowIDStackToolWindow(xxx);
         },
         "p_open"_a = nullptr
     );
