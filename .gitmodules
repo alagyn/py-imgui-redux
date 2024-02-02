@@ -10,3 +10,6 @@
 [submodule "third-party/implot"]
 	path = third-party/implot
 	url = git@github.com:epezent/implot.git
+[submodule "third-party/imnodes"]
+	path = third-party/imnodes
+	url = git@github.com:alagyn/imnodes.git

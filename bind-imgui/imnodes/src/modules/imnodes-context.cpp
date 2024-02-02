@@ -1,6 +1,3 @@
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-    #define IMGUI_DEFINE_MATH_OPERATORS
-#endif
 
 #include <binder/inc/wraps.h>
 #include <imnodes/inc/imnodes-modules.h>
