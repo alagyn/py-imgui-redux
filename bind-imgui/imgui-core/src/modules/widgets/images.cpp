@@ -1,6 +1,8 @@
 #include <binder/inc/struct-utility.h>
 #include <imgui-core/inc/imgui-modules.h>
 
+#include <sstream>
+
 #include <glad/gl.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -11,33 +13,59 @@ class Texture
 public:
     int width;
     int height;
+    int numChannels;
 
     GLuint texID;
 
     Texture()
         : width(0)
         , height(0)
+        , numChannels(0)
         , texID(0)
     {
     }
 };
 
-Texture
-loadTexture(char* bytes, unsigned width, unsigned height, int mipMapLevel = 0)
+Texture LoadTexture(
+    char* bytes,
+    unsigned width,
+    unsigned height,
+    int numChannels = 3,
+    int mipMapLevel = 0
+)
 {
     Texture out;
     out.width = width;
     out.height = height;
+    out.numChannels = numChannels;
+
+    int format = 0;
+
+    switch(numChannels)
+    {
+    case 3:
+        format = GL_RGB;
+        break;
+    case 4:
+        format = GL_RGBA;
+        break;
+    default:
+        std::stringstream ss;
+        ss << "imgui.LoadTexture() Invalid numChannels, expected 3 or 4, got "
+           << numChannels;
+        throw std::runtime_error(ss.str());
+    }
+
     glGenTextures(1, &out.texID);
     glBindTexture(GL_TEXTURE_2D, out.texID);
     glTexImage2D(
         GL_TEXTURE_2D,
         mipMapLevel, // TODO: Mipmap level?
-        GL_RGB,
+        format,
         out.width,
         out.height,
         0, // Always zero
-        GL_RGB,
+        format,
         GL_UNSIGNED_BYTE,
         bytes
     );
@@ -46,33 +74,53 @@ loadTexture(char* bytes, unsigned width, unsigned height, int mipMapLevel = 0)
     return out;
 }
 
-Texture loadTextureFile(const char* filename, int mipMapLevel = 0)
+Texture LoadTextureFile(
+    const char* filename,
+    int requestedChannels = 0,
+    int mipMapLevel = 0
+)
 {
     int width, height, numChannels;
-    unsigned char* data = stbi_load(filename, &width, &height, &numChannels, 0);
-    Texture out = loadTexture((char*)data, width, height, mipMapLevel);
+    unsigned char* data =
+        stbi_load(filename, &width, &height, &numChannels, requestedChannels);
+    if(!data)
+    {
+        std::stringstream ss;
+        ss << "imgui.LoadTextureFile() Unable to load texture: "
+           << stbi_failure_reason();
+        throw std::runtime_error(ss.str());
+    }
+    Texture out =
+        LoadTexture((char*)data, width, height, numChannels, mipMapLevel);
     stbi_image_free(data);
 
     return out;
 }
 
-void unloadTexture(Texture tex)
+void UnloadTexture(Texture tex)
 {
     glDeleteTextures(1, &tex.texID);
 }
 
 void init_widgets_images(py::module& m)
 {
-    m.def("LoadTextureFile", loadTextureFile, "filename"_a, "mipMapLevel"_a = 0);
     m.def(
-        "loadTexture",
-        loadTexture,
+        "LoadTextureFile",
+        LoadTextureFile,
+        "filename"_a,
+        "requestedChannels"_a = 0,
+        "lsmipMapLevel"_a = 0
+    );
+    m.def(
+        "LoadTexture",
+        LoadTexture,
         "data"_a,
         "width"_a,
         "height"_a,
+        "numChannels"_a = 3,
         "mipMapLevel"_a = 0
     );
-    m.def("UnloadTexture", unloadTexture, "texture"_a);
+    m.def("UnloadTexture", UnloadTexture, "texture"_a);
 
     py::class_<Texture>(m, "Texture")
         .RW(Texture, width)

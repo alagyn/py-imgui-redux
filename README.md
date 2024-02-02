@@ -197,11 +197,17 @@ Alternatively, if you wish to do some manual image processing, you can use PILLO
 import imgui
 import cv2
 
-image = cv2.imread("myImage.jpg")
-# Have to convert the colors first
-image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+image = cv2.imread("myImage.jpg", cv2.IMREAD_UNCHANGED)
+# cv2.IMREAD_UNCHANGED is important for files with alpha
 
-texture = imgui.LoadTexture(image.tobytes(), image.shape[0], image.shape[1])
+# Have to convert the colors first
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+# If your image has alpha: cv2.COLOR_GBRA2RGBA
+
+texture = imgui.LoadTexture(image.tobytes(),
+                            image.shape[1],
+                            image.shape[0],
+                            image.shape[2])
 
 ```
 
@@ -211,7 +217,10 @@ import imgui
 from PIL import Image
 
 image = Image.open("myImage.jpg")
-texture = imgui.LoadTexture(image.tobytes(), image.size[0], image.size[1])
+texture = imgui.LoadTexture(image.tobytes(),
+                            image.size[0],
+                            image.size[1],
+                            len(image.getbands()))
 
 ```
 
