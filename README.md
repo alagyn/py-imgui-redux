@@ -178,10 +178,9 @@ print(myStr.view())
 
 Loading images for rendering is simple
 ```python
-import imgui.glfw as glfw
 import imgui
 
-texture = glfw.LoadTexture("myImage.jpg")
+texture = imgui.LoadTextureFile("myImage.jpg")
 imgui.Image(texture.texID, imgui.ImVec2(texture.width, texture.height))
 # ...
 # Eventually
@@ -189,6 +188,33 @@ glfw.UnloadTexture(texture)
 # texture can no longer be used without a call to LoadTexture
 ```
 
-Image loading is handled via [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and supports various common file formats.
+Image file loading is handled via [stb_image](https://github.com/nothings/stb/blob/master/stb_image.h) and supports various common file formats.
+Alternatively, if you wish to do some manual image processing, you can use PILLOW or OpenCV
+(or any other image processing library... probably)
+
+**OpenCV Example**
+```python
+import imgui
+import cv2
+
+image = cv2.imread("myImage.jpg")
+# Have to convert the colors first
+image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+texture = imgui.LoadTexture(image.tobytes(), image.shape[0], image.shape[1])
+
+```
+
+**PILLOW Example**
+```python
+import imgui
+from PIL import Image
+
+image = Image.open("myImage.jpg")
+texture = imgui.LoadTexture(image.tobytes(), image.size[0], image.size[1])
+
+```
+
+
 
 ---

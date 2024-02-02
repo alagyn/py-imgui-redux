@@ -27,6 +27,7 @@ MODULE(widgets_colors);
 MODULE(widgets_tree);
 MODULE(widgets_tables);
 MODULE(widgets_tabs);
+MODULE(widgets_images);
 
 MODULE(imgui_enums);
 MODULE(drawlist);

@@ -26,6 +26,7 @@ list(APPEND ${PROJECT_NAME}_SRCS
     ${WID}/tabs.cpp
     ${WID}/text.cpp
     ${WID}/tree.cpp
+    ${WID}/images.cpp
 
     # Backends
     # ${BE}/opengl3.cpp

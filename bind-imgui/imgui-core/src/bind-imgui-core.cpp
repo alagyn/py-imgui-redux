@@ -29,6 +29,7 @@ void init_core_imgui(py::module& m)
     init_widgets_tree(m);
     init_widgets_tables(m);
     init_widgets_tabs(m);
+    init_widgets_images(m);
     // Backends
     // TODO use compile defs for different backends
     auto glfw = m.def_submodule("glfw", "GLFW Backend Wrapper");
