@@ -13,10 +13,10 @@ void GLFWErrCallback(int err, const char* msg)
     py::print("GLFW Error Code:", err, "Msg:", msg);
 }
 
-void* init_glfw(
+void* initGLFW(
+    const char* title,
     int window_width,
     int window_height,
-    const char* title,
     int swap_interval = 1
 )
 {
@@ -27,10 +27,21 @@ void* init_glfw(
         return nullptr;
     }
 
-    // GL 3.0 + GLSL 130
-    const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+
+    GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+    int width, height;
+    glfwGetMonitorWorkarea(primaryMonitor, nullptr, nullptr, &width, &height);
+
+    if(window_height == 0)
+    {
+        window_height = height;
+    }
+    if(window_width == 0)
+    {
+        window_width = width;
+    }
 
     GLFWwindow* window =
         glfwCreateWindow(window_width, window_height, title, nullptr, nullptr);
@@ -73,9 +84,11 @@ void initContextForGLFW(void* window)
     }
 }
 
-void shutdown_glfw(void* window)
+void shutdownGLFW(void* window)
 {
     glfwDestroyWindow(static_cast<GLFWwindow*>(window));
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
     glfwTerminate();
 }
 
@@ -113,15 +126,15 @@ void init_backend_glfw(py::module& m)
 {
     m.def(
         "Init",
-        init_glfw,
-        "window_width"_a,
-        "window_height"_a,
+        initGLFW,
         "title"_a,
+        "window_width"_a = 0,
+        "window_height"_a = 0,
         "swap_interval"_a = 1,
         py::return_value_policy::reference
     );
     m.def("InitContextForGLFW", initContextForGLFW, "window"_a);
-    m.def("Shutdown", shutdown_glfw, "window"_a);
+    m.def("Shutdown", shutdownGLFW, "window"_a);
     m.def("NewFrame", NewFrame);
     m.def("Render", Render, "window"_a, "clear_color"_a);
     m.def("ShouldClose", ShouldClose, "window"_a);
