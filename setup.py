@@ -17,7 +17,7 @@ IS_WINDOWS = sys.platform == "win32"
 
 
 def log(msg: str):
-    print(f"\x1b[1;33m{msg}\x1b[0m")
+    print(f"\x1b[1;33m{msg}\x1b[0m", flush=True)
 
 
 class CMakeExtension(Extension):
@@ -74,7 +74,7 @@ class InstallCMakeLibs(install_lib):
 
         self.skip_build = True
 
-        bin_dir = self.distribution.bin_dir
+        bin_dir = os.path.abspath(self.distribution.bin_dir)
 
         # Depending on the files that are generated from your cmake
         # build chain, you may need to change the below code, such that
@@ -107,7 +107,7 @@ class InstallCMakeLibs(install_lib):
                 lib, os.path.join(self.build_dir, os.path.basename(lib))
             )
 
-        log("Generating stubs")
+        log(f"Generating stubs in {self.build_dir}")
         env = dict(os.environ)
         try:
             oldPath = env["PYTHONPATH"]
@@ -115,11 +115,11 @@ class InstallCMakeLibs(install_lib):
             oldPath = ""
 
         if IS_WINDOWS:
-            oldPath += f";{self.build_dir}"
+            newPath = f"{bin_dir};" + oldPath
         else:
-            oldPath += f":{self.build_dir}"
+            newPath = f"{bin_dir}:" + oldPath
 
-        env["PYTHONPATH"] = oldPath
+        env["PYTHONPATH"] = newPath
 
         subprocess.check_call(
             [
@@ -129,16 +129,14 @@ class InstallCMakeLibs(install_lib):
                 "imgui"
             ],
             env=env,
-            cwd=self.build_dir
+            cwd=bin_dir
         )
 
         stub_dir = os.path.join(self.build_dir, "imgui")
         if os.path.exists(stub_dir):
             shutil.rmtree(stub_dir)
 
-        shutil.move(
-            os.path.join(self.build_dir, "stubs/imgui-stubs"), stub_dir
-        )
+        shutil.move(os.path.join(bin_dir, "stubs/imgui-stubs"), stub_dir)
         # Mark the libs for installation, adding them to
         # distribution.data_files seems to ensure that setuptools' record
         # writer appends them to installed-files.txt in the package's egg-info

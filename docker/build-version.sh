@@ -16,7 +16,7 @@ do
 done
 
 cd /src
-if [ CLEAN = 1 ]
+if [ $CLEAN -eq 1 ]
 then
     echo "Clearing Build Directory"
     rm -rf build
