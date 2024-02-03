@@ -4,7 +4,7 @@
 
 home=`dirname $0 | xargs realpath`
 
-PY_VERSIONS="3.7.16 3.8.16 3.9.16 3.10.11 3.11.3"
+PY_VERSIONS="3.7.16 3.8.16 3.9.16 3.10.11 3.11.3 3.12.1"
 
 PY_ROOT="/c/Python/bin/Python-"
 
