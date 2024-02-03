@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "py-imgui-redux"
-version = "1.2.0"
+version = "1.3.0"
 authors = [{ name = "Alagyn" }]
 description = "A python wrapper for DearImGUI and popular extensions"
 readme = "README.md"
