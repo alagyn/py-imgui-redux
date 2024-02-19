@@ -2,18 +2,19 @@
 # Enable exit on error
 set -e
 
-export PY_ROOT="/opt/python/${1}/bin"
-
-export PATH=${PY_ROOT}:${PATH}
-
 CLEAN=1
+PY_VERSION=
 
-while getopts "n" arg
+while getopts "p:n" arg
 do
     case $arg in
         n) CLEAN=0 ;;
+        p) PY_VERSION=$OPTARG ;;
     esac
 done
+
+export PY_ROOT="/opt/python/${PY_VERSION}/bin"
+export PATH=${PY_ROOT}:${PATH}
 
 cd /src
 if [ $CLEAN -eq 1 ]
