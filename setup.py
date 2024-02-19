@@ -263,7 +263,8 @@ class BuildCMakeExt(build_ext):
             '-S',
             SOURCE_DIR,
             '-B',
-            self.build_temp
+            self.build_temp,
+            "-DCMAKE_BUILD_TYPE=Release"  # this is needed for linux builds
         ]
 
         self.spawn(args)
@@ -283,7 +284,7 @@ class BuildCMakeExt(build_ext):
                 "--target",
                 extension.name,
                 "--config",
-                "Release"
+                "Release"  # this is needed for windows builds
             ]
         )
 

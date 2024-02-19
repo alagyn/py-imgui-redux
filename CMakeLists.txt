@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.25.2)
 
 project(imgui)
 
+set(CMAKE_DEBUG_POSTFIX, "-d")
+
 set(Python3_FIND_REGISTRY NEVER)
 
 if(${MSVC})

@@ -1,16 +1,22 @@
+"""
+Exammple uses of the basic widgets and the Ref data types.
+Uses most of the widgets.
+"""
+
 import sys
-
-#sys.path.append("../build/bind-imgui/Release")
-#sys.path.append("../build/bind-imgui")
+import os
 import time
-import numpy as np
-import random
 
-import imgui  # type: ignore
-import imgui.glfw as glfw  # type: ignore
-import imgui.implot as implot  # type: ignore
+# Add this file's dir to the path just in case we can't find the other files
+sys.path.append(os.path.split(__file__)[0])
+
+import imgui
+
+# Import the boilerplate loop from "window_boilerplate.py"
+from window_boilerplate import window_mainloop
 
 
+# Data holder for our UI state
 class State:
 
     def __init__(self) -> None:
@@ -31,19 +37,14 @@ class State:
         self.intVal3 = imgui.IntRef(0)
         self.intList = imgui.IntList([0, 0, 0, 0])
 
-        self.plotMode = 0
+    def showAll(self):
+        if imgui.Begin("Widgets"):
+            normWidgets(self)
+            imgui.End()
 
-        self.plotSize = 1000
-        self.plotMin = 0
-        self.plotMax = 10
-        self.plotX = np.arange(self.plotSize, dtype=np.float64)
-        self.plotY = np.array(
-            np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64
-        )
-        self.plotIdx = 0
-
-        self.lastUpate = time.perf_counter()
-        self.updatePeriod = 0.5
+        if imgui.Begin("Tables"):
+            tables()
+            imgui.End()
 
 
 def normWidgets(state: State):
@@ -68,8 +69,9 @@ def normWidgets(state: State):
         # TODO checkbox flags
         if imgui.Button("Reset Radio"):
             state.radio.val = -1
-        if imgui.RadioButton("Radio0", state.radio == 0):
+        if imgui.RadioButton("Radio0", state.radio.val == 0):
             state.radio.val = 0
+        # shorthand for the above if statement
         imgui.RadioButton("Radio1", state.radio, 1)
 
         imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
@@ -200,95 +202,9 @@ def tables():
         imgui.EndTable()
 
 
-def plot(state: State):
-    if imgui.RadioButton("Scatter", state.plotMode == 0):
-        state.plotMode = 0
-        implot.SetNextAxesToFit()
-    if imgui.RadioButton("Heatmap", state.plotMode == 1):
-        state.plotMode = 1
-        implot.SetNextAxesToFit()
-
-    if implot.BeginPlot("data", imgui.Vec2(500, 500)):
-        if state.plotMode == 0:
-            if time.perf_counter() - state.lastUpate > state.updatePeriod:
-                state.plotY[state.plotIdx] = random.triangular(
-                    state.plotMin, state.plotMax
-                )
-                state.plotIdx = (state.plotIdx + 1) % state.plotSize
-                state.lastUpate = time.perf_counter()
-            implot.PlotScatter("DATA", state.plotX, state.plotY)
-        elif state.plotMode == 1:
-            size = 10
-            if time.perf_counter() - state.lastUpate > state.updatePeriod:
-                state.plotY[state.plotIdx] += random.triangular(-1, 1)
-                state.plotIdx = (state.plotIdx + 1) % (size * size)
-                state.lastUpate = time.perf_counter()
-            implot.PlotHeatmap(
-                "DATA", state.plotY, size, size, state.plotMin, state.plotMax
-            )
-        implot.EndPlot()
-
-
-def showAll(state: State):
-    if imgui.Begin("Widgets"):
-        normWidgets(state)
-        imgui.End()
-
-    if imgui.Begin("Tables"):
-        tables()
-        imgui.End()
-
-    if imgui.Begin("Plot"):
-        plot(state)
-        imgui.End()
-
-
 def main():
-    print("Init GLFW")
-    window = glfw.Init(window_width=1024, window_height=600, title="Test")
-
-    if window is None:
-        print("Error during GLFW init")
-        exit(1)
-
-    print("Create ImGUI Context")
-    imgui.CreateContext()
-    print("Create ImPlot Context")
-    implot.CreateContext()
-    print("Init Context for GLFW")
-    glfw.InitContextForGLFW(window)
-    print("Set Style Colors")
-    imgui.StyleColorsDark()
-
-    print("Making Clear Color")
-    clearColor = imgui.Vec4(0.45, 0.55, 0.6, 1.0)
-
     state = State()
-
-    print("Starting Loop")
-    while True:
-        # print("GLFW NewFrame")
-        glfw.NewFrame()
-        # print("ImGUI NewFrame")
-        imgui.NewFrame()
-        # print("ShowDemo")
-        showAll(state)
-        # print("ImGUI Render")
-        imgui.Render()
-        # print("GLFW Render")
-        glfw.Render(window, clearColor)
-
-        # print("Check Close")
-        if glfw.ShouldClose(window):
-            break
-
-    print("Destroying ImPlot Context")
-    implot.DestroyContext()
-    print("Destroying ImGui Context")
-    imgui.DestroyContext()
-
-    print("Shutting down")
-    glfw.Shutdown(window)
+    window_mainloop("Basic Widgets", 1024, 680, state.showAll)
 
 
 if __name__ == '__main__':

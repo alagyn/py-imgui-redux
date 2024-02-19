@@ -16,4 +16,6 @@ do
     fi
 done
 
+rm -rf $home/*.egg-info
+
 echo "Done"

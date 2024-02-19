@@ -1,15 +1,18 @@
 build
 dist
+wheelhouse
 *.egg-info/
 venv
 .cache
 
+# Compiled python
 *.pyi
 *.pyd
+*.pyc
+__pycache__
 
 *.ini
 
-wheelhouse
 
 # Prerequisites
 *.d
