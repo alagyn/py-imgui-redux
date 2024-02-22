@@ -26,8 +26,8 @@ public:
     }
 };
 
-Texture LoadTexture(
-    char* bytes,
+Texture _LoadTexture(
+    const char* bytes,
     unsigned width,
     unsigned height,
     int numChannels = 3,
@@ -74,6 +74,19 @@ Texture LoadTexture(
     return out;
 }
 
+// Public facing func, so we can enforce bytes type
+Texture LoadTexture(
+    py::bytes bytes,
+    unsigned width,
+    unsigned height,
+    int numChannels = 3,
+    int mipMapLevel = 0
+)
+{
+    std::string data = bytes.cast<std::string>();
+    return _LoadTexture(data.c_str(), width, height, numChannels, mipMapLevel);
+}
+
 Texture LoadTextureFile(
     const char* filename,
     int requestedChannels = 0,
@@ -91,7 +104,7 @@ Texture LoadTextureFile(
         throw std::runtime_error(ss.str());
     }
     Texture out =
-        LoadTexture((char*)data, width, height, numChannels, mipMapLevel);
+        _LoadTexture((char*)data, width, height, numChannels, mipMapLevel);
     stbi_image_free(data);
 
     return out;
