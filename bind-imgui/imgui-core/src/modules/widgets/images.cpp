@@ -27,7 +27,7 @@ public:
 };
 
 Texture _LoadTexture(
-    const char* bytes,
+    char* bytes,
     unsigned width,
     unsigned height,
     int numChannels = 3,
@@ -83,8 +83,37 @@ Texture LoadTexture(
     int mipMapLevel = 0
 )
 {
-    std::string data = bytes.cast<std::string>();
-    return _LoadTexture(data.c_str(), width, height, numChannels, mipMapLevel);
+    if(width == 0)
+    {
+        throw py::value_error("width == 0");
+    }
+
+    if(height == 0)
+    {
+        throw py::value_error("height == 0");
+    }
+
+    unsigned len = bytes.attr("__len__")().cast<unsigned>();
+    unsigned calcLen = width * height * numChannels;
+    py::print("Got len", len);
+
+    if(calcLen != len)
+    {
+        std::stringstream ss;
+        ss << "(width * height * numChannels) != len(data), " << calcLen
+           << " != " << len;
+        throw py::value_error(ss.str());
+    }
+
+    // Preallocate to zero
+    std::vector<char> data(len, 0);
+    auto iter = py::iter(bytes);
+    for(size_t idx = 0; iter != py::iterator::sentinel(); ++iter, ++idx)
+    {
+        data[idx] = (char)iter->cast<unsigned int>();
+    }
+
+    return _LoadTexture(data.data(), width, height, numChannels, mipMapLevel);
 }
 
 Texture LoadTextureFile(
@@ -96,6 +125,7 @@ Texture LoadTextureFile(
     int width, height, numChannels;
     unsigned char* data =
         stbi_load(filename, &width, &height, &numChannels, requestedChannels);
+
     if(!data)
     {
         std::stringstream ss;
@@ -103,8 +133,10 @@ Texture LoadTextureFile(
            << stbi_failure_reason();
         throw std::runtime_error(ss.str());
     }
+
     Texture out =
         _LoadTexture((char*)data, width, height, numChannels, mipMapLevel);
+
     stbi_image_free(data);
 
     return out;

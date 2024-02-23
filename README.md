@@ -197,6 +197,8 @@ Image file loading is handled via [stb_image](https://github.com/nothings/stb/bl
 Alternatively, if you wish to do some manual image processing, you can use PILLOW or OpenCV
 (or any other image processing library... probably)
 
+**Important Note: `LoadTexture` and `LoadTextureFile` can only be called after both imgui and glfw have been initialized otherwise openGL will segfault**
+
 **OpenCV Example**
 ```python
 import imgui

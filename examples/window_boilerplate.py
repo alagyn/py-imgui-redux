@@ -21,12 +21,14 @@ def window_mainloop(
     width: int,
     height: int,
     draw: DrawFunc,
+    init: Callable[[], None] = noop,
     cleanup: Callable[[], None] = noop
 ):
     """
     Create a single window and enter render loop until either the window is closed
     or the draw() func returns true
-    cleanup func is called before imgui contexts are destroyed
+    init is called once, after imgui is initialized
+    cleanup func is called once before imgui contexts are destroyed
     """
 
     # 1) create our window
@@ -47,6 +49,9 @@ def window_mainloop(
     im.StyleColorsDark()
     # Set background OpenGL "clear color"
     clear_color = im.Vec4(0.22, 0.22, 0.22, 1.0)
+
+    # do any init tasks
+    init()
 
     # 5) Main Loop
     while True:

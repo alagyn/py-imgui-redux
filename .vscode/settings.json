@@ -87,7 +87,21 @@
         "xtr1common": "cpp",
         "xtree": "cpp",
         "xutility": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "any": "cpp",
+        "hash_map": "cpp",
+        "bitset": "cpp",
+        "cfenv": "cpp",
+        "codecvt": "cpp",
+        "cstdarg": "cpp",
+        "cwctype": "cpp",
+        "memory_resource": "cpp",
+        "source_location": "cpp",
+        "string_view": "cpp",
+        "numbers": "cpp",
+        "semaphore": "cpp",
+        "stdfloat": "cpp",
+        "cinttypes": "cpp"
     },
     "C_Cpp.default.defines": [
         "IMGUI_DISABLE_OBSOLETE_KEYIO=1",

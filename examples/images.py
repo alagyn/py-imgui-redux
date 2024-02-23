@@ -20,47 +20,65 @@ import cv2
 from PIL import Image
 
 
+# METHOD 1
+# Load via built-in image file parsing
+# see the README for more info
+def loadSTB(filename: str) -> im.Texture:
+    return im.LoadTextureFile(filename)
+
+
+# METHOD 2
+# Load via OpenCV
+def loadOpenCV(filename: str) -> im.Texture:
+    image = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    # Might need to convert the colors here
+    image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
+    # Pass the data to imgui
+    return im.LoadTexture(
+        image.tobytes(), image.shape[1], image.shape[0], image.shape[2]
+    )
+
+
+# METHOD 3
+# Load via PILLOW
+def loadPILLOW(filename) -> im.Texture:
+    print("Load PILLOW")
+    image2 = Image.open(filename)
+    # Pass the data to imgui
+    return im.LoadTexture(
+        image2.tobytes(),
+        image2.size[0],
+        image2.size[1],
+        len(image2.getbands())
+    )
+
+
 class State:
 
     def __init__(self) -> None:
-        # Get a path to our image
-        imageFile = os.path.join(
-            os.path.split(__file__), "..", "docs", "py-imgui-logo.png"
-        )
-
-        # METHOD 1
-        # Load via built in image file parsing
-        # see the README for more info
-        tex1 = im.LoadTextureFile(imageFile)
-
-        # METHOD 2
-        # Load via OpenCV
-        image = cv2.imread(imageFile, cv2.IMREAD_UNCHANGED)
-        # Might need to convert the colors here
-        image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
-        # Pass the data to imgui
-        tex2 = im.LoadTexture(
-            image.tobytes(), image.shape[1], image.shape[0], image.shape[2]
-        )
-
-        # METHOD 3
-        # Load via PILLOW
-        image2 = Image.open(imageFile)
-        # Pass the data to imgui
-        tex3 = im.LoadTexture(
-            image2.tobytes(),
-            image2.size[0],
-            image2.size[1],
-            len(image2.getbands())
-        )
-
-        # we no longer need the image data once loaded in a texture
-        self.textures = [("built-in", tex1), ("openCV", tex2), ("PIL", tex3)]
+        self.textures = []
         # rendered image size
         self.imSize = im.Vec2(200, 200)
 
+    def setup(self):
+        # Get a path to our image
+        imageFile = os.path.join(
+            os.path.split(__file__)[0], "..", "docs", "pyimgui-logo-512.png"
+        )
+
+        # textures can only be loaded AFTER imgui and glfw has been intialized
+
+        print("Load stb")
+        tex1 = loadSTB(imageFile)
+        print("Load OpenCV")
+        tex2 = loadOpenCV(imageFile)
+        print("Load PILLOW")
+        tex3 = loadPILLOW(imageFile)
+        # we no longer need the image data once loaded in a texture
+        self.textures = [("built-in", tex1), ("openCV", tex2), ("PIL", tex3)]
+
     def render(self):
-        im.SetNextWindowSize(im.Vec2(480, 300))
+        im.SetNextWindowSize(im.Vec2(600, 300))
         if im.Begin("Window"):
             if im.BeginTable("_im", len(self.textures)):
                 for label, _ in self.textures:
@@ -79,9 +97,16 @@ class State:
     def cleanup(self):
         for _, tex in self.textures:
             # unload all our textures to be nice :)
-            im.UnloadTexture(tex.texID)
+            im.UnloadTexture(tex)
 
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("Images", 1024, 768, state.render, state.cleanup)
+    window_mainloop(
+        "Images",
+        1024,
+        768,
+        state.render,
+        init=state.setup,
+        cleanup=state.cleanup
+    )
