@@ -1,4 +1,4 @@
-<img src="https://github.com/alagyn/PyImGui-Redux/blob/d20629bf4b850e5a5ccfc0526097d9e067e0f025/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
+<img src="https://github.com/alagyn/PyImGui-Redux/blob/193cda036b18d9dd2222c67e201fa2bbba5e22a5/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
 
 
 # PyImGui-Redux
