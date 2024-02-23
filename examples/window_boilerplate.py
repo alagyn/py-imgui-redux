@@ -12,10 +12,21 @@ import imgui.implot as implot
 DrawFunc = Callable[[], bool]
 
 
-def window_mainloop(title: str, width: int, height: int, draw: DrawFunc):
+def noop():
+    pass
+
+
+def window_mainloop(
+    title: str,
+    width: int,
+    height: int,
+    draw: DrawFunc,
+    cleanup: Callable[[], None] = noop
+):
     """
     Create a single window and enter render loop until either the window is closed
     or the draw() func returns true
+    cleanup func is called before imgui contexts are destroyed
     """
 
     # 1) create our window
@@ -54,6 +65,9 @@ def window_mainloop(title: str, width: int, height: int, draw: DrawFunc):
         if shouldExit or glfw.ShouldClose(window):
             break
 
+    # do any cleanup tasks
+    cleanup()
+
     # 6) Shutdown window
     # Do this first, else there will usually be a segfault
     glfw.Shutdown(window)
@@ -70,6 +84,7 @@ if __name__ == '__main__':
 
     def showDemo():
         im.ShowDemoWindow()
+        implot.ShowDemoWindow()
         return False
 
     window_mainloop("Demo", 860, 640, showDemo)

@@ -1,5 +1,5 @@
 """
-Exammple uses of the basic widgets and the Ref data types.
+Example uses of the basic widgets and the Ref data types.
 Uses most of the widgets.
 """
 
