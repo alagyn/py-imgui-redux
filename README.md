@@ -1,5 +1,10 @@
+<img src="https://github.com/alagyn/PyImGui-Redux/blob/d20629bf4b850e5a5ccfc0526097d9e067e0f025/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
+
+
 # PyImGui-Redux
 DearImGui wrapper for python made with PyBind11
+
+---
 
 Read below for adjustments made to the standard APIs.
 Otherwise, all documentation from the original libraries remains 100% valid.
