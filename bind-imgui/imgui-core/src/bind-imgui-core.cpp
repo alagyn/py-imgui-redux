@@ -19,6 +19,8 @@ void init_core_imgui(py::module& m)
     init_stacks(m);
     // Cursor / Layout
     init_cursor_and_layout(m);
+    // Drawlist structs
+    init_drawlist(m);
     // Widgets
     init_widgets_text(m);
     init_widgets_main(m);

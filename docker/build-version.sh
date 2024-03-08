@@ -13,6 +13,12 @@ do
     esac
 done
 
+if [ "$PY_VERSION" = "" ]
+then
+    echo "Please supply a python version with -p"
+    exit 1
+fi
+
 export PY_ROOT="/opt/python/${PY_VERSION}/bin"
 export PATH=${PY_ROOT}:${PATH}
 

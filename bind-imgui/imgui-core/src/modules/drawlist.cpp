@@ -1,11 +1,13 @@
 #include <binder/inc/struct-utility.h>
 #include <imgui-core/inc/imgui-modules.h>
 
+#include <pybind11/stl.h>
+
 #include <vector>
 
 void init_drawlist(py::module& m)
 {
-    py::class_<ImDrawList>(m, "DrawList")
+    py::class_<ImDrawList>(m, "ImDrawList")
         // TODO buffers
         .RW(ImDrawList, Flags)
         // Ignoring internals
