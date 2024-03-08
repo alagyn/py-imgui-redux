@@ -6,8 +6,6 @@ void init_imgui_context(py::module& m)
     // Context
     // Make opaque wrapper
     py::class_<ImGuiContext>(m, "Context");
-    // TODO make actual wrapper for this?
-    py::class_<ImFontAtlas>(m, "FontAtlas");
 
     m.def(
         IMFUNC(CreateContext),

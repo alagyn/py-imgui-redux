@@ -1,4 +1,5 @@
 #include <binder/inc/struct-utility.h>
+//#include <binder/inc/wraps.h>
 #include <imgui-core/inc/imgui-modules.h>
 
 void init_imgui_structs(py::module& m)
@@ -201,5 +202,159 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImColor, SetHSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f)
         .def_static(DEF(ImColor, HSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f);
 
-    // TODO ImFontConfig, ImFontGlyph
+    py::class_<ImFont>(m, "ImFont")
+        .RW(ImFont, IndexAdvanceX)
+        .RW(ImFont, FallbackAdvanceX)
+        .RW(ImFont, FontSize)
+        .RW(ImFont, IndexLookup)
+        .RW(ImFont, Glyphs)
+        .RW(ImFont, FallbackGlyph)
+        .RW(ImFont, ContainerAtlas)
+        .RW(ImFont, ConfigData)
+        .RW(ImFont, ConfigDataCount)
+        .RW(ImFont, FallbackChar)
+        .RW(ImFont, EllipsisChar)
+        .RW(ImFont, EllipsisCharCount)
+        .RW(ImFont, EllipsisWidth)
+        .RW(ImFont, EllipsisCharStep)
+        .RW(ImFont, DirtyLookupTables)
+        .RW(ImFont, Scale)
+        .RW(ImFont, Ascent)
+        .RW(ImFont, Descent)
+        .RW(ImFont, MetricsTotalSurface)
+        // TODO Used4kPagesMap?
+        .def(DEF(ImFont, FindGlyph), "c"_a, py::return_value_policy::reference)
+        .def(
+            DEF(ImFont, FindGlyphNoFallback),
+            "c"_a,
+            py::return_value_policy::reference
+        )
+        .def(DEF(ImFont, GetCharAdvance), "c"_a)
+        .def(DEF(ImFont, IsLoaded))
+        .def(DEF(ImFont, GetDebugName), py::return_value_policy::reference)
+        // TODO CalcTextSizeA
+        // TODO CalcWordWrapPositionA
+        .def(DEF(ImFont, RenderChar), "draw_list"_a, "size"_a, "pos"_a, "col"_a, "c"_a)
+        // TODO RenderText
+        ;
+
+    py::class_<ImFontConfig>(m, "ImFontConfig")
+        .RW(ImFontConfig, FontDataSize)
+        .RW(ImFontConfig, FontDataOwnedByAtlas)
+        .RW(ImFontConfig, FontNo)
+        .RW(ImFontConfig, SizePixels)
+        .RW(ImFontConfig, OversampleH)
+        .RW(ImFontConfig, OversampleV)
+        .RW(ImFontConfig, PixelSnapH)
+        .RW(ImFontConfig, GlyphExtraSpacing)
+        .RW(ImFontConfig, GlyphOffset)
+        .RW(ImFontConfig, GlyphMinAdvanceX)
+        .RW(ImFontConfig, GlyphMaxAdvanceX)
+        .RW(ImFontConfig, MergeMode)
+        .RW(ImFontConfig, FontBuilderFlags)
+        .RW(ImFontConfig, RasterizerMultiply)
+        .RW(ImFontConfig, RasterizerDensity)
+        .RW(ImFontConfig, EllipsisChar)
+        .def(py::init<>());
+
+    py::class_<ImFontGlyph>(m, "ImFontGlyph")
+        .def_property(
+            "Colored",
+            [](ImFontGlyph* self)
+            {
+                return self->Colored;
+            },
+            [](ImFontGlyph* self, unsigned int val)
+            {
+                self->Colored = val;
+            }
+        )
+        .def_property(
+            "Visible",
+            [](ImFontGlyph* self)
+            {
+                return self->Visible;
+            },
+            [](ImFontGlyph* self, unsigned int val)
+            {
+                self->Visible = val;
+            }
+        )
+        .def_property(
+            "Codepoint",
+            [](ImFontGlyph* self)
+            {
+                return self->Codepoint;
+            },
+            [](ImFontGlyph* self, unsigned int val)
+            {
+                self->Codepoint = val;
+            }
+        )
+        .RW(ImFontGlyph, AdvanceX)
+        .RW(ImFontGlyph, X0)
+        .RW(ImFontGlyph, X1)
+        .RW(ImFontGlyph, Y0)
+        .RW(ImFontGlyph, Y1)
+        .RW(ImFontGlyph, U0)
+        .RW(ImFontGlyph, U1)
+        .RW(ImFontGlyph, V0)
+        .RW(ImFontGlyph, V1);
+
+    py::class_<ImFontAtlas>(m, "ImFontAtlas")
+        .def(
+            DEF(ImFontAtlas, AddFont),
+            "font_cfg"_a,
+            py::return_value_policy::reference
+        )
+        .def(
+            DEF(ImFontAtlas, AddFontDefault),
+            "font_cfg"_a = nullptr,
+            py::return_value_policy::reference
+        )
+        /*
+        .def(
+            DEF(ImFontAtlas, AddFontFromFileTTF),
+            "filename"_a,
+            "size_pixels"_a,
+            "font_cfg"_a = nullptr,
+            "glyph_ranges"_a = nullptr
+        )
+        */
+        .def(
+            "AddFontFromFileTTF",
+            [](ImFontAtlas* self,
+               const char* filename,
+               float size_pixels,
+               ImFontConfig* font_cfg = nullptr)
+            {
+                return self->AddFontFromFileTTF(filename, size_pixels, font_cfg);
+            },
+            "filename"_a,
+            "size_pixels"_a,
+            "font_cfg"_a = nullptr,
+            py::return_value_policy::reference
+        )
+        // TODO AddFontFromMemory...?
+        .def(DEF(ImFontAtlas, ClearInputData))
+        .def(DEF(ImFontAtlas, ClearTexData))
+        .def(DEF(ImFontAtlas, ClearFonts))
+        .def(DEF(ImFontAtlas, Clear))
+        .def(DEF(ImFontAtlas, Build))
+        // TODO GetTexData...?
+        .def(DEF(ImFontAtlas, IsBuilt))
+        .def(DEF(ImFontAtlas, SetTexID), "id"_a)
+        // TODO GetGlyphRanges...?
+        .def(DEF(ImFontAtlas, AddCustomRectRegular), "width"_a, "height"_a)
+        .def(
+            DEF(ImFontAtlas, AddCustomRectFontGlyph),
+            "font"_a,
+            "id"_a,
+            "width"_a,
+            "height"_a,
+            "advance_x"_a,
+            py::arg_v("offset", ImVec2(0, 0), "Vec2(0, 0)")
+        )
+        // TODO GetCustomRectByIndex?
+        ;
 }
