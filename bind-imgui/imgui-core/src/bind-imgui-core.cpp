@@ -36,4 +36,6 @@ void init_core_imgui(py::module& m)
     // TODO use compile defs for different backends
     auto glfw = m.def_submodule("glfw", "GLFW Backend Wrapper");
     init_backend_glfw(glfw);
+
+    m.attr("FLT_MAX") = FLT_MAX;
 }

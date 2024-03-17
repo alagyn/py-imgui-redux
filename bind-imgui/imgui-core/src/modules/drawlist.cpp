@@ -207,7 +207,24 @@ void init_drawlist(py::module& m)
         )
         // Image Primitives
         .def(
-            DEF(ImDrawList, AddImage),
+            "AddImage",
+            [](ImDrawList* self,
+               unsigned int texID,
+               ImVec2 p_min,
+               ImVec2 p_max,
+               ImVec2 uv_min,
+               ImVec2 uv_max,
+               ImU32 col)
+            {
+                self->AddImage(
+                    (void*)(intptr_t)texID,
+                    p_min,
+                    p_max,
+                    uv_min,
+                    uv_max,
+                    col
+                );
+            },
             "user_texture_id"_a,
             "p_min"_a,
             "p_max"_a,
@@ -216,20 +233,66 @@ void init_drawlist(py::module& m)
             "col"_a = IM_COL32_WHITE
         )
         .def(
-            DEF(ImDrawList, AddImageQuad),
+            "AddImageQuad",
+            [](ImDrawList* self,
+               unsigned int texID,
+               ImVec2 p1,
+               ImVec2 p2,
+               ImVec2 p3,
+               ImVec2 p4,
+               ImVec2 uv1,
+               ImVec2 uv2,
+               ImVec2 uv3,
+               ImVec2 uv4,
+               ImU32 col)
+            {
+                self->AddImageQuad(
+                    (void*)(intptr_t)(texID),
+                    p1,
+                    p2,
+                    p3,
+                    p4,
+                    uv1,
+                    uv2,
+                    uv3,
+                    uv4,
+                    col
+                );
+            },
             "user_texture_id"_a,
             "p1"_a,
             "p2"_a,
             "p3"_a,
             "p4"_a,
-            py::arg_v("uv_1", ImVec2(0, 0), "Vec2(0, 0)"),
-            py::arg_v("uv_2", ImVec2(1, 0), "Vec2(1, 0)"),
-            py::arg_v("uv_3", ImVec2(1, 1), "Vec2(0, 1)"),
-            py::arg_v("uv_4", ImVec2(0, 1), "Vec2(1, 1)"),
+            py::arg_v("uv1", ImVec2(0, 0), "Vec2(0, 0)"),
+            py::arg_v("uv2", ImVec2(1, 0), "Vec2(1, 0)"),
+            py::arg_v("uv3", ImVec2(1, 1), "Vec2(0, 1)"),
+            py::arg_v("uv4", ImVec2(0, 1), "Vec2(1, 1)"),
             "col"_a = IM_COL32_WHITE
         )
         .def(
-            DEF(ImDrawList, AddImageRounded),
+            "AddImageRounded",
+            [](ImDrawList* self,
+               unsigned int texID,
+               ImVec2 p_min,
+               ImVec2 p_max,
+               ImVec2 uv_min,
+               ImVec2 uv_max,
+               ImU32 col,
+               float rounding,
+               ImDrawFlags flags)
+            {
+                self->AddImageRounded(
+                    (void*)(intptr_t)(texID),
+                    p_min,
+                    p_max,
+                    uv_min,
+                    uv_max,
+                    col,
+                    rounding,
+                    flags
+                );
+            },
             "user_texture_id"_a,
             "p_min"_a,
             "p_max"_a,

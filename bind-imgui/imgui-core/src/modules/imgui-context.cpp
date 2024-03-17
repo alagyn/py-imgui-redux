@@ -17,8 +17,8 @@ void init_imgui_context(py::module& m)
     m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
 
     // Main
-    QUICK(GetIO);
-    QUICK(GetStyle);
+    m.def(IMFUNC(GetIO), py::return_value_policy::reference);
+    m.def(IMFUNC(GetStyle), py::return_value_policy::reference);
     QUICK(NewFrame);
     QUICK(EndFrame);
     QUICK(Render);

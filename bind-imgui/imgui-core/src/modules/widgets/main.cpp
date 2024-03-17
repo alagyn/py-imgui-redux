@@ -314,11 +314,13 @@ void init_widgets_main(py::module& m)
     // Drawlists
     m.def(
         "GetBackgroundDrawList",
-        static_cast<ImDrawList* (*)(void)>(ImGui::GetBackgroundDrawList)
+        static_cast<ImDrawList* (*)(void)>(ImGui::GetBackgroundDrawList),
+        py::return_value_policy::reference
     );
     m.def(
         "GetForegroundDrawList",
-        static_cast<ImDrawList* (*)(void)>(ImGui::GetForegroundDrawList)
+        static_cast<ImDrawList* (*)(void)>(ImGui::GetForegroundDrawList),
+        py::return_value_policy::reference
     );
 
     // Misc Utilities
@@ -386,6 +388,7 @@ void init_widgets_main(py::module& m)
         py::overload_cast<ImGuiMouseButton>(ImGui::IsMouseDoubleClicked),
         "button"_a
     );
+
     m.def(IMFUNC(IsMouseHoveringRect), "r_min"_a, "r_max"_a, "clip"_a = true);
     m.def(IMFUNC(IsMousePosValid), "mouse_pos"_a = nullptr);
     // Ignoreing IsAnyMouseDown()

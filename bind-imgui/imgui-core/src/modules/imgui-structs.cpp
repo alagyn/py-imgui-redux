@@ -232,7 +232,17 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImFont, GetCharAdvance), "c"_a)
         .def(DEF(ImFont, IsLoaded))
         .def(DEF(ImFont, GetDebugName), py::return_value_policy::reference)
-        // TODO CalcTextSizeA
+        .def(
+            "CalcTextSizeA",
+            [](ImFont* self, const char* text, float max_width, float wrap_width)
+            {
+                return self
+                    ->CalcTextSizeA(self->FontSize, max_width, wrap_width, text);
+            },
+            "text"_a,
+            "max_width"_a = FLT_MAX,
+            "wrap_width"_a = -1.0
+        )
         // TODO CalcWordWrapPositionA
         .def(DEF(ImFont, RenderChar), "draw_list"_a, "size"_a, "pos"_a, "col"_a, "c"_a)
         // TODO RenderText
