@@ -108,6 +108,6 @@
         "IMGUI_DISABLE_OBSOLETE_FUNCTIONS=1"
     ],
     "python.analysis.exclude": [
-        "third-party"
+        "third-party", "build"
     ]
 }
