@@ -6,6 +6,8 @@ set(CMAKE_DEBUG_POSTFIX, "-d")
 
 set(Python3_FIND_REGISTRY NEVER)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+
 if(${MSVC})
     set(PY_COMPONENTS Interpreter Development)
 else()
@@ -20,10 +22,17 @@ find_package(Python3
 
 add_subdirectory(third-party)
 
-set(BUILD_TEST OFF CACHE BOOL "Build test directory")
+include(setupPyBindLib)
 
-if(${BUILD_TEST})
-    add_subdirectory(test)
-endif()
+include(imgui-srcs)
 
-add_subdirectory(bind-imgui)
+setupPyBindLib(
+    LIB imgui
+    SRCS ${IMGUI_SRCS}
+    LINKS
+        imgui-cpp
+        glfw
+        glad
+        stb
+    INCS ${CMAKE_SOURCE_DIR}/source/inc
+)
