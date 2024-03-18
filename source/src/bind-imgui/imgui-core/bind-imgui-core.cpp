@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/bind-modules.h>
 #include <bind-imgui/imgui-core/imgui-modules.h>
+#include <binder/bind-modules.h>
 
 void init_core_imgui(py::module& m)
 {

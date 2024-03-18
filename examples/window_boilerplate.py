@@ -2,7 +2,7 @@
 Example boilerplate for a setting up/shutting down the ImGui context and
 GLFW window correctly, as well as a basic render loop
 """
-from typing import Callable
+from typing import Callable, Optional
 
 import imgui as im
 import imgui.glfw as glfw
@@ -12,17 +12,13 @@ import imgui.implot as implot
 DrawFunc = Callable[[], bool]
 
 
-def noop():
-    pass
-
-
 def window_mainloop(
     title: str,
     width: int,
     height: int,
     draw: DrawFunc,
-    init: Callable[[], None] = noop,
-    cleanup: Callable[[], None] = noop
+    init: Optional[Callable[[], None]] = None,
+    cleanup: Optional[Callable[[], None]] = None
 ):
     """
     Create a single window and enter render loop until either the window is closed
@@ -51,7 +47,8 @@ def window_mainloop(
     clear_color = im.Vec4(0.22, 0.22, 0.22, 1.0)
 
     # do any init tasks
-    init()
+    if init is not None:
+        init()
 
     # 5) Main Loop
     while True:
@@ -71,7 +68,8 @@ def window_mainloop(
             break
 
     # do any cleanup tasks
-    cleanup()
+    if cleanup is not None:
+        cleanup()
 
     # 6) Shutdown window
     # Do this first, else there will usually be a segfault

@@ -1,5 +1,5 @@
 #pragma once
-#include <bind-imgui/binder/module-utility.h>
+#include <binder/module-utility.h>
 #include <imgui.h>
 
 // clang-format off

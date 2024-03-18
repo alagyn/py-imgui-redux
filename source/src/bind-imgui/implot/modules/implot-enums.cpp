@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/enum-utility.h>
 #include <bind-imgui/implot/implot-modules.h>
+#include <binder/enum-utility.h>
 
 void init_implot_enums(py::module& m)
 {

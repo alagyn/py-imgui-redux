@@ -1,4 +1,4 @@
-#include <bind-imgui/binder/module-utility.h>
+#include <binder/module-utility.h>
 #include <imnodes.h>
 
 // Quick bind for a function with no args or special needs

@@ -22,9 +22,11 @@ find_package(Python3
 
 add_subdirectory(third-party)
 
-include(setupPyBindLib)
+set(INCLUDE_DIR source/inc)
 
+include(setupPyBindLib)
 include(imgui-srcs)
+include(glfw-srcs)
 
 setupPyBindLib(
     LIB imgui
@@ -34,5 +36,29 @@ setupPyBindLib(
         glfw
         glad
         stb
-    INCS ${CMAKE_SOURCE_DIR}/source/inc
+    INCS ${INCLUDE_DIR}
 )
+
+# copy glfw include dirs
+#get_target_property(glfw_incs glfw INCLUDE_DIRECTORIES)
+
+setupPyBindLib(
+    LIB pyglfw
+    SRCS ${BIND_GLFW_SRCS}
+    LINKS
+    glfw
+    glad
+    INCS 
+    ${INCLUDE_DIR}
+    #third-party/
+    #${glfw_incs}
+)
+
+# copy GLFW's defs
+#get_target_property(glfw_defs glfw COMPILE_DEFINITIONS)
+#[[
+target_compile_definitions(pyglfw
+    PRIVATE
+    ${glfw_defs}
+)
+]]

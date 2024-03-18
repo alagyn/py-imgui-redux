@@ -1,6 +1,6 @@
 
-#include <bind-imgui/binder/wraps.h>
 #include <bind-imgui/imnodes/imnodes-modules.h>
+#include <binder/wraps.h>
 
 // Include internal to get context class def
 #include <imnodes_internal.h>

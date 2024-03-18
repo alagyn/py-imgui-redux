@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/bind-modules.h>
-#include <bind-imgui/binder/wraps.h>
+#include <binder/bind-modules.h>
+#include <binder/wraps.h>
 #include <pybind11/stl.h>
 #include <sstream>
 

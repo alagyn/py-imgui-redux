@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/struct-utility.h>
 #include <bind-imgui/imnodes/imnodes-modules.h>
+#include <binder/struct-utility.h>
 
 bool* getIOPointer(int key)
 {

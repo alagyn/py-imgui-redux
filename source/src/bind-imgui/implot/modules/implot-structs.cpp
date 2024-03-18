@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/struct-utility.h>
 #include <bind-imgui/implot/implot-modules.h>
+#include <binder/struct-utility.h>
 
 void init_implot_structs(py::module& m)
 {

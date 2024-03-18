@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/enum-utility.h>
 #include <bind-imgui/imnodes/imnodes-modules.h>
+#include <binder/enum-utility.h>
 #include <imnodes.h>
 
 void init_imnodes_enums(py::module& m)

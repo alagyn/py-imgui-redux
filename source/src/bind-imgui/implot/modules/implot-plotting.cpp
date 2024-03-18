@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/numpy.h>
 #include <bind-imgui/implot/implot-modules.h>
+#include <binder/numpy.h>
 
 void init_plotting(py::module& m)
 {

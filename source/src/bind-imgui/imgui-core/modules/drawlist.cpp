@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/struct-utility.h>
 #include <bind-imgui/imgui-core/imgui-modules.h>
+#include <binder/struct-utility.h>
 
 #include <pybind11/stl.h>
 

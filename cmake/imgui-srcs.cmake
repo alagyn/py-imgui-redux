@@ -15,11 +15,13 @@ set(IMPLOT_MOD ${IMPLOT_ROOT}/modules)
 
 set(IMGUI_SRCS
     # Binder
-    ${IMGUI_ROOT}/binder/bind-modules.cpp
     ${IMGUI_ROOT}/binder/enum-utility.cpp
     ${IMGUI_ROOT}/binder/wraps.cpp
 
-    # Imgui
+    # Base Module definition
+    ${IMGUI_ROOT}/bind-imgui.cpp
+
+    # Imgui Core
     ${IMGUI_CORE_ROOT}/bind-imgui-core.cpp
         # Modules
         ${IMGUI_MOD}/cursor-layout.cpp

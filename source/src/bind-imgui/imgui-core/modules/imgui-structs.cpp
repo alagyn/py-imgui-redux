@@ -1,5 +1,5 @@
-#include <bind-imgui/binder/struct-utility.h>
-//#include <bind-imgui/binder/wraps.h>
+#include <binder/struct-utility.h>
+//#include <binder/wraps.h>
 #include <bind-imgui/imgui-core/imgui-modules.h>
 
 void init_imgui_structs(py::module& m)

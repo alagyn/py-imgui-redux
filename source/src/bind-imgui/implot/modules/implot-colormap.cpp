@@ -1,6 +1,6 @@
-#include <bind-imgui/binder/numpy.h>
-#include <bind-imgui/binder/wraps.h>
 #include <bind-imgui/implot/implot-modules.h>
+#include <binder/numpy.h>
+#include <binder/wraps.h>
 
 void init_colormaps(py::module& m)
 {
