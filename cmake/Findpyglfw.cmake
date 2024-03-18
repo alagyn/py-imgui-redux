@@ -3,7 +3,7 @@ if(NOT pyglfw_ROOT OR NOT EXISTS ${pyglfw_ROOT})
 endif()
 
 if(MSVC)
-    set(pyglfw_GLOB "${pyglfw_ROOT}/glfw*.dll")
+    set(pyglfw_GLOB "${pyglfw_ROOT}/glfw*.lib")
 else()
     set(pyglfw_GLOB "${pyglfw_ROOT}/py_glfw_redux.libs/libglfw*.so.*")
 endif()
