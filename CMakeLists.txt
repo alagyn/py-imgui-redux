@@ -18,7 +18,7 @@ find_package(Python3
     ${PY_COMPONENTS}
 )
 
-find_package(pyglfw)
+find_package(pyglfw COMPONENTS REQUIRED pyglfw)
 
 add_subdirectory(third-party)
 
