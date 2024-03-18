@@ -18,20 +18,21 @@ find_package(Python3
     ${PY_COMPONENTS}
 )
 
+find_package(pyglfw)
+
 add_subdirectory(third-party)
 
 set(INCLUDE_DIR source/inc)
 
 include(setupPyBindLib)
 include(imgui-srcs)
-include(glfw-srcs)
 
 setupPyBindLib(
     LIB imgui
     SRCS ${IMGUI_SRCS}
     LINKS
         imgui-cpp
-        glfw
+        pyglfw
         glad
         stb
     INCS ${INCLUDE_DIR}

@@ -1,7 +1,4 @@
-
-set(SRC_ROOT source/src)
-
-set(IMGUI_ROOT ${SRC_ROOT}/bind-imgui)
+set(IMGUI_ROOT source/src)
 
 set(IMGUI_CORE_ROOT ${IMGUI_ROOT}/imgui-core)
 set(IMGUI_MOD ${IMGUI_CORE_ROOT}/modules)

@@ -37,7 +37,7 @@ target_include_directories(imgui-cpp
 
 target_link_libraries(imgui-cpp
     PRIVATE
-    glfw
+    pyglfw
 )
 
 set_target_properties(imgui-cpp

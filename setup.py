@@ -12,6 +12,8 @@ import subprocess
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
+if len(SOURCE_DIR) == 0:
+    SOURCE_DIR = os.path.abspath(".")
 
 IS_WINDOWS = sys.platform == "win32"
 
@@ -246,10 +248,6 @@ class BuildCMakeExt(build_ext):
         log("Configuring cmake project")
 
         PY_ROOT, _ = os.path.split(sys.executable)
-        try:
-            PY_ROOT = os.environ['PY_ROOT']
-        except KeyError:
-            pass
         log(f"Using Py Root: {PY_ROOT}")
 
         args = [
@@ -257,7 +255,7 @@ class BuildCMakeExt(build_ext):
             "-E",
             "env",
             "CMAKE_BUILD_PARALLEL_LEVEL=8",
-            f"Python3_ROOT_DIR={PY_ROOT}"
+            f"Python3_ROOT_DIR={PY_ROOT}",
             "--",
             'cmake',
             '-S',
@@ -291,7 +289,7 @@ class BuildCMakeExt(build_ext):
         # Build finished, now copy the files into the copy directory
         # The copy directory is the parent directory of the extension (.pyd)
 
-        bin_dir = os.path.join(build_dir, "bind-imgui")
+        bin_dir = os.path.join(build_dir)
 
         if IS_WINDOWS:
             bin_dir = os.path.join(bin_dir, "Release")
