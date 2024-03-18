@@ -8,11 +8,11 @@
             "name": "run-example",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/examples/fonts.py",
+            "program": "${workspaceFolder}/examples/test.py",
             "cwd": "${workspaceFolder}/examples",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "env": {"PYTHONPATH": "${workspaceFolder}/build/bind-imgui/"}
+            "env": {"PYTHONPATH": "${workspaceFolder}/build/"}
         },
         {
             "name": "(gdb) Attach",

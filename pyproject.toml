@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel", "cmake>=3.25"]
+requires = ["setuptools", "wheel", "cmake>=3.25", "py-glfw-redux"]
 build-backend = "setuptools.build_meta"
 
 [tool.distutils.egg_info]
@@ -22,6 +22,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: User Interfaces",
 ]
+
+dependencies = ["py-glfw-redux"]
 
 [project.urls]
 "Homepage" = "https://github.com/alagyn/PyImGui-Redux"

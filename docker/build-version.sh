@@ -26,7 +26,7 @@ cd /src
 if [ $CLEAN -eq 1 ]
 then
     echo "Clearing Build Directory"
-    rm -rf build
+    rm -rf build/*
     echo "Clearing Dist Directory"
     rm -rf dist
 fi

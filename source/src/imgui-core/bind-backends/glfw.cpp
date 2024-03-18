@@ -7,76 +7,26 @@
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <imgui.h>
 
-void GLFWErrCallback(int err, const char* msg)
+void initContextForGLFW(void* window, const char* glsl_version)
 {
-    py::print("GLFW Error Code:", err, "Msg:", msg);
-}
-
-void* initGLFW(
-    const char* title,
-    int window_width,
-    int window_height,
-    int swap_interval = 1
-)
-{
-    glfwSetErrorCallback(GLFWErrCallback);
-    if(!glfwInit())
-    {
-        py::print("Cannot initialize GLFW");
-        return nullptr;
-    }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
-    GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
-    int width, height;
-    glfwGetMonitorWorkarea(primaryMonitor, nullptr, nullptr, &width, &height);
-
-    if(window_height == 0)
-    {
-        window_height = height;
-    }
-    if(window_width == 0)
-    {
-        window_width = width;
-    }
-
-    GLFWwindow* window =
-        glfwCreateWindow(window_width, window_height, title, nullptr, nullptr);
-
-    if(window == nullptr)
-    {
-        py::print("Cannot create GLFW window");
-        return window;
-    }
-
-    glfwMakeContextCurrent(window);
-
     int version = gladLoadGL(glfwGetProcAddress);
+
     if(version == 0)
     {
         py::print("Failed to initialize the OpenGL context");
-        glfwDestroyWindow(window);
-        return nullptr;
+        throw std::runtime_error("Failed to initialize OpenGL");
     }
 
-    glfwSwapInterval(swap_interval);
-
-    return window;
-}
-
-void initContextForGLFW(void* window)
-{
     GLFWwindow* gWindow = static_cast<GLFWwindow*>(window);
+
     // Setup Platform/Renderer backends
     if(!ImGui_ImplGlfw_InitForOpenGL(gWindow, true))
     {
         py::print("Cannot init GLFW for OpenGL");
         exit(1);
     }
-    const char* glsl_version = "#version 130";
     if(!ImGui_ImplOpenGL3_Init(glsl_version))
     {
         py::print("Cannot init OpenGL");
@@ -84,23 +34,22 @@ void initContextForGLFW(void* window)
     }
 }
 
-void shutdownGLFW(void* window)
+void shutdownGLFW()
 {
-    glfwDestroyWindow(static_cast<GLFWwindow*>(window));
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
-    glfwTerminate();
 }
 
 void NewFrame()
 {
-    glfwPollEvents();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
 }
 
 void Render(void* window, const ImVec4& clear_color)
 {
+    ImGui::Render();
     GLFWwindow* gWindow = static_cast<GLFWwindow*>(window);
     int display_w, display_h;
     glfwGetFramebufferSize(gWindow, &display_w, &display_h);
@@ -113,31 +62,19 @@ void Render(void* window, const ImVec4& clear_color)
     );
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    glfwSwapBuffers(gWindow);
-}
-
-bool ShouldClose(void* window)
-{
-    return glfwWindowShouldClose(static_cast<GLFWwindow*>(window));
 }
 
 void init_backend_glfw(py::module& m)
 {
     m.def(
-        "Init",
-        initGLFW,
-        "title"_a,
-        "window_width"_a = 0,
-        "window_height"_a = 0,
-        "swap_interval"_a = 1,
-        py::return_value_policy::reference
+        "InitContextForGLFW",
+        initContextForGLFW,
+        "window"_a,
+        "glsl_version"_a = nullptr
     );
-    m.def("InitContextForGLFW", initContextForGLFW, "window"_a);
-    m.def("Shutdown", shutdownGLFW, "window"_a);
+    m.def("Shutdown", shutdownGLFW);
     m.def("NewFrame", NewFrame);
     m.def("Render", Render, "window"_a, "clear_color"_a);
-    m.def("ShouldClose", ShouldClose, "window"_a);
 
     /*
     m.def(

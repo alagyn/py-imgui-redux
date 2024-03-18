@@ -3,12 +3,6 @@ set(PYBIND11_INSTALL OFF CACHE BOOL "" FORCE)
 set(PYBIND11_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(pybind11)
 
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-add_subdirectory(glfw)
-
 # -------------- imgui --------------
 set(imgui_SRCS
     imgui/imgui.cpp

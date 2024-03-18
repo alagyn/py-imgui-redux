@@ -3,9 +3,7 @@ cmake_minimum_required(VERSION 3.25.2)
 project(imgui)
 
 set(CMAKE_DEBUG_POSTFIX, "-d")
-
 set(Python3_FIND_REGISTRY NEVER)
-
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(${MSVC})
@@ -38,27 +36,3 @@ setupPyBindLib(
         stb
     INCS ${INCLUDE_DIR}
 )
-
-# copy glfw include dirs
-#get_target_property(glfw_incs glfw INCLUDE_DIRECTORIES)
-
-setupPyBindLib(
-    LIB pyglfw
-    SRCS ${BIND_GLFW_SRCS}
-    LINKS
-    glfw
-    glad
-    INCS 
-    ${INCLUDE_DIR}
-    #third-party/
-    #${glfw_incs}
-)
-
-# copy GLFW's defs
-#get_target_property(glfw_defs glfw COMPILE_DEFINITIONS)
-#[[
-target_compile_definitions(pyglfw
-    PRIVATE
-    ${glfw_defs}
-)
-]]

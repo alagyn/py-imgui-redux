@@ -19,8 +19,6 @@ void init_imgui_context(py::module& m)
     // Main
     m.def(IMFUNC(GetIO), py::return_value_policy::reference);
     m.def(IMFUNC(GetStyle), py::return_value_policy::reference);
-    QUICK(NewFrame);
     QUICK(EndFrame);
-    QUICK(Render);
     m.def(IMFUNC(GetDrawData), py::return_value_policy::reference);
 }
