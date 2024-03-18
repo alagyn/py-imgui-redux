@@ -9,6 +9,7 @@ import shutil
 import pathlib
 import sys
 import subprocess
+import sysconfig
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
@@ -118,6 +119,15 @@ class InstallCMakeLibs(install_lib):
 
         if IS_WINDOWS:
             newPath = f"{bin_dir};" + oldPath
+
+            try:
+                dllPath = env['PATH']
+            except KeyError:
+                dllPath = ""
+
+            dllPath = f"{dllPath};{sysconfig.get_path('purelib')}"
+
+            env['PATH'] = dllPath
         else:
             newPath = f"{bin_dir}:" + oldPath
 
