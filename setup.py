@@ -261,30 +261,35 @@ class BuildCMakeExt(build_ext):
             '-S',
             SOURCE_DIR,
             '-B',
-            self.build_temp,
-            "-DCMAKE_BUILD_TYPE=Release"  # this is needed for linux builds
+            self.build_temp
         ]
+
+        if not IS_WINDOWS:
+            args.append("-DCMAKE_BUILD_TYPE=Release")
 
         self.spawn(args)
 
         log("Building binaries")
 
-        self.spawn(
-            [
-                "cmake",
-                "-E",
-                "env",
-                "CMAKE_BUILD_PARALLEL_LEVEL=8",
-                "--",
-                "cmake",
-                "--build",
-                self.build_temp,
-                "--target",
-                extension.name,
-                "--config",
-                "Release"  # this is needed for windows builds
-            ]
-        )
+        args = [
+            "cmake",
+            "-E",
+            "env",
+            "CMAKE_BUILD_PARALLEL_LEVEL=8",
+            "--",
+            "cmake",
+            "--build",
+            self.build_temp,
+            "--target",
+            extension.name,
+        ]
+
+        if IS_WINDOWS:
+            args.append("--config=Release")
+            args.append("--")
+            args.append("-m")
+
+        self.spawn(args)
 
         # Build finished, now copy the files into the copy directory
         # The copy directory is the parent directory of the extension (.pyd)
