@@ -4,12 +4,17 @@ GLFW window correctly, as well as a basic render loop
 """
 from typing import Callable, Optional
 
+import glfw  # import this first so that the libs are loaded correctly
+
 import imgui as im
-import imgui.glfw as glfw
 import imgui.implot as implot
 
 # Define a DrawFunc as a callable that takes no arguments and returns a bool
 DrawFunc = Callable[[], bool]
+
+
+def errorCallback(err: int, msg: str) -> None:
+    print(f'GLFW Error Code: {err}, Msg: {msg}')
 
 
 def window_mainloop(
@@ -27,19 +32,33 @@ def window_mainloop(
     cleanup func is called once before imgui contexts are destroyed
     """
 
-    # 1) create our window
-    window = glfw.Init(title, width, height)
-    if window is None:
-        # GLFW should have hopefully logged an error as well
-        raise RuntimeError("Could not create GLFW Window")
+    # set error callback func
+    glfw.SetErrorCallback(errorCallback)
+    if not glfw.Init():
+        print("Cannot initialize GLFW")
+        return
 
-    # 2) Create context
+    # create our window
+    glfw.WindowHint(glfw.CONTEXT_VERSION_MAJOR, 4)
+    glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR, 6)
+    window = glfw.CreateWindow(width, height, title, None, None)
+    if window is None:
+        print("Cannot create GLFW window")
+        return
+
+    glfw.MakeContextCurrent(window)
+    # enable vsync
+    glfw.SwapInterval(1)
+
+    # Create ImGui context
     im.CreateContext()
     # optionally create extension contexts
     implot.CreateContext()
 
-    # 3) Initialize glfw backend
-    glfw.InitContextForGLFW(window)
+    print(dir(window))
+
+    # Initialize glfw backend
+    im.InitContextForGLFW(window, "#version 130")
 
     # 4) Setup style
     im.StyleColorsDark()
@@ -53,32 +72,36 @@ def window_mainloop(
     # 5) Main Loop
     while True:
         # pre-frame init
-        glfw.NewFrame()
+        glfw.PollEvents()
         im.NewFrame()
 
         # Do GUI processing
         shouldExit = draw()
 
         # Render the frame
-        im.Render()
-        glfw.Render(window, clear_color)
+        im.Render(window, clear_color)
+        glfw.SwapBuffers(window)
 
         # if the draw func says we should exit, or the user clicked the close button
-        if shouldExit or glfw.ShouldClose(window):
+        if shouldExit or glfw.WindowShouldClose(window):
             break
 
     # do any cleanup tasks
     if cleanup is not None:
         cleanup()
 
-    # 6) Shutdown window
+    # Shutdown window
     # Do this first, else there will usually be a segfault
-    glfw.Shutdown(window)
+    glfw.DestroyWindow(window)
+    im.Shutdown()
 
-    # 7) Destroy Contexts
+    # Destroy Contexts
     # in reverse order, destroy extensions first
     implot.DestroyContext()
     im.DestroyContext()
+
+    # terminate glfw
+    glfw.Terminate()
 
     # Done
 

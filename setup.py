@@ -110,7 +110,7 @@ class InstallCMakeLibs(install_lib):
                 lib, os.path.join(self.build_dir, os.path.basename(lib))
             )
 
-        log(f"Generating stubs in {self.build_dir}")
+        log(f"Generating stubs in {bin_dir}")
         env = dict(os.environ)
         try:
             oldPath = env["PYTHONPATH"]
@@ -120,14 +120,11 @@ class InstallCMakeLibs(install_lib):
         if IS_WINDOWS:
             newPath = f"{bin_dir};" + oldPath
 
-            try:
-                dllPath = env['PATH']
-            except KeyError:
-                dllPath = ""
-
-            dllPath = f"{dllPath};{sysconfig.get_path('purelib')}"
-
-            env['PATH'] = dllPath
+            # force glfw dll to be in the same dir
+            # because we can't change the DLL lookup path via PATH
+            # because reasons
+            # https://docs.python.org/3/library/os.html#os.add_dll_directory
+            shutil.copy(f'{sysconfig.get_path("purelib")}/glfw3.dll', bin_dir)
         else:
             newPath = f"{bin_dir}:" + oldPath
 
