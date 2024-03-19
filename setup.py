@@ -15,6 +15,9 @@ BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
 if len(SOURCE_DIR) == 0:
     SOURCE_DIR = os.path.abspath(".")
+BUILD_DIR = os.path.join(SOURCE_DIR, "build")
+if not os.path.exists(BUILD_DIR):
+    os.mkdir(BUILD_DIR)
 
 IS_WINDOWS = sys.platform == "win32"
 
