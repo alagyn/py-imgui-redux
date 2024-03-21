@@ -38,8 +38,17 @@ public:
 
 template<class T> void initListWrapper(pybind11::module& m, const char* name)
 {
-    pybind11::class_<ListWrapper<T>>(m, name)
-        .def("__getitem__", &ListWrapper<T>::get)
-        .def("__len__", &ListWrapper<T>::len)
-        .def("__iter__", &ListWrapper<T>::makeIterator);
+    try
+    {
+        pybind11::class_<ListWrapper<T>>(m, name)
+            .def("__getitem__", &ListWrapper<T>::get)
+            .def("__len__", &ListWrapper<T>::len)
+            .def("__iter__", &ListWrapper<T>::makeIterator);
+    }
+    catch(...)
+    {
+        // PASS
+        // Silently ignore this if it errors
+        // Stops errors if ListWrappers are defined more than once
+    }
 }

@@ -10,10 +10,10 @@ import time
 # Add this file's dir to the path just in case we can't find the other files
 sys.path.append(os.path.split(__file__)[0])
 
-import imgui
-
 # Import the boilerplate loop from "window_boilerplate.py"
 from window_boilerplate import window_mainloop
+
+import imgui
 
 
 # Data holder for our UI state
@@ -94,26 +94,6 @@ def normWidgets(state: State):
                     state.listboxVal[idx] = not val
             imgui.EndListBox()
 
-        if imgui.BeginMainMenuBar():
-            if imgui.MenuItem("Item1"):
-                print("Menu1")
-            elif imgui.MenuItem("Item2"):
-                print("Menu2")
-            elif imgui.BeginMenu("Menu1"):
-                if imgui.MenuItem("SubMenu1"):
-                    print("SubMenu1")
-                elif imgui.MenuItem("SubMenu2"):
-                    print("SubMenu2")
-                imgui.EndMenu()
-            imgui.EndMainMenuBar()
-
-        if imgui.BeginMenu("Window Menu"):
-            if imgui.MenuItem("WindowMenu1"):
-                print("WindowItem1")
-            if imgui.MenuItem("WindowMenu2"):
-                print("WindowItem2")
-            imgui.EndMenu()
-
         imgui.Text("Tooltip")
         if imgui.IsItemHovered():
             imgui.BeginTooltip()
@@ -177,6 +157,26 @@ def normWidgets(state: State):
         imgui.DragFloatRange2("flt range 2", state.fltVal2, state.fltVal3)
 
         imgui.EndTable()
+
+        if imgui.BeginMainMenuBar():
+            if imgui.MenuItem("Item1"):
+                print("Menu1")
+            elif imgui.MenuItem("Item2"):
+                print("Menu2")
+            elif imgui.BeginMenu("Menu1"):
+                if imgui.MenuItem("SubMenu1"):
+                    print("SubMenu1")
+                elif imgui.MenuItem("SubMenu2"):
+                    print("SubMenu2")
+                imgui.EndMenu()
+            imgui.EndMainMenuBar()
+
+        if imgui.BeginMenu("Window Menu"):
+            if imgui.MenuItem("WindowMenu1"):
+                print("WindowItem1")
+            if imgui.MenuItem("WindowMenu2"):
+                print("WindowItem2")
+            imgui.EndMenu()
 
 
 def tables():

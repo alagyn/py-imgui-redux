@@ -16,8 +16,6 @@ void init_imgui_structs(py::module& m)
     initListWrapper<bool>(m, "ListWrapperBool");
     initListWrapper<ImVec2>(m, "ListWrapperImVec2");
     initListWrapper<double>(m, "ListWrapperDouble");
-    initListWrapper<ImU16>(m, "ListWrapperImU16");
-    initListWrapper<float>(m, "ListWrapperFloat");
     initListWrapper<ImGuiTableColumnSortSpecs>(m, "ListWrapperTCSS");
 
     // Vectors
