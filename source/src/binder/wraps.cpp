@@ -47,93 +47,57 @@ size_t StrRef_::strSize()
     return vals.size() - 1;
 }
 
+template<class T, class U>
+void initRef(py::module& m, const char* name, const char* desc, U defaultVal)
+{
+    py::class_<T>(m, name, desc)
+        .def(py::init<U>(), "val"_a = defaultVal)
+        .def_readwrite("val", &T::val, "The wrapped value")
+        .def("__str__", &T::toStr);
+}
+
+template<class T, class U>
+void initList(py::module& m, const char* name, const char* desc)
+{
+    py::class_<T>(m, name, desc)
+        .def(py::init<std::vector<U>>(), "vals"_a = std::vector<U>())
+        .def("append", &T::append, "val"_a, "Append a value to the end")
+        .def("pop", &T::pop, "Pop a value from the end")
+        .def(
+            "resize",
+            &T::resize,
+            "size"_a,
+            "Resize the vector, dropping any lost values"
+        )
+        .def("__len__", &T::size)
+        .def("__iter__", &T::makeIter)
+        .def("__getitem__", &T::getItem, "index"_a)
+        .def("__setitem__", &T::setItem, "index"_a, "val"_a);
+}
+
 void init_wraps(py::module& m)
 {
-    py::class_<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool")
-        .def(py::init<bool>(), "val"_a = false)
-        .def_readwrite("val", &BoolRef_::val, "The wrapped value")
-        .def("__str__", &BoolRef_::toStr);
+    initRef<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool", false);
+    initRef<IntRef_>(m, "IntRef", "A pass-by-ref wrapper for an int", 0);
+    initRef<FloatRef_>(m, "FloatRef", "A pass-by-ref wrapper for a float", 0.0f);
+    initRef<DoubleRef_>(m, "DoubleRef", "A pass-by-ref wrapper for a double", 0.0);
 
-    py::class_<FloatRef_>(m, "FloatRef", "A pass-by-ref wrapper for a float")
-        .def(py::init<float>(), "val"_a = 0.0)
-        .def_readwrite("val", &FloatRef_::val, "The wrapped value")
-        .def("__str__", &FloatRef_::toStr);
-
-    py::class_<IntRef_>(m, "IntRef", "A pass-by-ref wrapper for an int")
-        .def(py::init<int>(), "val"_a = 0)
-        .def_readwrite("val", &IntRef_::val, "The wrapped value")
-        .def("__str__", &IntRef_::toStr);
-
-    py::class_<IntList_>(m, "IntList", "Thin wrapper over a std::vector<int>")
-        .def(py::init<std::vector<int>>(), "vals"_a = std::vector<int>())
-        .def("append", &IntList_::append, "val"_a, "Append a value to the end")
-        .def("pop", &IntList_::pop, "Pop a value from the end")
-        .def(
-            "resize",
-            &IntList_::resize,
-            "size"_a,
-            "Resize the vector, dropping any lost values"
-        )
-        .def("__len__", &IntList_::size)
-        .def("__iter__", &IntList_::makeIter)
-        .def("__getitem__", &IntList_::getItem, "index"_a)
-        .def("__setitem__", &IntList_::setItem, "index"_a, "val"_a);
-
-    py::class_<FloatList_>(m, "FloatList", "Thin wrapper over a std::vector<float>")
-        .def(py::init<std::vector<float>>(), "vals"_a = std::vector<float>())
-        .def("append", &FloatList_::append, "val"_a, "Append a value to the end")
-        .def("pop", &FloatList_::pop, "Pop a value from the end")
-        .def(
-            "resize",
-            &FloatList_::resize,
-            "size"_a,
-            "Resize the vector, dropping any lost values"
-        )
-        .def("__len__", &FloatList_::size)
-        .def("__iter__", &FloatList_::makeIter)
-        .def("__getitem__", &FloatList_::getItem, "index"_a)
-        .def("__setitem__", &FloatList_::setItem, "index"_a, "val"_a);
-
-    py::class_<DoubleList_>(
+    initList<IntList_, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
+    initList<FloatList_, float>(
+        m,
+        "FloatList",
+        "Thin wrapper over a std::vector<float>"
+    );
+    initList<DoubleList_, double>(
         m,
         "DoubleList",
         "Thin wrapper over a std::vector<double>"
-    )
-        .def(py::init<std::vector<double>>(), "vals"_a = std::vector<double>())
-        .def("append", &DoubleList_::append, "val"_a, "Append a value to the end")
-        .def("pop", &DoubleList_::pop, "Pop a value from the end")
-        .def(
-            "resize",
-            &DoubleList_::resize,
-            "size"_a,
-            "Resize the vector, dropping any lost values"
-        )
-        .def("__len__", &DoubleList_::size)
-        .def("__iter__", &DoubleList_::makeIter)
-        .def("__getitem__", &DoubleList_::getItem, "index"_a)
-        .def("__setitem__", &DoubleList_::setItem, "index"_a, "val"_a);
-
-    py::class_<StrList_>(
+    );
+    initList<StrList_, const char*>(
         m,
         "StrList",
         "Thin wrapper over a std::vector<const char*>"
-    )
-        .def(
-            py::init<std::vector<const char*>>(),
-            "vals"_a = std::vector<const char*>()
-        )
-        .def("append", &StrList_::append, "val"_a, "Append a value to the end")
-        .def("pop", &StrList_::pop, "Pop a value from the end")
-        .def(
-            "resize",
-            &StrList_::resize,
-            "size"_a,
-            "Resize the vector, dropping any lost values"
-        )
-        .def("__len__", &StrList_::size)
-        .def("__iter__", &StrList_::makeIter)
-        .def("__getitem__", &StrList_::getItem, "index"_a)
-        .def("__setitem__", &StrList_::setItem, "index"_a, "val"_a);
+    );
 
     py::class_<StrRef_>(m, "StrRef", "Thin wrapper over a std::vector<char>")
         .def(
