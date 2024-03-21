@@ -1,4 +1,5 @@
 #include <bind-imgui/imnodes/imnodes-modules.h>
+#include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
 
 bool* getIOPointer(int key)
@@ -26,26 +27,6 @@ bool* getIOPointer(int key)
 
 void init_imnodes_structs(py::module& m)
 {
-    py::class_<ImNodesStyle>(m, "Style")
-        .RW(ImNodesStyle, GridSpacing)
-        .RW(ImNodesStyle, NodeCornerRounding)
-        .RW(ImNodesStyle, NodePadding)
-        .RW(ImNodesStyle, NodeBorderThickness)
-        .RW(ImNodesStyle, LinkThickness)
-        .RW(ImNodesStyle, LinkLineSegmentsPerLength)
-        .RW(ImNodesStyle, LinkHoverDistance)
-        .RW(ImNodesStyle, PinCircleRadius)
-        .RW(ImNodesStyle, PinQuadSideLength)
-        .RW(ImNodesStyle, PinTriangleSideLength)
-        .RW(ImNodesStyle, PinLineThickness)
-        .RW(ImNodesStyle, PinHoverRadius)
-        .RW(ImNodesStyle, PinOffset)
-        .RW(ImNodesStyle, MiniMapPadding)
-        .RW(ImNodesStyle, MiniMapOffset)
-        .RW(ImNodesStyle, Flags)
-        .def(py::init<>());
-
-    // TODO ImNodesIO
     py::class_<ImNodesIO>(m, "IO")
         .def(
             "SetEmulateThreeButtonMouseMod",
@@ -90,6 +71,34 @@ void init_imnodes_structs(py::module& m)
             [](ImNodesIO* self)
             {
                 self->MultipleSelectModifier.Modifier = nullptr;
+            }
+        )
+        .RW(ImNodesIO, AltMouseButton)
+        .RW(ImNodesIO, AutoPanningSpeed)
+        .def(py::init<>());
+
+    py::class_<ImNodesStyle>(m, "Style")
+        .RW(ImNodesStyle, GridSpacing)
+        .RW(ImNodesStyle, NodeCornerRounding)
+        .RW(ImNodesStyle, NodePadding)
+        .RW(ImNodesStyle, NodeBorderThickness)
+        .RW(ImNodesStyle, LinkThickness)
+        .RW(ImNodesStyle, LinkLineSegmentsPerLength)
+        .RW(ImNodesStyle, LinkHoverDistance)
+        .RW(ImNodesStyle, PinCircleRadius)
+        .RW(ImNodesStyle, PinQuadSideLength)
+        .RW(ImNodesStyle, PinTriangleSideLength)
+        .RW(ImNodesStyle, PinLineThickness)
+        .RW(ImNodesStyle, PinHoverRadius)
+        .RW(ImNodesStyle, PinOffset)
+        .RW(ImNodesStyle, MiniMapPadding)
+        .RW(ImNodesStyle, MiniMapOffset)
+        .RW(ImNodesStyle, Flags)
+        .def_property_readonly(
+            "Colors",
+            [](ImNodesStyle* self)
+            {
+                return ListWrapper<unsigned int>(self->Colors, ImNodesCol_COUNT);
             }
         )
         .def(py::init<>());

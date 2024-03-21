@@ -11,7 +11,25 @@ void init_setup_funcs(py::module& m)
         "v_max"_a,
         "cond"_a = (int)ImPlotCond_Once
     );
-    // TODO SetupAxisLinks? Has pointers to values, maybe unusable
+    m.def(
+        "SetupAxisLinks",
+        [](ImAxis axis, DoubleRef link_min, DoubleRef link_max)
+        {
+            double* a = nullptr;
+            double* b = nullptr;
+
+            if(link_min)
+            {
+                a = &link_min->val;
+            }
+            if(link_max)
+            {
+                b = &link_max->val;
+            }
+
+            ImPlot::SetupAxisLinks(axis, a, b);
+        }
+    );
     m.def(
         "SetupAxisFormat",
         py::overload_cast<ImAxis, const char*>(ImPlot::SetupAxisFormat),
@@ -107,7 +125,25 @@ void init_setup_funcs(py::module& m)
         "v_max"_a,
         "cond"_a = (int)ImPlotCond_Once
     );
-    // TODO SetNextAxisLinks?
+    m.def(
+        "SetNextAxisLinks",
+        [](ImAxis axis, DoubleRef link_min, DoubleRef link_max)
+        {
+            double* a = nullptr;
+            double* b = nullptr;
+
+            if(link_min)
+            {
+                a = &link_min->val;
+            }
+            if(link_max)
+            {
+                b = &link_max->val;
+            }
+
+            ImPlot::SetNextAxisLinks(axis, a, b);
+        }
+    );
     m.def(IMFUNC(SetNextAxisToFit), "axis"_a);
     m.def(
         IMFUNC(SetNextAxesLimits),

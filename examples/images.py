@@ -89,7 +89,7 @@ class State:
                 for _, texture in self.textures:
                     im.TableNextColumn()
                     # create image object
-                    im.Image(texture.texID, self.imSize)
+                    im.Image(texture, self.imSize)
 
                 im.EndTable()
         im.End()

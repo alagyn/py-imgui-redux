@@ -1,9 +1,25 @@
-#include <binder/struct-utility.h>
-//#include <binder/wraps.h>
 #include <bind-imgui/imgui-core/imgui-modules.h>
+#include <binder/list-wrapper.h>
+#include <binder/struct-utility.h>
+
+#define RO_ARRAY(STRUCT, TYPE, VALUE, SIZE) \
+    def_property_readonly( \
+        #VALUE, \
+        [](STRUCT* self) \
+        { \
+            return ListWrapper<TYPE>(self->VALUE, SIZE); \
+        } \
+    )
 
 void init_imgui_structs(py::module& m)
 {
+    initListWrapper<bool>(m, "ListWrapperBool");
+    initListWrapper<ImVec2>(m, "ListWrapperImVec2");
+    initListWrapper<double>(m, "ListWrapperDouble");
+    initListWrapper<ImU16>(m, "ListWrapperImU16");
+    initListWrapper<float>(m, "ListWrapperFloat");
+    initListWrapper<ImGuiTableColumnSortSpecs>(m, "ListWrapperTCSS");
+
     // Vectors
     py::class_<ImVec2>(m, "Vec2")
         .RW(ImVec2, x)
@@ -61,7 +77,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, AntiAliasedFill)
         .RW(ImGuiStyle, CurveTessellationTol)
         .RW(ImGuiStyle, CircleTessellationMaxError)
-        .RO(ImGuiStyle, Colors)
+        .RO_ARRAY(ImGuiStyle, ImVec4, Colors, ImGuiCol_COUNT)
         .RW(ImGuiStyle, HoverStationaryDelay)
         .RW(ImGuiStyle, HoverDelayShort)
         .RW(ImGuiStyle, HoverDelayNormal)
@@ -154,7 +170,7 @@ void init_imgui_structs(py::module& m)
         .RO(ImGuiIO, MouseDelta)
         // Main  Input State
         .RW(ImGuiIO, MousePos)
-        // TODO how to handle array?
+        .RO_ARRAY(ImGuiIO, bool, MouseDown, 5)
         //.RW(ImGuiIO, MouseDown)
         .RW(ImGuiIO, MouseWheel)
         .RW(ImGuiIO, MouseWheelH)
@@ -162,7 +178,30 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, KeyShift)
         .RW(ImGuiIO, KeyAlt)
         .RW(ImGuiIO, KeySuper)
-        // TODO the rest?
+        // Other state
+        .RW(ImGuiIO, KeyMods)
+        // Ignoring KeysData, use IsKeyXXX
+        .RW(ImGuiIO, WantCaptureMouseUnlessPopupClose)
+        .RW(ImGuiIO, MousePosPrev)
+        .RO_ARRAY(ImGuiIO, ImVec2, MouseClickedPos, 5)
+        .RO_ARRAY(ImGuiIO, double, MouseClickedTime, 5)
+        .RO_ARRAY(ImGuiIO, bool, MouseClicked, 5)
+        .RO_ARRAY(ImGuiIO, bool, MouseDoubleClicked, 5)
+        .RO_ARRAY(ImGuiIO, ImU16, MouseClickedCount, 5)
+        .RO_ARRAY(ImGuiIO, ImU16, MouseClickedLastCount, 5)
+        .RO_ARRAY(ImGuiIO, bool, MouseReleased, 5)
+        .RO_ARRAY(ImGuiIO, bool, MouseDownOwned, 5)
+        .RO_ARRAY(ImGuiIO, bool, MouseDownOwnedUnlessPopupClose, 5)
+        .RW(ImGuiIO, MouseWheelRequestAxisSwap)
+        .RO_ARRAY(ImGuiIO, float, MouseDownDuration, 5)
+        .RO_ARRAY(ImGuiIO, float, MouseDownDurationPrev, 5)
+        .RO_ARRAY(ImGuiIO, float, MouseDragMaxDistanceSqr, 5)
+        .RW(ImGuiIO, PenPressure)
+        .RW(ImGuiIO, AppFocusLost)
+        .RW(ImGuiIO, AppAcceptingEvents)
+        .RW(ImGuiIO, BackendUsingLegacyKeyArrays)
+        .RW(ImGuiIO, BackendUsingLegacyNavInputArray)
+        .RW(ImGuiIO, InputQueueSurrogate)
         .def(py::init<>());
 
     py::class_<ImGuiListClipper>(m, "ListClipper")
@@ -181,11 +220,31 @@ void init_imgui_structs(py::module& m)
             "item_end"_a
         );
 
+    py::class_<ImGuiTableSortSpecs>(m, "TableSortSpecs")
+        .def(py::init<>())
+        .RO_ARRAY(
+            ImGuiTableSortSpecs,
+            ImGuiTableColumnSortSpecs,
+            Specs,
+            self->SpecsCount
+        )
+        .RW(ImGuiTableSortSpecs, SpecsDirty);
+
     py::class_<ImGuiTableColumnSortSpecs>(m, "TableColumnSortSpecs")
         .RW(ImGuiTableColumnSortSpecs, ColumnUserID)
         .RW(ImGuiTableColumnSortSpecs, ColumnIndex)
         .RW(ImGuiTableColumnSortSpecs, SortOrder)
-        // TODO SortDirection
+        .def_property(
+            "SortDirection",
+            [](ImGuiTableColumnSortSpecs* self)
+            {
+                return self->SortDirection;
+            },
+            [](ImGuiTableColumnSortSpecs* self, ImGuiSortDirection val)
+            {
+                self->SortDirection = val;
+            }
+        )
         .def(py::init<>());
 
     py::class_<ImColor>(m, "Color")

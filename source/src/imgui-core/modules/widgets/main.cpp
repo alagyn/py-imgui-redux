@@ -2,6 +2,8 @@
 #include <binder/wraps.h>
 #include <imgui_internal.h>
 
+#include <bind-imgui/imgui-core/texture.h>
+
 void init_widgets_main(py::module& m)
 {
     m.def(
@@ -67,7 +69,7 @@ void init_widgets_main(py::module& m)
     // Images
     m.def(
         "Image",
-        [](unsigned int texID,
+        [](Texture tex,
            ImVec2 size,
            ImVec2 uv0,
            ImVec2 uv1,
@@ -75,7 +77,7 @@ void init_widgets_main(py::module& m)
            ImVec4 border_col)
         {
             ImGui::Image(
-                (void*)(intptr_t)texID,
+                (void*)(intptr_t)tex.texID,
                 size,
                 uv0,
                 uv1,
@@ -94,7 +96,7 @@ void init_widgets_main(py::module& m)
     m.def(
         "ImageButton",
         [](const char* str_id,
-           unsigned int texID,
+           Texture tex,
            ImVec2 size,
            ImVec2 uv0,
            ImVec2 uv1,
@@ -103,7 +105,7 @@ void init_widgets_main(py::module& m)
         {
             return ImGui::ImageButton(
                 str_id,
-                (void*)(intptr_t)texID,
+                (void*)(intptr_t)tex.texID,
                 size,
                 uv0,
                 uv1,

@@ -1,3 +1,4 @@
+#include <bind-imgui/imgui-core/texture.h>
 #include <bind-imgui/implot/implot-modules.h>
 #include <binder/numpy.h>
 
@@ -673,7 +674,37 @@ void init_plotting(py::module& m)
         "offset"_a = 0
     );
 
-    // TODO PlotImage
+    m.def(
+        "PlotImage",
+        [](const char* label_id,
+           Texture tex,
+           const ImPlotPoint& bounds_min,
+           const ImPlotPoint& bounds_max,
+           const ImVec2& uv0,
+           const ImVec2& uv1,
+           const ImVec4& tint_col,
+           ImPlotImageFlags flags)
+        {
+            ImPlot::PlotImage(
+                label_id,
+                (void*)(intptr_t)tex.texID,
+                bounds_min,
+                bounds_max,
+                uv0,
+                uv1,
+                tint_col,
+                flags
+            );
+        },
+        "label_id"_a,
+        "texture"_a,
+        "bounds_min"_a,
+        "bounds_max"_a,
+        py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
+        py::arg_v("uv1", ImVec2(0, 0), "Vec2(0, 0)"),
+        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)"),
+        "flags"_a = 0
+    );
 
     m.def(
         IMFUNC(PlotText),

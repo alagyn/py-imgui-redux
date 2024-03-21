@@ -30,6 +30,9 @@ using BoolRef = BoolRef_*;
 using FloatRef_ = Wrapper<float>;
 using FloatRef = FloatRef_*;
 
+using DoubleRef_ = Wrapper<double>;
+using DoubleRef = DoubleRef_*;
+
 using IntRef_ = Wrapper<int>;
 using IntRef = IntRef_*;
 

@@ -32,7 +32,7 @@ fi
 
 echo "Using python $PY_EXEC"
 
-# We are building outside an environment so that we can
+# We are building outside in a custom env outside of "build" so that we can
 # check the venv and find the name of the glfw lib and exclude it
 # necessary because auditwheel appends a hash to the end of the libname
 

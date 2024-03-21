@@ -55,8 +55,6 @@ def window_mainloop(
     # optionally create extension contexts
     implot.CreateContext()
 
-    print(dir(window))
-
     # Initialize glfw backend
     im.InitContextForGLFW(window, "#version 130")
 
@@ -113,4 +111,4 @@ if __name__ == '__main__':
         implot.ShowDemoWindow()
         return False
 
-    window_mainloop("Demo", 860, 640, showDemo)
+    window_mainloop("Demo", 1024, 768, showDemo)

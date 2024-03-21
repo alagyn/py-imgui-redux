@@ -3,28 +3,10 @@
 
 #include <sstream>
 
-#include <glad/gl.h>
+#include <bind-imgui/imgui-core/texture.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-
-class Texture
-{
-public:
-    int width;
-    int height;
-    int numChannels;
-
-    GLuint texID;
-
-    Texture()
-        : width(0)
-        , height(0)
-        , numChannels(0)
-        , texID(0)
-    {
-    }
-};
 
 Texture _LoadTexture(
     char* bytes,

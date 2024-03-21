@@ -1,4 +1,5 @@
 #include <bind-imgui/implot/implot-modules.h>
+#include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
 
 void init_implot_structs(py::module& m)
@@ -80,7 +81,13 @@ void init_implot_structs(py::module& m)
         .RW(ImPlotStyle, FitPadding)
         .RW(ImPlotStyle, PlotDefaultSize)
         .RW(ImPlotStyle, PlotMinSize)
-        // TODO Colors[]
+        .def_property_readonly(
+            "Colors",
+            [](ImPlotStyle* self)
+            {
+                return ListWrapper<ImVec4>(self->Colors, ImPlotCol_COUNT);
+            }
+        )
         .RW(ImPlotStyle, Colormap)
         .RW(ImPlotStyle, UseLocalTime)
         .RW(ImPlotStyle, UseISO8601)

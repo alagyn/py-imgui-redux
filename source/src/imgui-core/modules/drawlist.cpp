@@ -1,4 +1,5 @@
 #include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-core/texture.h>
 #include <binder/struct-utility.h>
 
 #include <pybind11/stl.h>
@@ -209,7 +210,7 @@ void init_drawlist(py::module& m)
         .def(
             "AddImage",
             [](ImDrawList* self,
-               unsigned int texID,
+               Texture tex,
                ImVec2 p_min,
                ImVec2 p_max,
                ImVec2 uv_min,
@@ -217,7 +218,7 @@ void init_drawlist(py::module& m)
                ImU32 col)
             {
                 self->AddImage(
-                    (void*)(intptr_t)texID,
+                    (void*)(intptr_t)tex.texID,
                     p_min,
                     p_max,
                     uv_min,
@@ -235,7 +236,7 @@ void init_drawlist(py::module& m)
         .def(
             "AddImageQuad",
             [](ImDrawList* self,
-               unsigned int texID,
+               Texture tex,
                ImVec2 p1,
                ImVec2 p2,
                ImVec2 p3,
@@ -247,7 +248,7 @@ void init_drawlist(py::module& m)
                ImU32 col)
             {
                 self->AddImageQuad(
-                    (void*)(intptr_t)(texID),
+                    (void*)(intptr_t)(tex.texID),
                     p1,
                     p2,
                     p3,
@@ -273,7 +274,7 @@ void init_drawlist(py::module& m)
         .def(
             "AddImageRounded",
             [](ImDrawList* self,
-               unsigned int texID,
+               Texture tex,
                ImVec2 p_min,
                ImVec2 p_max,
                ImVec2 uv_min,
@@ -283,7 +284,7 @@ void init_drawlist(py::module& m)
                ImDrawFlags flags)
             {
                 self->AddImageRounded(
-                    (void*)(intptr_t)(texID),
+                    (void*)(intptr_t)(tex.texID),
                     p_min,
                     p_max,
                     uv_min,
