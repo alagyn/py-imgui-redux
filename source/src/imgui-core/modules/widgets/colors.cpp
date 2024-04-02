@@ -5,14 +5,9 @@ void init_widgets_colors(py::module& m)
 {
     m.def(
         "ColorEdit3",
-        [](const char* label, FloatList col, const int flags)
+        [](const char* label, ImVec4& col, const int flags)
         {
-            if(col->size() < 3)
-            {
-                throw std::out_of_range("ColorEdit3(): len(col) < 3");
-            }
-
-            return ImGui::ColorEdit3(label, col->data(), flags);
+            return ImGui::ColorEdit3(label, &col.x, flags);
         },
         "label"_a,
         "col"_a,
@@ -20,14 +15,9 @@ void init_widgets_colors(py::module& m)
     );
     m.def(
         "ColorEdit4",
-        [](const char* label, FloatList col, const int flags)
+        [](const char* label, ImVec4& col, const int flags)
         {
-            if(col->size() < 4)
-            {
-                throw std::out_of_range("ColorEdit4(): len(col) < 4");
-            }
-
-            return ImGui::ColorEdit4(label, col->data(), flags);
+            return ImGui::ColorEdit4(label, &col.x, flags);
         },
         "label"_a,
         "col"_a,
@@ -35,14 +25,9 @@ void init_widgets_colors(py::module& m)
     );
     m.def(
         "ColorPicker3",
-        [](const char* label, FloatList col, const int flags)
+        [](const char* label, ImVec4& col, const int flags)
         {
-            if(col->size() < 3)
-            {
-                throw std::out_of_range("ColorPicker3(): len(col) < 3");
-            }
-
-            return ImGui::ColorPicker3(label, col->data(), flags);
+            return ImGui::ColorPicker3(label, &col.x, flags);
         },
         "label"_a,
         "col"_a,
@@ -50,15 +35,16 @@ void init_widgets_colors(py::module& m)
     );
     m.def(
         "ColorPicker4",
-        [](const char* label, FloatList col, const int flags, const float* refColor
-        )
+        [](const char* label, ImVec4& col, const int flags, const ImVec4* refColor)
         {
-            if(col->size() < 4)
+            if(refColor)
             {
-                throw std::out_of_range("ColorPicker4(): len(col) < 4");
+                return ImGui::ColorPicker4(label, &col.x, flags, &refColor->x);
             }
-
-            return ImGui::ColorPicker4(label, col->data(), flags, refColor);
+            else
+            {
+                return ImGui::ColorPicker4(label, &col.x, flags);
+            }
         },
         "label"_a,
         "col"_a,

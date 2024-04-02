@@ -37,6 +37,8 @@ class State:
         self.intVal3 = imgui.IntRef(0)
         self.intList = imgui.IntList([0, 0, 0, 0])
 
+        self.color = imgui.Vec4(0.5, 0.1, 0.1, 1.0)
+
     def showAll(self):
         if imgui.Begin("Widgets"):
             normWidgets(self)
@@ -177,6 +179,8 @@ def normWidgets(state: State):
             if imgui.MenuItem("WindowMenu2"):
                 print("WindowItem2")
             imgui.EndMenu()
+
+        imgui.ColorEdit4("Color Edit", state.color)
 
 
 def tables():

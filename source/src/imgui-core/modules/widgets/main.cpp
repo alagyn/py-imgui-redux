@@ -123,7 +123,7 @@ void init_widgets_main(py::module& m)
     );
 
     // Combo
-    m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flag"_a = 0);
+    m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flags"_a = 0);
     QUICK(EndCombo);
 
     // Ignoring old Combo() funcs
