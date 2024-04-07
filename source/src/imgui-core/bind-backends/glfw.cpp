@@ -27,8 +27,7 @@ void initContextForGLFW(void* window, const char* glsl_version)
 
     if(version == 0)
     {
-        py::print("Failed to initialize the OpenGL context");
-        throw std::runtime_error("Failed to initialize OpenGL");
+        throw std::runtime_error("Failed to load OpenGL bindings");
     }
 
     GLFWwindow* gWindow = static_cast<GLFWwindow*>(window);
@@ -36,13 +35,11 @@ void initContextForGLFW(void* window, const char* glsl_version)
     // Setup Platform/Renderer backends
     if(!ImGui_ImplGlfw_InitForOpenGL(gWindow, true))
     {
-        py::print("Cannot init GLFW for OpenGL");
-        exit(1);
+        throw std::runtime_error("Failed to init ImGui for GLFW+OpenGL");
     }
     if(!ImGui_ImplOpenGL3_Init(glsl_version))
     {
-        py::print("Cannot init OpenGL");
-        exit(1);
+        throw std::runtime_error("Failed to init ImGui for OpenGL");
     }
 }
 
