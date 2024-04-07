@@ -54,6 +54,15 @@ if(${ENABLE_OPENGL_ES})
         PUBLIC
         IMGUI_IMPL_OPENGL_ES2
     )
+    add_library(glad
+        STATIC
+        glad/src/gles2.c
+    )
+else()
+    add_library(glad
+        STATIC
+        glad/src/gl.c
+    )
 endif()
 
 if(${MSVC})
@@ -75,12 +84,6 @@ target_compile_definitions(imgui-cpp
     PUBLIC
     IMGUI_DISABLE_OBSOLETE_KEYIO
     IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-)
-
-add_library(glad
-    STATIC
-    glad/src/gl.c
-    glad/src/gles2.c
 )
 
 target_include_directories(glad PUBLIC
