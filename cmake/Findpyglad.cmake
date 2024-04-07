@@ -10,7 +10,7 @@ endif()
 if(MSVC)
     set(pyglad_GLOB "${pyglfw_ROOT}/glad.lib")
 else()
-    set(pyglad_GLOB "${pyglfw_ROOT}/py_glfw_redux.libs/libglad*.so.*")
+    set(pyglad_GLOB "${pyglfw_ROOT}/py_glfw_redux.libs/libglad*.so")
 endif()
 
 file(GLOB pyglad_LIBRARY "${pyglad_GLOB}")
@@ -57,7 +57,7 @@ if(pyglad_FOUND)
         else()
             find_package(OpenGL REQUIRED)
             target_link_libraries(pyglad
-                PRIVATE
+                INTERFACE
                 ${OPENGL_LIBRARIES}
             )
         endif()
