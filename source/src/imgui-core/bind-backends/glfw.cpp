@@ -2,8 +2,6 @@
 
 #include <pybind11/functional.h>
 
-#define IMGUI_IMPL_OPENGL_ES2
-
 #ifdef IMGUI_IMPL_OPENGL_ES2
     #include <glad/gles2.h>
 #else
