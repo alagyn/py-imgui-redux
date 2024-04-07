@@ -273,7 +273,8 @@ void init_imnodes_context(py::module& m)
         [](IntRef linkID)
         {
             return ImNodes::IsLinkDestroyed(&linkID->val);
-        }
+        },
+        "linkID"
     );
 
     m.def(
@@ -288,7 +289,8 @@ void init_imnodes_context(py::module& m)
         [](const ImNodesEditorContext* editor)
         {
             return ImNodes::SaveEditorStateToIniString(editor);
-        }
+        },
+        "editor"_a
     );
 
     m.def(IMFUNC(SaveCurrentEditorStateToIniFile), "file_name"_a);
