@@ -20,8 +20,6 @@ find_package(Python3
     ${PY_COMPONENTS}
 )
 
-find_package(pyglfw COMPONENTS REQUIRED pyglfw)
-
 add_subdirectory(third-party)
 
 set(INCLUDE_DIR source/inc)
@@ -35,7 +33,7 @@ setupPyBindLib(
     LINKS
     imgui-cpp
     pyglfw
-    glad
+    pyglad
     stb
     INCS ${INCLUDE_DIR}
 )
