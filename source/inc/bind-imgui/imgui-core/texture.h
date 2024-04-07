@@ -1,6 +1,10 @@
 #pragma once
 
-#include <glad/gl.h>
+#ifdef IMGUI_IMPL_OPENGL_ES2
+    #include <glad/gles2.h>
+#else
+    #include <glad/gl.h>
+#endif
 
 class Texture
 {

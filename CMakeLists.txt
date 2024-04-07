@@ -6,6 +6,8 @@ set(CMAKE_DEBUG_POSTFIX, "-d")
 set(Python3_FIND_REGISTRY NEVER)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
+option(ENABLE_OPENGL_ES "Enable OpenGL ES" OFF)
+
 if(${MSVC})
     set(PY_COMPONENTS Interpreter Development)
 else()
@@ -31,9 +33,9 @@ setupPyBindLib(
     LIB imgui
     SRCS ${IMGUI_SRCS}
     LINKS
-        imgui-cpp
-        pyglfw
-        glad
-        stb
+    imgui-cpp
+    pyglfw
+    glad
+    stb
     INCS ${INCLUDE_DIR}
 )

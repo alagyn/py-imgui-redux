@@ -49,6 +49,13 @@ target_compile_definitions(imgui-cpp
     IMGUI_USER_CONFIG=<bind-imconfig.h>
 )
 
+if(${ENABLE_OPENGL_ES})
+    target_compile_definitions(imgui-cpp
+        PUBLIC
+        IMGUI_IMPL_OPENGL_ES2
+    )
+endif()
+
 if(${MSVC})
     target_link_libraries(imgui-cpp
         PRIVATE
@@ -73,7 +80,9 @@ target_compile_definitions(imgui-cpp
 add_library(glad
     STATIC
     glad/src/gl.c
+    glad/src/gles2.c
 )
+
 target_include_directories(glad PUBLIC
     glad/include
 )
