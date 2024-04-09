@@ -50,6 +50,5 @@ echo Building wheel
 $B_PY -m build --wheel -n
 echo "Auditing"
 
-GLFW_LIB_ABS=`ls build/build-venv/lib/python*/site-packages/py_glfw_redux.libs/libglfw*.so.*`
-GLFW_LIB=`basename $GLFW_LIB_ABS`
-auditwheel repair dist/*.whl --exclude $GLFW_LIB
+docker/audit-imgui.sh $B_ENV dist/*.whl
+#auditwheel repair dist/*.whl --exclude $GLFW_LIB

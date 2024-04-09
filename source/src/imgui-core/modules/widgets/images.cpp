@@ -143,7 +143,7 @@ void init_widgets_images(py::module& m)
         LoadTextureFile,
         "filename"_a,
         "requestedChannels"_a = 0,
-        "lsmipMapLevel"_a = 0
+        "mipMapLevel"_a = 0
     );
     m.def(
         "LoadTexture",
