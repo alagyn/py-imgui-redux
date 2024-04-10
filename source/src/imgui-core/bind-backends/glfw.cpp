@@ -2,11 +2,7 @@
 
 #include <pybind11/functional.h>
 
-#ifdef IMGUI_IMPL_OPENGL_ES2
-    #include <glad/gles2.h>
-#else
-    #include <glad/gl.h>
-#endif
+#include <glad/gl.h>
 
 #include <GLFW/glfw3.h>
 #include <backends/imgui_impl_glfw.h>
@@ -15,13 +11,7 @@
 
 void initContextForGLFW(void* window, const char* glsl_version)
 {
-    int version = 0;
-
-#ifdef IMGUI_IMPL_OPENGL_ES2
-    version = gladLoadGLES2(glfwGetProcAddress);
-#else
-    version = gladLoadGL(glfwGetProcAddress);
-#endif
+    int version = gladLoadGL(glfwGetProcAddress);
 
     if(version == 0)
     {

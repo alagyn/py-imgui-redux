@@ -1,7 +1,7 @@
-<img src="https://github.com/alagyn/PyImGui-Redux/blob/main/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
+<img src="https://github.com/alagyn/py-imgui-redux/blob/main/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
 
 
-# PyImGui-Redux
+# PyImGui
 DearImGui wrapper for python made with PyBind11
 
 ---
@@ -26,7 +26,7 @@ pip install py-imgui-redux
 
 ## Backends:
 
-`imgui.glfw` - GLFW
+This module only uses the GFLW+OpenGL3 backend. Access to GLFW is provided via [py-glfw-redux](https://github.com/alagyn/py-glfw-redux)
 
 ---
 
@@ -60,7 +60,7 @@ if(imgui::DragIntRange2("Label", &min, &max))
 ```
 
 Python, however, will not let you pass an integer by reference normally, let alone across the C API.
-Therefore, the PyImgui-Redux method of accomplishing this:
+Therefore, the py-imgui-redux method of accomplishing this:
 ```python
 min_val = imgui.IntRef(0)
 max_val = imgui.IntRef(5)
@@ -93,7 +93,7 @@ A standard python list is stored sequentially in memory, but the raw *values* th
 
 This is solved in one of two ways.  
 
-Method 1: PyImgui-Redux Wrappers
+Method 1: py-imgui-redux Wrappers
 ```python
 vals = imgui.IntList([0, 5, 10])
 if imgui.DragInt3("Label", vals):
@@ -186,7 +186,7 @@ Loading images for rendering is simple
 import imgui
 
 texture = imgui.LoadTextureFile("myImage.jpg")
-imgui.Image(texture.texID, imgui.ImVec2(texture.width, texture.height))
+imgui.Image(texture, imgui.ImVec2(texture.width, texture.height))
 # ...
 # Eventually
 glfw.UnloadTexture(texture)
