@@ -28,9 +28,8 @@ class State:
         self.plotMin = 0
         self.plotMax = 10
         self.plotX = np.arange(self.plotSize, dtype=np.float64)
-        self.plotY = np.array(
-            np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64
-        )
+        self.plotY = np.array(np.random.rand(self.plotSize) * self.plotMax,
+                              dtype=np.float64)
         self.plotIdx = 0
 
         self.lastUpate = time.perf_counter()
@@ -50,8 +49,7 @@ class State:
                     if time.perf_counter(
                     ) - self.lastUpate > self.updatePeriod:
                         self.plotY[self.plotIdx] = random.triangular(
-                            self.plotMin, self.plotMax
-                        )
+                            self.plotMin, self.plotMax)
                         self.plotIdx = (self.plotIdx + 1) % self.plotSize
                         self.lastUpate = time.perf_counter()
                     implot.PlotScatter("DATA", self.plotX, self.plotY)
@@ -62,16 +60,12 @@ class State:
                         self.plotY[self.plotIdx] += random.triangular(-1, 1)
                         self.plotIdx = (self.plotIdx + 1) % (size * size)
                         self.lastUpate = time.perf_counter()
-                    implot.PlotHeatmap(
-                        "DATA",
-                        self.plotY,
-                        size,
-                        size,
-                        self.plotMin,
-                        self.plotMax
-                    )
+                    implot.PlotHeatmap("DATA", self.plotY, size, size,
+                                       self.plotMin, self.plotMax)
                 implot.EndPlot()
         imgui.End()
+
+        return False
 
 
 if __name__ == '__main__':

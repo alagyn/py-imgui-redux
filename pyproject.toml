@@ -30,8 +30,8 @@ classifiers = [
 dependencies = ["py-glfw-redux==1.0.2"]
 
 [project.urls]
-"Homepage" = "https://github.com/alagyn/PyImGui-Redux"
-"Bug Tracker" = "https://github.com/alagyn/PyImGui-Redux/issues"
+"Homepage" = "https://github.com/alagyn/py-imgui-redux"
+"Bug Tracker" = "https://github.com/alagyn/py-imgui-redux/issues"
 
 [style]
 # Align closing bracket with visual indentation.

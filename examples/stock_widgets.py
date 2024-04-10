@@ -48,6 +48,8 @@ class State:
             tables()
             imgui.End()
 
+        return False
+
 
 def normWidgets(state: State):
     if imgui.BeginTable("tab1", 3):
@@ -186,18 +188,15 @@ def normWidgets(state: State):
 def tables():
     COLS = 3
     ROWS = 10
-    flags = (
-        imgui.TableFlags.BordersInnerH | imgui.TableFlags.BordersOuterV
-        | imgui.TableFlags.BordersOuterH
-    )
+    flags = (imgui.TableFlags.BordersInnerH | imgui.TableFlags.BordersOuterV
+             | imgui.TableFlags.BordersOuterH)
     if imgui.BeginTable("tab-id", COLS, flags):
         for x in range(ROWS):
             imgui.TableNextRow()
             for c in range(COLS):
                 imgui.TableNextColumn()
-                col = imgui.Vec4(
-                    x / ROWS, c / COLS, 1 - (x + c) / (ROWS + COLS), 1.0
-                )
+                col = imgui.Vec4(x / ROWS, c / COLS,
+                                 1 - (x + c) / (ROWS + COLS), 1.0)
                 imgui.TextColored(
                     col,
                     f"({int(col.x * 255)}, {int(col.y * 255)}, {int(col.z * 255)})"

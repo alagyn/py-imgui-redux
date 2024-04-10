@@ -20,14 +20,15 @@ class State:
     def setup(self):
         io = im.GetIO()
         self.font = io.Fonts.AddFontFromFileTTF(
-            os.path.join(EXAMPLE_DIR, "RussoOne-Regular.ttf"), 18.0
-        )
+            os.path.join(EXAMPLE_DIR, "RussoOne-Regular.ttf"), 18.0)
 
     def render(self):
         if im.Begin("Window"):
             im.Text("Wooooow")
             im.Text("Look at that font")
         im.End()
+
+        return False
 
 
 if __name__ == '__main__':

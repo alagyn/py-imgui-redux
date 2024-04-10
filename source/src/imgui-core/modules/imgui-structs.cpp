@@ -216,7 +216,9 @@ void init_imgui_structs(py::module& m)
             DEF(ImGuiListClipper, IncludeItemsByIndex),
             "item_begin"_a,
             "item_end"_a
-        );
+        )
+        .RO(ImGuiListClipper, DisplayStart)
+        .RO(ImGuiListClipper, DisplayEnd);
 
     py::class_<ImGuiTableSortSpecs>(m, "TableSortSpecs")
         .def(py::init<>())

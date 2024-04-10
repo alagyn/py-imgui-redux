@@ -3,6 +3,9 @@ set(PYBIND11_INSTALL OFF CACHE BOOL "" FORCE)
 set(PYBIND11_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(pybind11)
 
+find_package(pyglfw COMPONENTS REQUIRED pyglfw)
+find_package(pyglad COMPONENTS REQUIRED pyglad)
+
 # -------------- imgui --------------
 set(imgui_SRCS
     imgui/imgui.cpp
@@ -36,8 +39,9 @@ target_include_directories(imgui-cpp
 )
 
 target_link_libraries(imgui-cpp
-    PRIVATE
+    PUBLIC
     pyglfw
+    pyglad
 )
 
 set_target_properties(imgui-cpp
@@ -49,36 +53,10 @@ target_compile_definitions(imgui-cpp
     IMGUI_USER_CONFIG=<bind-imconfig.h>
 )
 
-if(${MSVC})
-    target_link_libraries(imgui-cpp
-        PRIVATE
-        opengl32.lib
-        gdi32.lib
-        shell32.lib
-    )
-else()
-    find_package(OpenGL REQUIRED)
-    target_link_libraries(imgui-cpp
-        PRIVATE
-        ${OPENGL_LIBRARIES}
-    )
-endif()
-
 target_compile_definitions(imgui-cpp
     PUBLIC
     IMGUI_DISABLE_OBSOLETE_KEYIO
     IMGUI_DISABLE_OBSOLETE_FUNCTIONS
-)
-
-add_library(glad
-    STATIC
-    glad/src/gl.c
-)
-target_include_directories(glad PUBLIC
-    glad/include
-)
-set_target_properties(glad PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
 )
 
 add_library(stb INTERFACE)

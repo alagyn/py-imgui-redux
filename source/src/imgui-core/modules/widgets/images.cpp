@@ -40,6 +40,14 @@ Texture _LoadTexture(
 
     glGenTextures(1, &out.texID);
     glBindTexture(GL_TEXTURE_2D, out.texID);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(
+        GL_TEXTURE_2D,
+        GL_TEXTURE_WRAP_S,
+        GL_CLAMP_TO_EDGE
+    ); // This is required on WebGL for non power-of-two textures
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexImage2D(
         GL_TEXTURE_2D,
         mipMapLevel,
@@ -51,7 +59,7 @@ Texture _LoadTexture(
         GL_UNSIGNED_BYTE,
         bytes
     );
-    glGenerateMipmap(GL_TEXTURE_2D);
+    //glGenerateMipmap(GL_TEXTURE_2D);
 
     return out;
 }
@@ -135,7 +143,7 @@ void init_widgets_images(py::module& m)
         LoadTextureFile,
         "filename"_a,
         "requestedChannels"_a = 0,
-        "lsmipMapLevel"_a = 0
+        "mipMapLevel"_a = 0
     );
     m.def(
         "LoadTexture",
