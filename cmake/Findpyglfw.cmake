@@ -3,7 +3,7 @@ if(NOT pyglfw_ROOT OR NOT EXISTS ${pyglfw_ROOT})
 endif()
 
 if(NOT pyglfw_VERSION)
-    set(pyglfw_VERSION 1.0.2)
+    set(pyglfw_VERSION 1.1.0)
 endif()
 
 if(MSVC)
