@@ -9,14 +9,16 @@ endif()
 if(MSVC)
     set(pyglfw_GLOB "${pyglfw_ROOT}/glfw3dll.lib")
 else()
-    set(pyglfw_GLOB "${pyglfw_ROOT}/py_glfw_redux.libs/libglfw*.so.*")
+    set(pyglfw_GLOB "${pyglfw_ROOT}/py*glfw*redux.libs/libglfw*.so.*")
 endif()
 
 file(GLOB pyglfw_LIBRARY "${pyglfw_GLOB}")
 
 find_path(pyglfw_INCLUDE
     GLFW/glfw3.h
-    PATHS ${pyglfw_ROOT}/py-glfw-redux-${pyglfw_VERSION}.inc/glfw
+    PATHS 
+        ${pyglfw_ROOT}/py-glfw-redux-${pyglfw_VERSION}.inc/glfw
+        ${pyglfw_ROOT}/py_glfw_redux-${pyglfw_VERSION}.inc/glfw
     REQUIRED
 )
 

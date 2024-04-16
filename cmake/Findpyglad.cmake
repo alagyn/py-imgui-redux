@@ -10,14 +10,16 @@ endif()
 if(MSVC)
     set(pyglad_GLOB "${pyglfw_ROOT}/glad.lib")
 else()
-    set(pyglad_GLOB "${pyglfw_ROOT}/py_glfw_redux.libs/libglad*.so")
+    set(pyglad_GLOB "${pyglfw_ROOT}/py*glfw*redux.libs/libglad*.so")
 endif()
 
 file(GLOB pyglad_LIBRARY "${pyglad_GLOB}")
 
 find_path(pyglad_INCLUDE
     glad/gl.h
-    PATHS ${pyglfw_ROOT}/py-glfw-redux-${pyglad_VERSION}.inc/glad
+    PATHS 
+        ${pyglfw_ROOT}/py-glfw-redux-${pyglad_VERSION}.inc/glad
+        ${pyglfw_ROOT}/py_glfw_redux-${pyglad_VERSION}.inc/glad
     REQUIRED
 )
 
