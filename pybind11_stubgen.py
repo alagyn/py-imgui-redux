@@ -78,7 +78,9 @@ def _find_str_end(s, start):
 
 def _is_balanced(s):
     closing = {
-        "(": ")", "{": "}", "[": "]"
+        "(": ")",
+        "{": "}",
+        "[": "]"
     }
 
     stack = []
@@ -331,7 +333,7 @@ class StubsGenerator(object):
             r"|Optional|Set|Tuple|Union|ItemsView|KeysView|ValuesView)(?!\w)"
         ):
         replace_typing_types,
-        re.compile(": (?P<type>\w+) = None"):
+        re.compile(r": (?P<type>\w+) = None"):
         make_optional
     }
 
