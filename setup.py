@@ -109,8 +109,9 @@ class InstallCMakeLibs(install_lib):
         """
 
         for lib in libs:
-            shutil.copy(lib, os.path.join(self.build_dir,
-                                          os.path.basename(lib)))
+            shutil.copy(
+                lib, os.path.join(self.build_dir, os.path.basename(lib))
+            )
 
         log(f"Generating stubs in {bin_dir}")
         env = dict(os.environ)
@@ -131,21 +132,24 @@ class InstallCMakeLibs(install_lib):
             newPath = f"{bin_dir}:" + oldPath
 
         env["PYTHONPATH"] = newPath
-        """
-        subprocess.check_call([
-            sys.executable,
-            os.path.join(SOURCE_DIR, "pybind11_stubgen.py"), "--no-setup-py",
-            "imgui"
-        ],
-                              env=env,
-                              cwd=bin_dir)
+
+        subprocess.check_call(
+            [
+                sys.executable,
+                os.path.join(SOURCE_DIR, "pybind11_stubgen.py"),
+                "--no-setup-py",
+                "imgui"
+            ],
+            env=env,
+            cwd=bin_dir
+        )
 
         stub_dir = os.path.join(self.build_dir, "imgui")
         if os.path.exists(stub_dir):
             shutil.rmtree(stub_dir)
 
         shutil.move(os.path.join(bin_dir, "stubs/imgui-stubs"), stub_dir)
-        """
+
         # Mark the libs for installation, adding them to
         # distribution.data_files seems to ensure that setuptools' record
         # writer appends them to installed-files.txt in the package's egg-info
@@ -208,7 +212,8 @@ class InstallCMakeScripts(install_scripts):
 
             shutil.move(
                 scripts_dir,
-                os.path.join(self.build_dir, os.path.basename(scripts_dir)))
+                os.path.join(self.build_dir, os.path.basename(scripts_dir))
+            )
 
         # Mark the scripts for installation, adding them to
         # distribution.scripts seems to ensure that the setuptools' record
@@ -257,9 +262,17 @@ class BuildCMakeExt(build_ext):
         log(f"Using Py Root: {PY_ROOT}")
 
         args = [
-            "cmake", "-E", "env", "CMAKE_BUILD_PARALLEL_LEVEL=8",
-            f"Python3_ROOT_DIR={PY_ROOT}", "--", 'cmake', '-S', SOURCE_DIR,
-            '-B', self.build_temp
+            "cmake",
+            "-E",
+            "env",
+            "CMAKE_BUILD_PARALLEL_LEVEL=8",
+            f"Python3_ROOT_DIR={PY_ROOT}",
+            "--",
+            'cmake',
+            '-S',
+            SOURCE_DIR,
+            '-B',
+            self.build_temp
         ]
 
         if not IS_WINDOWS:
@@ -321,11 +334,13 @@ class BuildCMakeExt(build_ext):
 
 
 # Most of this is pulled from pyproject.toml
-setup(ext_modules=[CMakeExtension(name="imgui")],
-      packages=[],
-      cmdclass={
-          'build_ext': BuildCMakeExt,
-          'install_data': InstallCMakeLibsData,
-          'install_lib': InstallCMakeLibs,
-          'install_scripts': InstallCMakeScripts
-      })
+setup(
+    ext_modules=[CMakeExtension(name="imgui")],
+    packages=[],
+    cmdclass={
+        'build_ext': BuildCMakeExt,
+        'install_data': InstallCMakeLibsData,
+        'install_lib': InstallCMakeLibs,
+        'install_scripts': InstallCMakeScripts
+    }
+)

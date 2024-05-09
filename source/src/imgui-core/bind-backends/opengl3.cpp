@@ -1,4 +1,4 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 
 #include <backends/imgui_impl_opengl3.h>
 

@@ -1,4 +1,4 @@
-#include <bind-imgui/implot/implot-modules.h>
+#include <bind-imgui/implot-modules.h>
 #include <binder/bind-modules.h>
 
 void init_implot(py::module& m)

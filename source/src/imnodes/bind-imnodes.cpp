@@ -1,4 +1,4 @@
-#include <bind-imgui/imnodes/imnodes-modules.h>
+#include <bind-imgui/imnodes-modules.h>
 #include <binder/bind-modules.h>
 
 void init_imnodes(py::module& m)

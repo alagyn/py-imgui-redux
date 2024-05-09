@@ -2,7 +2,7 @@
     #define IMGUI_DEFINE_MATH_OPERATORS
 #endif
 
-#include <bind-imgui/implot/implot-modules.h>
+#include <bind-imgui/implot-modules.h>
 
 // Import internal so that we get the context class def
 #include <implot_internal.h>

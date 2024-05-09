@@ -1,4 +1,4 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 #include <binder/enum-utility.h>
 
 void init_imgui_enums(py::module& m)

@@ -4,10 +4,8 @@ GLFW window correctly, as well as a basic render loop
 """
 from typing import Callable, Optional
 
-import glfw  # import this first so that the libs are loaded correctly
-
 import imgui as im
-from imgui import imnodes, implot
+from imgui import glfw, imnodes, implot
 
 # Define a DrawFunc as a callable that takes no arguments and returns a bool
 DrawFunc = Callable[[], bool]
@@ -17,12 +15,14 @@ def errorCallback(err: int, msg: str) -> None:
     print(f'GLFW Error Code: {err}, Msg: {msg}')
 
 
-def window_mainloop(title: str,
-                    width: int,
-                    height: int,
-                    draw: DrawFunc,
-                    init: Optional[Callable[[], None]] = None,
-                    cleanup: Optional[Callable[[], None]] = None):
+def window_mainloop(
+    title: str,
+    width: int,
+    height: int,
+    draw: DrawFunc,
+    init: Optional[Callable[[], None]] = None,
+    cleanup: Optional[Callable[[], None]] = None
+):
     """
     Create a single window and enter render loop until either the window is closed
     or the draw() func returns true.
@@ -31,7 +31,7 @@ def window_mainloop(title: str,
     """
 
     # set error callback func
-    glfw.SetErrorCallback(errorCallback)
+    #glfw.SetErrorCallback(errorCallback)
     if not glfw.Init():
         print("Cannot initialize GLFW")
         return

@@ -1,4 +1,4 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
 
 void init_widgets_slide(py::module& m)
