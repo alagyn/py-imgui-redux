@@ -247,20 +247,11 @@ Exceptions:
 
 **Debian/apt**
 ```
-libx11-dev
-libxrandr-dev
-libxinerama-dev
-libxcursor-dev
-libxi-dev
-libgl-dev
+libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
 ```
 
 **Fedora/yum**
 ```
-libXrandr-devel
-libXinerama-devel
-libXcursor-devel
-libXi-devel
-mesa-libGL-devel
+libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel mesa-libGL-devel
 ```
 
