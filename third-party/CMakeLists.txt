@@ -4,7 +4,7 @@ set(PYBIND11_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(pybind11)
 
 # -------------- glfw ---------------
-set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -26,9 +26,11 @@ set_target_properties(glad PROPERTIES
 
 target_compile_definitions(glad
     PRIVATE
-    GLAD_API_CALL_EXPORT=1
     GLAD_API_CALL_EXPORT_BUILD=1
+    PUBLIC
+    GLAD_API_CALL_EXPORT=1
 )
+
 
 # -------------- imgui --------------
 set(imgui_SRCS

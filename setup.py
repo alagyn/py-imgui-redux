@@ -127,7 +127,7 @@ class InstallCMakeLibs(install_lib):
             # because we can't change the DLL lookup path via PATH
             # because reasons
             # https://docs.python.org/3/library/os.html#os.add_dll_directory
-            shutil.copy(f'{sysconfig.get_path("purelib")}/glfw3.dll', bin_dir)
+            # shutil.copy(f'{sysconfig.get_path("purelib")}/glfw3.dll', bin_dir)
         else:
             newPath = f"{bin_dir}:" + oldPath
 
