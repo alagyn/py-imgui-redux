@@ -110,7 +110,4 @@
     "python.analysis.exclude": [
         "third-party", "build"
     ],
-    "cmake.configureArgs": [
-        "-DPython3_ROOT_DIR=./venv/bin/"
-    ]
 }

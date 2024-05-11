@@ -1,8 +1,8 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
 #include <imgui_internal.h>
 
-#include <bind-imgui/imgui-core/texture.h>
+#include <bind-imgui/texture.h>
 
 void init_widgets_main(py::module& m)
 {

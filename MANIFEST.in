@@ -5,7 +5,7 @@ recursive-include source *
 recursive-include third-party *
 prune test
 
-prune third-party/pybind11/.github
-prune third-party/pybind11/docs
-prune third-party/pybind11/tests
+prune third-party/*/.github
+prune third-party/*/docs
+prune third-party/*/tests
 prune third-party/imgui/examples

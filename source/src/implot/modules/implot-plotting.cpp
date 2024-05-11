@@ -1,5 +1,5 @@
-#include <bind-imgui/imgui-core/texture.h>
-#include <bind-imgui/implot/implot-modules.h>
+#include <bind-imgui/implot-modules.h>
+#include <bind-imgui/texture.h>
 #include <binder/numpy.h>
 
 void init_plotting(py::module& m)

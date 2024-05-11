@@ -21,12 +21,13 @@ pip install py-imgui-redux
 
 `imgui` - [Core DearImGUI](https://github.com/ocornut/imgui)  
 `imgui.implot` - [ImPlot library](https://github.com/epezent/implot)  
-`imgui.imnodes` - [ImNodes library](https://github.com/Nelarius/imnodes)
+`imgui.imnodes` - [ImNodes library](https://github.com/Nelarius/imnodes)  
+`imgui.glfw` - [GLFW Bindings](https://www.glfw.org)
 
 
 ## Backends:
 
-This module only uses the GFLW+OpenGL3 backend. Access to GLFW is provided via [py-glfw-redux](https://github.com/alagyn/py-glfw-redux)
+This module only uses the GFLW+OpenGL3 backend. `imgui.glfw` provides full access to GLFW's API, see below for it's adjustments
 
 ---
 
@@ -231,26 +232,26 @@ texture = imgui.LoadTexture(image.tobytes(),
 
 ```
 
+### GLFW API Adjustments
+
+This wrapper aims to be as close to the original API as possible.
+Exceptions:
+- Functions have lost the `glfw` prefix as this is already in the module name
+- Functions that returned pointers to arrays now return list-like objects
+- Functions that took pointers to output variables as arguments now return tuples
+
+
 ---
 
 ### Build Dependencies
 
 **Debian/apt**
 ```
-libx11-dev
-libxrandr-dev
-libxinerama-dev
-libxcursor-dev
-libxi-dev
-libgl-dev
+libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
 ```
 
 **Fedora/yum**
 ```
-libXrandr-devel
-libXinerama-devel
-libXcursor-devel
-libXi-devel
-mesa-libGL-devel
+libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel mesa-libGL-devel
 ```
 

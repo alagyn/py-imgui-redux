@@ -1,4 +1,4 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 
 void init_widgets_text(py::module& m)
 {

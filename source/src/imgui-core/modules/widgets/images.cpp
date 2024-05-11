@@ -1,9 +1,9 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 #include <binder/struct-utility.h>
 
 #include <sstream>
 
-#include <bind-imgui/imgui-core/texture.h>
+#include <bind-imgui/texture.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

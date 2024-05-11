@@ -1,4 +1,4 @@
-#include <bind-imgui/imgui-core/imgui-modules.h>
+#include <bind-imgui/imgui-modules.h>
 #include <imgui_internal.h>
 
 void init_imgui_context(py::module& m)

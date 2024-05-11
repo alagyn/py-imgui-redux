@@ -1,0 +1,27 @@
+{
+    "version": 6,
+    "configurePresets": [
+        {
+            "name": "default",
+            //"generator": "Ninja Multi-Config",
+            "generator": "Unix Makefiles",
+            "binaryDir": "${sourceDir}/build",
+
+            "cacheVariables": {
+                "CMAKE_EXPORT_COMPILE_COMMANDS": {
+                    "type": "BOOL",
+                    "value": "ON"
+                },
+                "Python3_ROOT_DIR": "${sourceDir}/venv/bin/"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "imgui",
+            "configurePreset": "default",
+            "targets": ["imgui"],
+            "jobs": 12
+        }
+    ]
+}

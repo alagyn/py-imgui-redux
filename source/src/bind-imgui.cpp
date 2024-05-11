@@ -16,4 +16,7 @@ PYBIND11_MODULE(imgui, m)
 
     auto implot = m.def_submodule("implot", "ImPlot Library");
     init_implot(implot);
+
+    auto glfw = m.def_submodule("glfw", "GLFW Library");
+    bindGLFW::init_glfw(glfw);
 }

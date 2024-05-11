@@ -1,4 +1,4 @@
-#include <bind-imgui/implot/implot-modules.h>
+#include <bind-imgui/implot-modules.h>
 
 #define STR(x) #x
 #define AUTO_COL_STR STR(IMPLOT_AUTO_COL)
