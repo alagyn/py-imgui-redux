@@ -13,7 +13,6 @@ add_subdirectory(glfw)
 
 # -------------- glad ---------------
 add_library(glad
-    SHARED
     glad/src/gl.c
 )
 
@@ -26,11 +25,12 @@ set_target_properties(glad PROPERTIES
 
 target_compile_definitions(glad
     PRIVATE
-    GLAD_API_CALL_EXPORT_BUILD=1
-    PUBLIC
-    GLAD_API_CALL_EXPORT=1
-)
 
+    # GLAD_API_CALL_EXPORT_BUILD=1
+    PUBLIC
+
+    # GLAD_API_CALL_EXPORT=1
+)
 
 # -------------- imgui --------------
 set(imgui_SRCS
