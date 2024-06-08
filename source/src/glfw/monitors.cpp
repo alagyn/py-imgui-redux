@@ -17,7 +17,11 @@ void init_monitors(py::module& m)
         }
     );
 
-    QUICK(GetPrimaryMonitor);
+    m.def(
+        "GetPrimaryMonitor",
+        glfwGetPrimaryMonitor,
+        py::return_value_policy::reference
+    );
 
     m.def(
         "GetMonitorPos",
