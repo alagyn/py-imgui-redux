@@ -426,4 +426,11 @@ void init_imgui_structs(py::module& m)
         )
         // TODO GetCustomRectByIndex?
         ;
+
+    py::class_<ImGuiViewport>(m, "Viewport")
+        .RO(ImGuiViewport, Flags)
+        .RO(ImGuiViewport, Pos)
+        .RO(ImGuiViewport, Size)
+        .RO(ImGuiViewport, WorkPos)
+        .RO(ImGuiViewport, WorkSize);
 }
