@@ -88,6 +88,11 @@ public:
     {
         vals.resize(size);
     }
+
+    void clear()
+    {
+        vals.clear();
+    }
 };
 
 using IntList_ = ImList<int>;

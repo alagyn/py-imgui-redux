@@ -69,6 +69,7 @@ void initList(py::module& m, const char* name, const char* desc)
             "size"_a,
             "Resize the vector, dropping any lost values"
         )
+        .def("clear", &T::clear)
         .def("__len__", &T::size)
         .def("__iter__", &T::makeIter)
         .def("__getitem__", &T::getItem, "index"_a)

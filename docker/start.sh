@@ -14,10 +14,13 @@ else
     COMMAND=$@
 fi
 
+echo "Starting Build Container $CONTAINER"
+
 docker run \
     $MISC_ARGS \
     --volume $SRC_ROOT:/src \
     --workdir /src \
     --user $UID \
+    --env IN_DOCKER=1 \
     $CONTAINER \
     $COMMAND
