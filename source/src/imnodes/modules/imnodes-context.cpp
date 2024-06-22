@@ -106,9 +106,30 @@ void init_imnodes_context(py::module& m)
 
     // Interactions
     QUICK(IsEditorHovered);
-    m.def(IMFUNC(IsNodeHovered), "node_id"_a);
-    m.def(IMFUNC(IsLinkHovered), "link_id"_a);
-    m.def(IMFUNC(IsPinHovered), "attribute_id"_a);
+    m.def(
+        "IsNodeHovered",
+        [](IntRef node_id)
+        {
+            return ImNodes::IsNodeHovered(&node_id->val);
+        },
+        "node_id"_a
+    );
+    m.def(
+        "IsLinkHovered",
+        [](IntRef link_id)
+        {
+            return ImNodes::IsLinkHovered(&link_id->val);
+        },
+        "link_id"_a
+    );
+    m.def(
+        "IsPinHovered",
+        [](IntRef attr_id)
+        {
+            return ImNodes::IsPinHovered(&attr_id->val);
+        },
+        "attribute_id"_a
+    );
 
     QUICK(NumSelectedNodes);
     QUICK(NumSelectedLinks);
