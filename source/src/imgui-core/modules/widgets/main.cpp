@@ -1,5 +1,6 @@
 #include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
+
 #include <imgui_internal.h>
 
 #include <bind-imgui/texture.h>
@@ -367,6 +368,15 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(GetKeyName), "key"_a);
     m.def(IMFUNC(SetNextFrameWantCaptureKeyboard), "want_capture_keyboard"_a);
 
+    // Shortcut utilities
+    m.def(
+        "Shortcut",
+        py::overload_cast<ImGuiKeyChord, ImGuiInputFlags>(ImGui::Shortcut),
+        "key_chord"_a,
+        "flags"_a = 0
+    );
+    m.def(IMFUNC(SetNextItemShortcut), "key_chord"_a, "flags"_a = 0);
+
     // Mouse Input Utilities
     m.def(
         "IsMouseDown",
@@ -429,6 +439,8 @@ void init_widgets_main(py::module& m)
 
     // Debug Utilities
     m.def(IMFUNC(DebugTextEncoding), "text"_a);
+    m.def(IMFUNC(DebugFlashStyleColor), "idx"_a);
+    QUICK(DebugStartItemPicker);
 
     // Ignoring allocator functions
 }

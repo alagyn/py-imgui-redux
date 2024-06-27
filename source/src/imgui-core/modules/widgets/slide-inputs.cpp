@@ -25,7 +25,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat2",
         [](const char* label,
-           FloatList v,
+           FloatListPtr v,
            const float v_min,
            const float v_max,
            const char* format,
@@ -55,7 +55,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat3",
         [](const char* label,
-           FloatList v,
+           FloatListPtr v,
            const float v_min,
            const float v_max,
            const char* format,
@@ -85,7 +85,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderFloat4",
         [](const char* label,
-           FloatList v,
+           FloatListPtr v,
            const float v_min,
            const float v_max,
            const char* format,
@@ -173,7 +173,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt2",
         [](const char* label,
-           IntList v,
+           IntListPtr v,
            const int v_min,
            const int v_max,
            const char* format,
@@ -196,7 +196,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt3",
         [](const char* label,
-           IntList v,
+           IntListPtr v,
            const int v_min,
            const int v_max,
            const char* format,
@@ -218,7 +218,7 @@ void init_widgets_slide(py::module& m)
     m.def(
         "SliderInt4",
         [](const char* label,
-           IntList v,
+           IntListPtr v,
            const int v_min,
            const int v_max,
            const char* format,

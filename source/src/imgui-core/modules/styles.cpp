@@ -21,7 +21,12 @@ void init_styles(py::module& m)
         py::overload_cast<const ImVec4&>(ImGui::GetColorU32),
         "col"_a
     );
-    m.def("GetColorU32", py::overload_cast<ImU32>(ImGui::GetColorU32), "col"_a);
+    m.def(
+        "GetColorU32",
+        py::overload_cast<ImU32, float>(ImGui::GetColorU32),
+        "col"_a,
+        "alpha_mul"_a = 1.0f
+    );
     m.def(
         IMFUNC(GetStyleColorVec4),
         "idx"_a,

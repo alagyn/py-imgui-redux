@@ -83,21 +83,26 @@ void init_wraps(py::module& m)
     initRef<FloatRef_>(m, "FloatRef", "A pass-by-ref wrapper for a float", 0.0f);
     initRef<DoubleRef_>(m, "DoubleRef", "A pass-by-ref wrapper for a double", 0.0);
 
-    initList<IntList_, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
-    initList<FloatList_, float>(
+    initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
+    initList<FloatList, float>(
         m,
         "FloatList",
         "Thin wrapper over a std::vector<float>"
     );
-    initList<DoubleList_, double>(
+    initList<DoubleList, double>(
         m,
         "DoubleList",
         "Thin wrapper over a std::vector<double>"
     );
-    initList<StrList_, const char*>(
+    initList<StrList, const char*>(
         m,
         "StrList",
         "Thin wrapper over a std::vector<const char*>"
+    );
+    initList<Vec2List, ImVec2>(
+        m,
+        "Vec2List",
+        "Thin wrapper over a std::vector<ImVec2>"
     );
 
     py::class_<StrRef_>(m, "StrRef", "Thin wrapper over a std::vector<char>")
@@ -133,7 +138,8 @@ void init_wraps(py::module& m)
             "view",
             &StrRef_::data,
             py::return_value_policy::reference,
-            "Get a reference to the string, only valid while this object exists"
+            "Get a reference to the string, only valid while this object "
+            "exists"
         )
         .def(
             "set",
@@ -141,6 +147,7 @@ void init_wraps(py::module& m)
             "newVal"_a,
             "maxSize"_a = 0,
             "Assign a new value to the string. If maxSize=0,"
-            "the maxSize will remain unchanged and extra chars will be dropped"
+            "the maxSize will remain unchanged and extra chars will be "
+            "dropped"
         );
 }

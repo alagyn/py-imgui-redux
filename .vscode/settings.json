@@ -101,7 +101,8 @@
         "numbers": "cpp",
         "semaphore": "cpp",
         "stdfloat": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "text_encoding": "cpp"
     },
     "C_Cpp.default.defines": [
         "IMGUI_DISABLE_OBSOLETE_KEYIO=1",

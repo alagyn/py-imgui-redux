@@ -3,6 +3,8 @@
 #include <sstream>
 #include <vector>
 
+#include <imgui.h>
+
 // Forward declares of wrapper types
 // These are used to wrap arguments that are supposed to be pointers to output variables
 
@@ -66,7 +68,7 @@ public:
 
     pybind11::iterator makeIter()
     {
-        return pybind11::make_iterator(vals);
+        return pybind11::make_iterator(vals.begin(), vals.end());
     }
 
     T getItem(int index)
@@ -95,17 +97,20 @@ public:
     }
 };
 
-using IntList_ = ImList<int>;
-using IntList = IntList_*;
+using IntList = ImList<int>;
+using IntListPtr = IntList*;
 
-using FloatList_ = ImList<float>;
-using FloatList = FloatList_*;
+using FloatList = ImList<float>;
+using FloatListPtr = FloatList*;
 
-using DoubleList_ = ImList<double>;
-using DoubleList = DoubleList_*;
+using DoubleList = ImList<double>;
+using DoubleListPtr = DoubleList*;
 
-using StrList_ = ImList<const char*>;
-using StrList = StrList_*;
+using StrList = ImList<const char*>;
+using StrListPtr = StrList*;
+
+using Vec2List = ImList<ImVec2>;
+using Vec2ListPtr = Vec2List*;
 
 class StrRef_ : public ImList<char>
 {

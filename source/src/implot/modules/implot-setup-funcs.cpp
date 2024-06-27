@@ -39,7 +39,7 @@ void init_setup_funcs(py::module& m)
     // TODO SetupAxisFormat with callback, need to wrap in an object?
     m.def(
         "SetupAxisTicks",
-        [](ImAxis axis, DoubleList values, StrList labels, bool keep_default)
+        [](ImAxis axis, DoubleListPtr values, StrListPtr labels, bool keep_default)
         {
             const char** labelPtr = nullptr;
             if(labels)
@@ -65,7 +65,7 @@ void init_setup_funcs(py::module& m)
            double v_min,
            double v_max,
            int n_ticks,
-           StrList labels,
+           StrListPtr labels,
            bool keep_default)
         {
             const char** labelPtr = nullptr;

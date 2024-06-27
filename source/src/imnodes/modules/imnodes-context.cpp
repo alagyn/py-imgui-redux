@@ -136,19 +136,59 @@ void init_imnodes_context(py::module& m)
 
     m.def(
         "GetSelectedNodes",
-        [](IntList out)
+        [](IntListPtr out)
         {
-            out->resize(ImNodes::NumSelectedNodes());
-            ImNodes::GetSelectedNodes(out->data());
+            int numSelected = ImNodes::NumSelectedNodes();
+            out->resize(numSelected);
+            if(numSelected > 0)
+            {
+                ImNodes::GetSelectedNodes(out->data());
+            }
         },
         "node_ids"_a
     );
     m.def(
         "GetSelectedLinks",
-        [](IntList out)
+        [](IntListPtr out)
         {
+            int numSelected = ImNodes::NumSelectedLinks();
             out->resize(ImNodes::NumSelectedLinks());
-            ImNodes::GetSelectedLinks(out->data());
+            if(numSelected > 0)
+            {
+                ImNodes::GetSelectedLinks(out->data());
+            }
+        },
+        "link_ids"_a
+    );
+
+    m.def(
+        "GetSelectedNodes",
+        []()
+        {
+            IntListPtr out;
+            int numSelected = ImNodes::NumSelectedNodes();
+            out->resize(numSelected);
+            if(numSelected > 0)
+            {
+                ImNodes::GetSelectedNodes(out->data());
+            }
+
+            return out;
+        }
+    );
+    m.def(
+        "GetSelectedLinks",
+        []()
+        {
+            IntListPtr out;
+            int numSelected = ImNodes::NumSelectedLinks();
+            out->resize(ImNodes::NumSelectedLinks());
+            if(numSelected > 0)
+            {
+                ImNodes::GetSelectedLinks(out->data());
+            }
+
+            return out;
         }
     );
 

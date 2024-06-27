@@ -72,7 +72,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputFloat2",
-        [](const char* label, FloatList v, const char* format, const int flags)
+        [](const char* label, FloatListPtr v, const char* format, const int flags)
         {
             if(v->size() < 2)
             {
@@ -89,7 +89,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputFloat3",
-        [](const char* label, FloatList v, const char* format, const int flags)
+        [](const char* label, FloatListPtr v, const char* format, const int flags)
         {
             if(v->size() < 3)
             {
@@ -106,7 +106,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputFloat4",
-        [](const char* label, FloatList v, const char* format, const int flags)
+        [](const char* label, FloatListPtr v, const char* format, const int flags)
         {
             if(v->size() < 4)
             {
@@ -140,7 +140,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputInt2",
-        [](const char* label, IntList v, const int flags)
+        [](const char* label, IntListPtr v, const int flags)
         {
             if(v->size() < 2)
             {
@@ -156,7 +156,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputInt3",
-        [](const char* label, IntList v, const int flags)
+        [](const char* label, IntListPtr v, const int flags)
         {
             if(v->size() < 3)
             {
@@ -172,7 +172,7 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputInt4",
-        [](const char* label, IntList v, const int flags)
+        [](const char* label, IntListPtr v, const int flags)
         {
             if(v->size() < 4)
             {

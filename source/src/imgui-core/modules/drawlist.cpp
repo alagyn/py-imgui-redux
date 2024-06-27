@@ -2,9 +2,7 @@
 #include <bind-imgui/texture.h>
 #include <binder/struct-utility.h>
 
-#include <pybind11/stl.h>
-
-#include <vector>
+#include <binder/wraps.h>
 
 void init_drawlist(py::module& m)
 {
@@ -103,8 +101,7 @@ void init_drawlist(py::module& m)
         .def(
             DEF(ImDrawList, AddEllipse),
             "center"_a,
-            "radius_x"_a,
-            "radius_y"_a,
+            "radius"_a,
             "col"_a,
             "rot"_a = 0.0f,
             "num_segments"_a = 0,
@@ -113,8 +110,7 @@ void init_drawlist(py::module& m)
         .def(
             DEF(ImDrawList, AddEllipseFilled),
             "center"_a,
-            "radius_x"_a,
-            "radius_y"_a,
+            "radius"_a,
             "col"_a,
             "rot"_a = 0.0f,
             "num_segments"_a = 0
@@ -160,14 +156,14 @@ void init_drawlist(py::module& m)
         .def(
             "AddPolyline",
             [](ImDrawList* self,
-               std::vector<ImVec2> points,
+               Vec2ListPtr points,
                ImU32 col,
                ImDrawFlags flags,
                float thickness)
             {
                 self->AddPolyline(
-                    points.data(),
-                    points.size(),
+                    points->data(),
+                    points->size(),
                     col,
                     flags,
                     thickness
@@ -180,12 +176,19 @@ void init_drawlist(py::module& m)
         )
         .def(
             "AddConvexPolyFilled",
-            [](ImDrawList* self, std::vector<ImVec2> points, ImU32 col)
+            [](ImDrawList* self, Vec2ListPtr points, ImU32 col)
             {
-                self->AddConvexPolyFilled(points.data(), points.size(), col);
+                self->AddConvexPolyFilled(points->data(), points->size(), col);
             },
             "points"_a,
             "col"_a
+        )
+        .def(
+            "AddConcavePolyFilled",
+            [](ImDrawList* self, Vec2ListPtr points, ImU32 col)
+            {
+                self->AddConcavePolyFilled(points->data(), points->size(), col);
+            }
         )
         .def(
             DEF(ImDrawList, AddBezierCubic),
@@ -307,6 +310,7 @@ void init_drawlist(py::module& m)
         .def(DEF(ImDrawList, PathLineTo), "pos"_a)
         .def(DEF(ImDrawList, PathLineToMergeDuplicate), "pos"_a)
         .def(DEF(ImDrawList, PathFillConvex), "col"_a)
+        .def(DEF(ImDrawList, PathFillConcave), "col"_a)
         .def(
             DEF(ImDrawList, PathStroke),
             "col"_a,
@@ -327,6 +331,15 @@ void init_drawlist(py::module& m)
             "radius"_a,
             "a_min_of_12"_a,
             "a_max_of_12"_a
+        )
+        .def(
+            DEF(ImDrawList, PathEllipticalArcTo),
+            "center"_a,
+            "radius"_a,
+            "rot"_a,
+            "a_min"_a,
+            "a_max"_a,
+            "num_segments"_a = 0
         )
         .def(
             DEF(ImDrawList, PathBezierCubicCurveTo),

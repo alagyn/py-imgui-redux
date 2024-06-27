@@ -306,7 +306,7 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotBarGroups",
-        [](StrList labels,
+        [](StrListPtr labels,
            T values,
            int item_count,
            int group_count,
@@ -488,7 +488,7 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotPieChart",
-        [](StrList label_ids,
+        [](StrListPtr label_ids,
            T values,
            double x,
            double y,
@@ -655,8 +655,8 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
 void init_plotting(py::module& m)
 {
-    initWrapperPlotting<DoubleList>(m);
-    initWrapperPlotting<IntList>(m);
+    initWrapperPlotting<DoubleListPtr>(m);
+    initWrapperPlotting<IntListPtr>(m);
 
     m.def(
         "PlotLine",

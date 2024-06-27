@@ -37,8 +37,8 @@ void init_implot_context(py::module& m)
            int cols,
            const ImVec2& size,
            ImPlotSubplotFlags flags,
-           FloatList row_ratios,
-           FloatList col_ratios)
+           FloatListPtr row_ratios,
+           FloatListPtr col_ratios)
         {
             if(row_ratios && row_ratios->size() < rows)
             {
