@@ -266,13 +266,13 @@ class BuildCMakeExt(build_ext):
             "-E",
             "env",
             "CMAKE_BUILD_PARALLEL_LEVEL=8",
-            f"Python3_ROOT_DIR={PY_ROOT}",
             "--",
             'cmake',
             '-S',
             SOURCE_DIR,
             '-B',
-            self.build_temp
+            self.build_temp,
+            f"-DPython_ROOT_DIR={PY_ROOT}"
         ]
 
         if not IS_WINDOWS:

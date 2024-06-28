@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.25.2)
 project(imgui)
 
 set(CMAKE_DEBUG_POSTFIX, "-d")
-set(Python3_FIND_REGISTRY NEVER)
+set(Python_FIND_REGISTRY NEVER)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(${MSVC})
@@ -12,7 +12,7 @@ else()
     set(PY_COMPONENTS Interpreter Development.Module)
 endif()
 
-find_package(Python3
+find_package(Python
     COMPONENTS
     REQUIRED
     ${PY_COMPONENTS}
@@ -108,13 +108,38 @@ set(IMGUI_SRCS
 
 )
 
-setupPyBindLib(
-    LIB imgui
-    SRCS ${IMGUI_SRCS}
-    LINKS
+Python_add_library(imgui ${IMGUI_SRCS})
+set_target_properties(imgui
+    PROPERTIES
+        INTERPROCEDURAL_OPTIMIZATION ON
+        VISIBILITY_INLINES_HIDDEN ON
+        CXX_STANDARD 17
+)
+
+target_link_libraries(imgui
+    PRIVATE
+        pybind11::headers
         imgui-cpp
         glfw
         glad
         stb
-    INCS ${INCLUDE_DIR}
 )
+
+target_include_directories(imgui
+    PRIVATE
+        ${INCLUDE_DIR}
+)
+
+target_compile_definitions(imgui
+    PRIVATE PYBIND11_DETAILED_ERROR_MESSAGES
+)
+
+if(${MSVC})
+    # PASS
+else()
+    target_compile_options(imgui
+        PRIVATE
+        -Wno-format-security
+        -fvisibility=hidden
+    )
+endif()
