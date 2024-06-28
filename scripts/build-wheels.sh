@@ -1,15 +1,29 @@
 #!/bin/bash
 
+# build every wheel we distribute.
+# works on linux and windows gitbash/ming
+
 home=$(realpath $(dirname $0)/..)
 
-PY_VERSIONS="cp37-cp37m cp38-cp38 cp39-cp39 cp310-cp310 cp311-cp311 cp312-cp312"
+PY_VERSIONS="3.7 3.8 3.9 3.10 3.11 3.12"
 
 cd $home
+
+# Check if we are on windows
+IS_WINDOWS=0
+case "$(uname -s)" in
+    MINGW*) IS_WINDOWS=1
+esac
 
 for ver in $PY_VERSIONS
 do
     echo "Building $ver"
-    $home/docker/build-version.sh -p $ver
+    if [[ $IS_WINDOWS = 0 ]]
+    then
+        ./scripts/build-version.sh -p $ver
+    else
+        ./scripts/build-version-win.sh -p $ver
+    fi
     error=$?
     if [ $error -ne 0 ]
     then
