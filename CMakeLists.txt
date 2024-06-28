@@ -4,7 +4,7 @@ project(imgui)
 
 set(CMAKE_DEBUG_POSTFIX, "-d")
 set(Python_FIND_REGISTRY NEVER)
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+#set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(${MSVC})
     set(PY_COMPONENTS Interpreter Development)
@@ -18,11 +18,11 @@ find_package(Python
     ${PY_COMPONENTS}
 )
 
+set(PYBIND11_NOPYTHON ON)
+
 add_subdirectory(third-party)
 
 set(INCLUDE_DIR source/inc)
-
-include(setupPyBindLib)
 
 set(IMGUI_ROOT source/src)
 
