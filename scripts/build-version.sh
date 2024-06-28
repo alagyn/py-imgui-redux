@@ -11,7 +11,7 @@ if [[ "$IN_DOCKER" = "" ]]
 then
     # if not, start the docker container and run this script again
     cd $scriptDir/..
-    ./docker/start.sh /src/docker/build-version.sh $@
+    ./docker/start.sh /src/scripts/build-version.sh $@
     exit
 fi
 
@@ -44,7 +44,7 @@ case $PY_VERSION in
 esac
 
 # this is the path for the container's installs
-export PY_ROOT="/opt/python/${PY_VERSION}/bin"
+export PY_ROOT="/opt/python/${PY_PATH}/bin"
 export PATH=${PY_ROOT}:${PATH}
 
 cd /src
