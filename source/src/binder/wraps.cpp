@@ -61,6 +61,7 @@ void initList(py::module& m, const char* name, const char* desc)
 {
     py::class_<T>(m, name, desc)
         .def(py::init<std::vector<U>>(), "vals"_a = std::vector<U>())
+        .def(py::init<>())
         .def("append", &T::append, "val"_a, "Append a value to the end")
         .def("pop", &T::pop, "Pop a value from the end")
         .def(

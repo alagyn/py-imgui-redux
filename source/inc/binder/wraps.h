@@ -49,6 +49,11 @@ public:
     {
     }
 
+    ImList()
+        : vals()
+    {
+    }
+
     void append(T val)
     {
         vals.push_back(val);

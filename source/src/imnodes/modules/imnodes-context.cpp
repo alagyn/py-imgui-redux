@@ -165,7 +165,7 @@ void init_imnodes_context(py::module& m)
         "GetSelectedNodes",
         []()
         {
-            IntListPtr out;
+            IntListPtr out = new IntList();
             int numSelected = ImNodes::NumSelectedNodes();
             out->resize(numSelected);
             if(numSelected > 0)
@@ -174,13 +174,14 @@ void init_imnodes_context(py::module& m)
             }
 
             return out;
-        }
+        },
+        py::return_value_policy::take_ownership
     );
     m.def(
         "GetSelectedLinks",
         []()
         {
-            IntListPtr out;
+            IntListPtr out = new IntList();
             int numSelected = ImNodes::NumSelectedLinks();
             out->resize(ImNodes::NumSelectedLinks());
             if(numSelected > 0)
@@ -189,7 +190,8 @@ void init_imnodes_context(py::module& m)
             }
 
             return out;
-        }
+        },
+        py::return_value_policy::take_ownership
     );
 
     m.def(
