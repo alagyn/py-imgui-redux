@@ -40,7 +40,7 @@ case $PY_VERSION in
     *) echo "Invalid"
 esac
 
-PY_EXEC=${PY_ROOT}${ver}/python.exe
+PY_EXEC=${PY_ROOT}${PY_PATH}/python.exe
 echo "Using python ${PY_EXEC}"
 
 $PY_EXEC -m build --wheel
