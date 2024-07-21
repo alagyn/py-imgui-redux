@@ -40,7 +40,10 @@ case $PY_VERSION in
     3.10) PY_PATH=cp310-cp310 ;;
     3.11) PY_PATH=cp311-cp311 ;;
     3.12) PY_PATH=cp312-cp312 ;;
-    *) echo "Invalid"
+    *) 
+        echo "Invalid"
+        exit 1
+        ;;
 esac
 
 # this is the path for the container's installs

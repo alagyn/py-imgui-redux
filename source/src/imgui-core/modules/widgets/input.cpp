@@ -1,14 +1,32 @@
 #include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
 
+int inputTextCallback(ImGuiInputTextCallbackData* data)
+{
+    StrRefPtr value = static_cast<StrRefPtr>(data->UserData);
+    if(data->EventFlag == ImGuiInputTextFlags_CallbackAlways)
+    {
+        value->strLen = data->BufTextLen;
+    }
+
+    return 0;
+}
+
 void init_widgets_input(py::module& m)
 {
     // Ignoring callbacks and user-data
     m.def(
         "InputText",
-        [](const char* label, StrRef value, const int flags)
+        [](const char* label, StrRefPtr value, const int flags)
         {
-            return ImGui::InputText(label, value->data(), value->size(), flags);
+            return ImGui::InputText(
+                label,
+                value->data(),
+                value->vals.capacity(),
+                flags | ImGuiInputTextFlags_CallbackAlways,
+                inputTextCallback,
+                value
+            );
         },
         "label"_a,
         "value"_a,
@@ -17,15 +35,20 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputTextMultiline",
-        [](const char* label, StrRef value, const ImVec2& size, const int flags)
+        [](const char* label, StrRefPtr value, const ImVec2& size, const int flags)
         {
-            return ImGui::InputTextMultiline(
+            bool out = ImGui::InputTextMultiline(
                 label,
                 value->data(),
                 value->size(),
                 size,
                 flags
             );
+            if(out)
+            {
+                value->calcLen();
+            }
+            return out;
         },
         "label"_a,
         "value"_a,
@@ -35,15 +58,20 @@ void init_widgets_input(py::module& m)
     );
     m.def(
         "InputTextWithHint",
-        [](const char* label, const char* hint, StrRef value, const int flags)
+        [](const char* label, const char* hint, StrRefPtr value, const int flags)
         {
-            return ImGui::InputTextWithHint(
+            bool out = ImGui::InputTextWithHint(
                 label,
                 hint,
                 value->data(),
                 value->size(),
                 flags
             );
+            if(out)
+            {
+                value->calcLen();
+            }
+            return out;
         },
         "label"_a,
         "hint"_a,

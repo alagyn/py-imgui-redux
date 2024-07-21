@@ -5,14 +5,15 @@
 
 namespace py = pybind11;
 
-StrRef_::StrRef_(size_t maxSize)
+StrRef::StrRef(size_t maxSize)
     : ImList<char>(std::vector<char>(maxSize + 1))
+    , strLen(0)
 {
     // Set first char to zero to terminate string
     vals[0] = 0;
 }
 
-StrRef_::StrRef_(const char* val, size_t maxSize)
+StrRef::StrRef(const char* val, size_t maxSize)
     : ImList<char>(std::vector<char>())
 {
     if(maxSize == 0)
@@ -23,13 +24,17 @@ StrRef_::StrRef_(const char* val, size_t maxSize)
     std::strncpy(vals.data(), val, maxSize);
 }
 
-void StrRef_::set(const char* newVal, size_t maxSize)
+void StrRef::set(const char* newVal, size_t maxSize)
 {
-    vals.resize(maxSize + 1);
-    std::strncpy(vals.data(), newVal, maxSize);
+    if(maxSize != 0)
+    {
+        vals.resize(maxSize + 1);
+    }
+    std::strncpy(vals.data(), newVal, vals.size());
+    strLen = strlen(vals.data());
 }
 
-void StrRef_::resize(size_t maxSize)
+void StrRef::resize(size_t maxSize)
 {
     size_t oldSize = vals.size() - 1;
     vals.resize(maxSize + 1);
@@ -42,9 +47,14 @@ void StrRef_::resize(size_t maxSize)
     }
 }
 
-size_t StrRef_::strSize()
+size_t StrRef::strSize()
 {
-    return vals.size() - 1;
+    return strLen;
+}
+
+void StrRef::calcLen()
+{
+    this->strLen = strnlen(vals.data(), vals.size());
 }
 
 template<class T, class U>
@@ -106,7 +116,7 @@ void init_wraps(py::module& m)
         "Thin wrapper over a std::vector<ImVec2>"
     );
 
-    py::class_<StrRef_>(m, "StrRef", "Thin wrapper over a std::vector<char>")
+    py::class_<StrRef>(m, "StrRef", "Thin wrapper over a std::vector<char>")
         .def(
             py::init<size_t>(),
             "maxSize"_a,
@@ -119,32 +129,32 @@ void init_wraps(py::module& m)
             "Initialize with an input string. If maxSize=0, then "
             "maxSize=len(val)"
         )
-        .def("append", &StrRef_::append, "val"_a, "Append a value to the end")
-        .def("pop", &StrRef_::pop, "Pop a value from the end")
+        .def("append", &StrRef::append, "val"_a, "Append a value to the end")
+        .def("pop", &StrRef::pop, "Pop a value from the end")
         .def(
             "resize",
-            &StrRef_::resize,
+            &StrRef::resize,
             "size"_a,
             "Resize the vector, dropping any lost values"
         )
-        .def("__len__", &StrRef_::strSize)
-        .def("__str__", &StrRef_::data, py::return_value_policy::copy)
+        .def("__len__", &StrRef::strSize)
+        .def("__str__", &StrRef::data, py::return_value_policy::copy)
         .def(
             "copy",
-            &StrRef_::data,
+            &StrRef::data,
             py::return_value_policy::copy,
             "Get a copy of the string"
         )
         .def(
             "view",
-            &StrRef_::data,
+            &StrRef::data,
             py::return_value_policy::reference,
             "Get a reference to the string, only valid while this object "
             "exists"
         )
         .def(
             "set",
-            &StrRef_::set,
+            &StrRef::set,
             "newVal"_a,
             "maxSize"_a = 0,
             "Assign a new value to the string. If maxSize=0,"

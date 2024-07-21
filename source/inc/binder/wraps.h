@@ -40,10 +40,9 @@ using IntRef = IntRef_*;
 
 template<class T> class ImList
 {
-protected:
+public:
     std::vector<T> vals;
 
-public:
     ImList(std::vector<T> vals)
         : vals(vals)
     {
@@ -117,14 +116,16 @@ using StrListPtr = StrList*;
 using Vec2List = ImList<ImVec2>;
 using Vec2ListPtr = Vec2List*;
 
-class StrRef_ : public ImList<char>
+class StrRef : public ImList<char>
 {
 public:
-    StrRef_(size_t maxSize);
-    StrRef_(const char* val, size_t maxSize = 0);
+    StrRef(size_t maxSize);
+    StrRef(const char* val, size_t maxSize = 0);
     void set(const char* newVal, size_t maxSize = 0);
     virtual void resize(size_t size) override;
     size_t strSize();
+    size_t strLen;
+    void calcLen();
 };
 
-using StrRef = StrRef_*;
+using StrRefPtr = StrRef*;
