@@ -14,7 +14,15 @@ void init_widgets_main(py::module& m)
     );
     m.def(IMFUNC(SmallButton), "label"_a);
     m.def(IMFUNC(InvisibleButton), "str_id"_a, "size"_a, "flags"_a = 0);
-    m.def(IMFUNC(ArrowButton), "str_id"_a, "dir"_a);
+    m.def(
+        "ArrowButton",
+        [](const char* str_id, int dir)
+        {
+            return ImGui::ArrowButton(str_id, static_cast<ImGuiDir>(dir));
+        },
+        "str_id"_a,
+        "dir"_a
+    );
     m.def(
         "CheckBox",
         [](const char* label, BoolRef cur_state)
@@ -66,6 +74,9 @@ void init_widgets_main(py::module& m)
         "overlay"_a = nullptr
     );
     QUICK(Bullet);
+
+    m.def(IMFUNC(TextLink), "label"_a);
+    m.def(IMFUNC(TextLinkOpenURL), "label"_a, "url"_a);
 
     // Images
     m.def(
@@ -376,6 +387,11 @@ void init_widgets_main(py::module& m)
         "flags"_a = 0
     );
     m.def(IMFUNC(SetNextItemShortcut), "key_chord"_a, "flags"_a = 0);
+    m.def(
+        "SetItemKeyOwner",
+        py::overload_cast<ImGuiKey>(ImGui::SetItemKeyOwner),
+        "key"_a
+    );
 
     // Mouse Input Utilities
     m.def(

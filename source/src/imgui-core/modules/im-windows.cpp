@@ -124,9 +124,6 @@ void init_windows(py::module& m)
 
     // Content region
     QUICK(GetContentRegionAvail);
-    QUICK(GetContentRegionMax);
-    QUICK(GetWindowContentRegionMin);
-    QUICK(GetWindowContentRegionMax);
 
     // Window Scrolling
     QUICK(GetScrollX);

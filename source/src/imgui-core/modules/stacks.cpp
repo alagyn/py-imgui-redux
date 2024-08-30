@@ -31,10 +31,8 @@ void init_stacks(py::module& m)
         "val"_a.noconvert()
     );
     m.def(IMFUNC(PopStyleVar), "count"_a = 1);
-    m.def(IMFUNC(PushTabStop), "tab_stop"_a);
-    QUICK(PopTabStop);
-    m.def(IMFUNC(PushButtonRepeat), "repeat"_a);
-    QUICK(PopButtonRepeat);
+    m.def(IMFUNC(PushItemFlag), "option"_a, "enabled"_a);
+    QUICK(PopItemFlag);
 
     // Parameter Stacks (current window)
     m.def(IMFUNC(PushItemWidth), "item_width"_a);
@@ -63,4 +61,5 @@ void init_stacks(py::module& m)
         "str_id_end"_a
     );
     m.def("GetID", py::overload_cast<const void*>(ImGui::GetID), "ptr_id"_a);
+    m.def("GetID", py::overload_cast<int>(ImGui::GetID), "int_id"_a);
 }

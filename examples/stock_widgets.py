@@ -65,7 +65,7 @@ def normWidgets(state: State):
         imgui.SameLine()
         if imgui.InvisibleButton("invis_btn", imgui.Vec2(50, 20)):
             print("Invis Btn")
-        if imgui.ArrowButton("arrw_btn", 0):
+        if imgui.ArrowButton("arrw_btn", imgui.Dir.Right):
             print("Arrow Btn")
 
         if imgui.CheckBox("Checkbox", state.cb1):
@@ -188,15 +188,18 @@ def normWidgets(state: State):
 def tables():
     COLS = 3
     ROWS = 10
-    flags = (imgui.TableFlags.BordersInnerH | imgui.TableFlags.BordersOuterV
-             | imgui.TableFlags.BordersOuterH)
+    flags = (
+        imgui.TableFlags.BordersInnerH | imgui.TableFlags.BordersOuterV
+        | imgui.TableFlags.BordersOuterH
+    )
     if imgui.BeginTable("tab-id", COLS, flags):
         for x in range(ROWS):
             imgui.TableNextRow()
             for c in range(COLS):
                 imgui.TableNextColumn()
-                col = imgui.Vec4(x / ROWS, c / COLS,
-                                 1 - (x + c) / (ROWS + COLS), 1.0)
+                col = imgui.Vec4(
+                    x / ROWS, c / COLS, 1 - (x + c) / (ROWS + COLS), 1.0
+                )
                 imgui.TextColored(
                     col,
                     f"({int(col.x * 255)}, {int(col.y * 255)}, {int(col.z * 255)})"

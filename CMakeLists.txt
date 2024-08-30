@@ -64,6 +64,7 @@ set(IMGUI_SRCS
         ${IMGUI_WID}/drag-inputs.cpp
         ${IMGUI_WID}/input.cpp
         ${IMGUI_WID}/main.cpp
+        ${IMGUI_WID}/multi-select.cpp
         ${IMGUI_WID}/slide-inputs.cpp
         ${IMGUI_WID}/tables.cpp
         ${IMGUI_WID}/tabs.cpp

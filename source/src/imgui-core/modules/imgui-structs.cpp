@@ -64,9 +64,16 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, TabRounding)
         .RW(ImGuiStyle, TabBorderSize)
         .RW(ImGuiStyle, TabMinWidthForCloseButton)
+        .RW(ImGuiStyle, TabBarBorderSize)
+        .RW(ImGuiStyle, TabBarOverlineSize)
+        .RW(ImGuiStyle, TableAngledHeadersAngle)
+        .RW(ImGuiStyle, TableAngledHeadersTextAlign)
         .RW(ImGuiStyle, ColorButtonPosition)
         .RW(ImGuiStyle, ButtonTextAlign)
         .RW(ImGuiStyle, SelectableTextAlign)
+        .RW(ImGuiStyle, SeparatorTextBorderSize)
+        .RW(ImGuiStyle, SeparatorTextAlign)
+        .RW(ImGuiStyle, SeparatorTextPadding)
         .RW(ImGuiStyle, DisplayWindowPadding)
         .RW(ImGuiStyle, DisplaySafeAreaPadding)
         .RW(ImGuiStyle, MouseCursorScale)
@@ -108,6 +115,7 @@ void init_imgui_structs(py::module& m)
         // Misc
         .RW(ImGuiIO, MouseDrawCursor)
         .RW(ImGuiIO, ConfigMacOSXBehaviors)
+        .RW(ImGuiIO, ConfigNavSwapGamepadButtons)
         .RW(ImGuiIO, ConfigInputTrickleEventQueue)
         .RW(ImGuiIO, ConfigInputTextCursorBlink)
         .RW(ImGuiIO, ConfigInputTextEnterKeepActive)
@@ -153,6 +161,7 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImGuiIO, SetAppAcceptingEvents), "accepting_events"_a)
         .def(DEF(ImGuiIO, ClearEventsQueue))
         .def(DEF(ImGuiIO, ClearInputKeys))
+        .def(DEF(ImGuiIO, ClearInputMouse))
         .RW(ImGuiIO, WantCaptureMouse)
         .RW(ImGuiIO, WantCaptureKeyboard)
         .RW(ImGuiIO, WantTextInput)
@@ -217,6 +226,7 @@ void init_imgui_structs(py::module& m)
             "item_begin"_a,
             "item_end"_a
         )
+        .def(DEF(ImGuiListClipper, SeekCursorForItem), "item_index"_a)
         .RO(ImGuiListClipper, DisplayStart)
         .RO(ImGuiListClipper, DisplayEnd);
 
@@ -433,4 +443,20 @@ void init_imgui_structs(py::module& m)
         .RO(ImGuiViewport, Size)
         .RO(ImGuiViewport, WorkPos)
         .RO(ImGuiViewport, WorkSize);
+
+    py::class_<ImGuiMultiSelectIO>(m, "MultiSelectIO")
+        // TODO Requests
+        .RO(ImGuiMultiSelectIO, Requests)
+        .RO(ImGuiMultiSelectIO, RangeSrcItem)
+        .RO(ImGuiMultiSelectIO, NavIdItem)
+        .RO(ImGuiMultiSelectIO, NavIdSelected)
+        .RW(ImGuiMultiSelectIO, RangeSrcReset)
+        .RO(ImGuiMultiSelectIO, ItemsCount);
+
+    py::class_<ImGuiSelectionRequest>(m, "SelectionRequest")
+        .RO(ImGuiSelectionRequest, Type)
+        .RO(ImGuiSelectionRequest, Selected)
+        .RO(ImGuiSelectionRequest, RangeDirection)
+        .RO(ImGuiSelectionRequest, RangeFirstItem)
+        .RO(ImGuiSelectionRequest, RangeLastItem);
 }

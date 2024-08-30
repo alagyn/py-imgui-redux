@@ -33,6 +33,7 @@ void init_widgets_tables(py::module& m)
     m.def(IMFUNC(TableGetColumnName), "column_n"_a = -1);
     m.def(IMFUNC(TableGetColumnFlags), "column_n"_a = -1);
     m.def(IMFUNC(TableSetColumnEnabled), "column_n"_a, "v"_a);
+    QUICK(TableGetHoveredColumn);
     m.def(IMFUNC(TableSetBgColor), "target"_a, "color"_a, "column_n"_a = -1);
 
     // Ignoring legacy Columns()

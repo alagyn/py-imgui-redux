@@ -32,6 +32,7 @@ void init_widgets_tree(py::module& m);
 void init_widgets_tables(py::module& m);
 void init_widgets_tabs(py::module& m);
 void init_widgets_images(py::module& m);
+void init_widgets_multi_select(py::module& m);
 
 void init_imgui_enums(py::module& m);
 void init_drawlist(py::module& m);
