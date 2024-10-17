@@ -28,7 +28,10 @@ void init_setup_funcs(py::module& m)
             }
 
             ImPlot::SetupAxisLinks(axis, a, b);
-        }
+        },
+        "axis"_a,
+        "link_min"_a,
+        "link_max"_a
     );
     m.def(
         "SetupAxisFormat",

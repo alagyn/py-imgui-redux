@@ -74,6 +74,7 @@ void init_utils(py::module& m)
         "cond"_a = (int)ImPlotCond_Once
     );
     m.def(IMFUNC(BeginAlignedPlots), "group_id"_a, "vertical"_a = true);
+    QUICK(EndAlignedPlots);
 
     // Legend utils
     m.def(
