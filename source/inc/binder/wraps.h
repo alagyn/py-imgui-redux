@@ -104,6 +104,9 @@ public:
 using IntList = ImList<int>;
 using IntListPtr = IntList*;
 
+using WCharList = ImList<ImWchar>;
+using WCharListPtr = WCharList*;
+
 using FloatList = ImList<float>;
 using FloatListPtr = FloatList*;
 

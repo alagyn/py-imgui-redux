@@ -1,6 +1,7 @@
 #include <bind-imgui/imgui-modules.h>
 #include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
+#include <binder/wraps.h>
 
 #define RO_ARRAY(STRUCT, TYPE, VALUE, SIZE) \
     def_property_readonly( \
@@ -422,13 +423,24 @@ void init_imgui_structs(py::module& m)
             [](ImFontAtlas* self,
                const char* filename,
                float size_pixels,
-               ImFontConfig* font_cfg = nullptr)
+               ImFontConfig* font_cfg,
+               WCharListPtr glyph_ranges)
             {
+                if(glyph_ranges)
+                {
+                    return self->AddFontFromFileTTF(
+                        filename,
+                        size_pixels,
+                        font_cfg,
+                        glyph_ranges->vals.data()
+                    );
+                }
                 return self->AddFontFromFileTTF(filename, size_pixels, font_cfg);
             },
             "filename"_a,
             "size_pixels"_a,
             "font_cfg"_a = nullptr,
+            "glyph_ranges"_a = nullptr,
             py::return_value_policy::reference
         )
         // TODO AddFontFromMemory...?

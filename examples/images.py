@@ -46,7 +46,6 @@ def loadOpenCV(filename: str) -> im.Texture:
 # METHOD 3
 # Load via PILLOW
 def loadPILLOW(filename) -> im.Texture:
-    print("Load PILLOW")
     image2 = Image.open(filename)
     # Pass the data to imgui
     return im.LoadTexture(
