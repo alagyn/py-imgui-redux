@@ -122,7 +122,7 @@ void init_drawlist(py::module& m)
                const ImVec2& pos,
                ImU32 col,
                const char* text,
-               const ImFont* font,
+               ImFont* font,
                float font_size,
                float wrap_width,
                const ImVec4* cpu_fine_clip_rect)
@@ -220,14 +220,7 @@ void init_drawlist(py::module& m)
                ImVec2 uv_max,
                ImU32 col)
             {
-                self->AddImage(
-                    (void*)(intptr_t)tex.texID,
-                    p_min,
-                    p_max,
-                    uv_min,
-                    uv_max,
-                    col
-                );
+                self->AddImage(tex.texID, p_min, p_max, uv_min, uv_max, col);
             },
             "user_texture_id"_a,
             "p_min"_a,
@@ -250,18 +243,7 @@ void init_drawlist(py::module& m)
                ImVec2 uv4,
                ImU32 col)
             {
-                self->AddImageQuad(
-                    (void*)(intptr_t)(tex.texID),
-                    p1,
-                    p2,
-                    p3,
-                    p4,
-                    uv1,
-                    uv2,
-                    uv3,
-                    uv4,
-                    col
-                );
+                self->AddImageQuad(tex.texID, p1, p2, p3, p4, uv1, uv2, uv3, uv4, col);
             },
             "user_texture_id"_a,
             "p1"_a,
@@ -287,7 +269,7 @@ void init_drawlist(py::module& m)
                ImDrawFlags flags)
             {
                 self->AddImageRounded(
-                    (void*)(intptr_t)(tex.texID),
+                    tex.texID,
                     p_min,
                     p_max,
                     uv_min,

@@ -5,6 +5,7 @@ in a couple different methods
 
 import sys
 import os
+import numpy as np
 
 # Add this file's dir to the path just in case we can't find the other files
 sys.path.append(os.path.split(__file__)[0])
@@ -27,6 +28,9 @@ def loadSTB(filename: str) -> im.Texture:
     return im.LoadTextureFile(filename)
 
 
+SIZE = 255
+
+
 # METHOD 2
 # Load via OpenCV
 def loadOpenCV(filename: str) -> im.Texture:
@@ -34,18 +38,22 @@ def loadOpenCV(filename: str) -> im.Texture:
     # Might need to convert the colors here
     image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
     # Pass the data to imgui
-    return im.LoadTexture(image.tobytes(), image.shape[1], image.shape[0],
-                          image.shape[2])
+    return im.LoadTexture(
+        image.tobytes(), image.shape[1], image.shape[0], image.shape[2]
+    )
 
 
 # METHOD 3
 # Load via PILLOW
 def loadPILLOW(filename) -> im.Texture:
-    print("Load PILLOW")
     image2 = Image.open(filename)
     # Pass the data to imgui
-    return im.LoadTexture(image2.tobytes(), image2.size[0], image2.size[1],
-                          len(image2.getbands()))
+    return im.LoadTexture(
+        image2.tobytes(),
+        image2.size[0],
+        image2.size[1],
+        len(image2.getbands())
+    )
 
 
 class State:
@@ -58,7 +66,8 @@ class State:
     def setup(self):
         # Get a path to our image
         imageFile = os.path.join(
-            os.path.split(__file__)[0], "..", "docs", "pyimgui-logo-512.png")
+            os.path.split(__file__)[0], "..", "docs", "pyimgui-logo-512.png"
+        )
 
         # textures can only be loaded AFTER imgui and glfw has been intialized
 
@@ -72,7 +81,7 @@ class State:
         self.textures = [("built-in", tex1), ("openCV", tex2), ("PIL", tex3)]
 
     def render(self):
-        im.SetNextWindowSize(im.Vec2(600, 300))
+        im.SetNextWindowSize(im.Vec2(700, 300))
         if im.Begin("Window"):
             if im.BeginTable("_im", len(self.textures)):
                 for label, _ in self.textures:
@@ -98,9 +107,11 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("Images",
-                    1024,
-                    768,
-                    state.render,
-                    init=state.setup,
-                    cleanup=state.cleanup)
+    window_mainloop(
+        "Images",
+        1024,
+        768,
+        state.render,
+        init=state.setup,
+        cleanup=state.cleanup
+    )

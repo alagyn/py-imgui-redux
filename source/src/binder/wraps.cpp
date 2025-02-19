@@ -95,6 +95,11 @@ void init_wraps(py::module& m)
     initRef<DoubleRef_>(m, "DoubleRef", "A pass-by-ref wrapper for a double", 0.0);
 
     initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
+    initList<WCharList, ImWchar>(
+        m,
+        "WCharList",
+        "This wrapper over a std::vector<ImWchar>"
+    );
     initList<FloatList, float>(
         m,
         "FloatList",

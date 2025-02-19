@@ -136,7 +136,9 @@ void init_implot_enums(py::module& m)
 
     ENUM(ImPlot, PieChartFlags)
         .RAW_VALUE(None_, ImPlotPieChartFlags_None)
-        .VALUE(ImPlot, PieChartFlags, Normalize);
+        .VALUE(ImPlot, PieChartFlags, Normalize)
+        .VALUE(ImPlot, PieChartFlags, IgnoreHidden)
+        .VALUE(ImPlot, PieChartFlags, Exploding);
 
     ENUM(ImPlot, HeatmapFlags)
         .RAW_VALUE(None_, ImPlotHeatmapFlags_None)

@@ -30,6 +30,8 @@ void init_stacks(py::module& m)
         "idx"_a,
         "val"_a.noconvert()
     );
+    m.def(IMFUNC(PushStyleVarX), "idx"_a, "val"_a);
+    m.def(IMFUNC(PushStyleVarY), "idx"_a, "val"_a);
     m.def(IMFUNC(PopStyleVar), "count"_a = 1);
     m.def(IMFUNC(PushItemFlag), "option"_a, "enabled"_a);
     QUICK(PopItemFlag);

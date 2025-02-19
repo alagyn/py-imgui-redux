@@ -1,6 +1,7 @@
 #include <bind-imgui/imgui-modules.h>
 #include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
+#include <binder/wraps.h>
 
 #define RO_ARRAY(STRUCT, TYPE, VALUE, SIZE) \
     def_property_readonly( \
@@ -112,16 +113,25 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, FontAllowUserScaling)
         .RW(ImGuiIO, FontDefault)
         .RW(ImGuiIO, DisplayFramebufferScale)
+        // Keyboard/Gamepad navigation options
+        .RW(ImGuiIO, ConfigNavSwapGamepadButtons)
+        .RW(ImGuiIO, ConfigNavMoveSetMousePos)
+        .RW(ImGuiIO, ConfigNavCaptureKeyboard)
+        .RW(ImGuiIO, ConfigNavEscapeClearFocusItem)
+        .RW(ImGuiIO, ConfigNavEscapeClearFocusWindow)
+        .RW(ImGuiIO, ConfigNavCursorVisibleAuto)
+        .RW(ImGuiIO, ConfigNavCursorVisibleAlways)
         // Misc
         .RW(ImGuiIO, MouseDrawCursor)
         .RW(ImGuiIO, ConfigMacOSXBehaviors)
-        .RW(ImGuiIO, ConfigNavSwapGamepadButtons)
         .RW(ImGuiIO, ConfigInputTrickleEventQueue)
         .RW(ImGuiIO, ConfigInputTextCursorBlink)
         .RW(ImGuiIO, ConfigInputTextEnterKeepActive)
         .RW(ImGuiIO, ConfigDragClickToInputText)
         .RW(ImGuiIO, ConfigWindowsResizeFromEdges)
         .RW(ImGuiIO, ConfigWindowsMoveFromTitleBarOnly)
+        .RW(ImGuiIO, ConfigWindowsCopyContentsWithCtrlC)
+        .RW(ImGuiIO, ConfigScrollbarScrollByPage)
         .RW(ImGuiIO, ConfigMemoryCompactTimer)
         // Input
         .RW(ImGuiIO, MouseDoubleClickTime)
@@ -129,7 +139,13 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, MouseDragThreshold)
         .RW(ImGuiIO, KeyRepeatDelay)
         .RW(ImGuiIO, KeyRepeatRate)
+        // Debug options
+        .RW(ImGuiIO, ConfigErrorRecovery)
+        .RW(ImGuiIO, ConfigErrorRecoveryEnableAssert)
+        .RW(ImGuiIO, ConfigErrorRecoveryEnableDebugLog)
+        .RW(ImGuiIO, ConfigErrorRecoveryEnableTooltip)
         .RW(ImGuiIO, ConfigDebugIsDebuggerPresent)
+        .RW(ImGuiIO, ConfigDebugHighlightIdConflicts)
         .RW(ImGuiIO, ConfigDebugBeginReturnValueOnce)
         .RW(ImGuiIO, ConfigDebugBeginReturnValueLoop)
         .RW(ImGuiIO, ConfigDebugIgnoreFocusLoss)
@@ -140,7 +156,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, BackendPlatformUserData)
         .RW(ImGuiIO, BackendRendererUserData)
         .RW(ImGuiIO, BackendLanguageUserData)
-        // TODO Ignoring Clipboard stuff
+        // TODO Ignoring Clipboard stuff/Moved to PlatformIO?
         .def(DEF(ImGuiIO, AddKeyEvent), "key"_a, "down"_a)
         .def(DEF(ImGuiIO, AddKeyAnalogEvent), "key"_a, "down"_a, "v"_a)
         .def(DEF(ImGuiIO, AddMousePosEvent), "x"_a, "y"_a)
@@ -162,6 +178,7 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImGuiIO, ClearEventsQueue))
         .def(DEF(ImGuiIO, ClearInputKeys))
         .def(DEF(ImGuiIO, ClearInputMouse))
+        // output UI state
         .RW(ImGuiIO, WantCaptureMouse)
         .RW(ImGuiIO, WantCaptureKeyboard)
         .RW(ImGuiIO, WantTextInput)
@@ -200,14 +217,15 @@ void init_imgui_structs(py::module& m)
         .RO_ARRAY(ImGuiIO, bool, MouseDownOwned, 5)
         .RO_ARRAY(ImGuiIO, bool, MouseDownOwnedUnlessPopupClose, 5)
         .RW(ImGuiIO, MouseWheelRequestAxisSwap)
+        .RW(ImGuiIO, MouseCtrlLeftAsRightClick)
         .RO_ARRAY(ImGuiIO, float, MouseDownDuration, 5)
         .RO_ARRAY(ImGuiIO, float, MouseDownDurationPrev, 5)
         .RO_ARRAY(ImGuiIO, float, MouseDragMaxDistanceSqr, 5)
         .RW(ImGuiIO, PenPressure)
         .RW(ImGuiIO, AppFocusLost)
         .RW(ImGuiIO, AppAcceptingEvents)
-        .RW(ImGuiIO, BackendUsingLegacyKeyArrays)
-        .RW(ImGuiIO, BackendUsingLegacyNavInputArray)
+        // .RW(ImGuiIO, BackendUsingLegacyKeyArrays)
+        // .RW(ImGuiIO, BackendUsingLegacyNavInputArray)
         .RW(ImGuiIO, InputQueueSurrogate)
         .def(py::init<>());
 
@@ -405,13 +423,24 @@ void init_imgui_structs(py::module& m)
             [](ImFontAtlas* self,
                const char* filename,
                float size_pixels,
-               ImFontConfig* font_cfg = nullptr)
+               ImFontConfig* font_cfg,
+               WCharListPtr glyph_ranges)
             {
+                if(glyph_ranges)
+                {
+                    return self->AddFontFromFileTTF(
+                        filename,
+                        size_pixels,
+                        font_cfg,
+                        glyph_ranges->vals.data()
+                    );
+                }
                 return self->AddFontFromFileTTF(filename, size_pixels, font_cfg);
             },
             "filename"_a,
             "size_pixels"_a,
             "font_cfg"_a = nullptr,
+            "glyph_ranges"_a = nullptr,
             py::return_value_policy::reference
         )
         // TODO AddFontFromMemory...?

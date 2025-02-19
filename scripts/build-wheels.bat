@@ -1,3 +1,5 @@
 : Execute the bash script
 @echo off
-"%PROGRAMFILES%\Git\bin\sh.exe" .\build-wheels.sh
+
+set SCRIPT_DIR=%~dp0
+"%PROGRAMFILES%\Git\bin\sh.exe" %SCRIPT_DIR%\build-wheels.sh
