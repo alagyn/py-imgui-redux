@@ -37,6 +37,7 @@ case $PY_VERSION in
     3.10) PY_PATH=3.10.11 ;;
     3.11) PY_PATH=3.11.3 ;;
     3.12) PY_PATH=3.12.1 ;;
+    3.13) PY_PATH=3.13.2 ;;
     *) echo "Invalid"
 esac
 
