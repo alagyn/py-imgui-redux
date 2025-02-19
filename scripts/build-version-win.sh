@@ -39,7 +39,7 @@ case $PY_VERSION in
     3.12) PY_PATH=3.12.1 ;;
     3.13) PY_PATH=3.13.2 ;;
     *) 
-        echo "Invalid"
+    echo "Invalid python version (try 3.12)"
         exit 1
         ;;
 esac
