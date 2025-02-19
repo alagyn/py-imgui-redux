@@ -88,14 +88,7 @@ void init_widgets_main(py::module& m)
            ImVec4 tint_col,
            ImVec4 border_col)
         {
-            ImGui::Image(
-                (void*)(intptr_t)tex.texID,
-                size,
-                uv0,
-                uv1,
-                tint_col,
-                border_col
-            );
+            ImGui::Image(tex.texID, size, uv0, uv1, tint_col, border_col);
         },
         "texID"_a,
         "size"_a,
@@ -117,7 +110,7 @@ void init_widgets_main(py::module& m)
         {
             return ImGui::ImageButton(
                 str_id,
-                (void*)(intptr_t)tex.texID,
+                tex.texID,
                 size,
                 uv0,
                 uv1,
@@ -415,6 +408,13 @@ void init_widgets_main(py::module& m)
         "IsMouseDoubleClicked",
         py::overload_cast<ImGuiMouseButton>(ImGui::IsMouseDoubleClicked),
         "button"_a
+    );
+    m.def(
+        "IsMouseReleasedWithDelay",
+        py::overload_cast<ImGuiMouseButton, float>(ImGui::IsMouseReleasedWithDelay
+        ),
+        "button"_a,
+        "delay"_a
     );
 
     m.def(IMFUNC(IsMouseHoveringRect), "r_min"_a, "r_max"_a, "clip"_a = true);

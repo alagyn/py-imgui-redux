@@ -1342,7 +1342,7 @@ void init_plotting(py::module& m)
         {
             ImPlot::PlotImage(
                 label_id,
-                (void*)(intptr_t)tex.texID,
+                tex.texID,
                 bounds_min,
                 bounds_max,
                 uv0,
