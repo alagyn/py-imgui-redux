@@ -224,8 +224,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, PenPressure)
         .RW(ImGuiIO, AppFocusLost)
         .RW(ImGuiIO, AppAcceptingEvents)
-        // .RW(ImGuiIO, BackendUsingLegacyKeyArrays)
-        // .RW(ImGuiIO, BackendUsingLegacyNavInputArray)
         .RW(ImGuiIO, InputQueueSurrogate)
         .def(py::init<>());
 
@@ -409,15 +407,6 @@ void init_imgui_structs(py::module& m)
             "font_cfg"_a = nullptr,
             py::return_value_policy::reference
         )
-        /*
-        .def(
-            DEF(ImFontAtlas, AddFontFromFileTTF),
-            "filename"_a,
-            "size_pixels"_a,
-            "font_cfg"_a = nullptr,
-            "glyph_ranges"_a = nullptr
-        )
-        */
         .def(
             "AddFontFromFileTTF",
             [](ImFontAtlas* self,
