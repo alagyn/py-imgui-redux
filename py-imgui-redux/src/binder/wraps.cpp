@@ -98,7 +98,7 @@ void init_wraps(py::module& m)
     initList<WCharList, ImWchar>(
         m,
         "WCharList",
-        "This wrapper over a std::vector<ImWchar>"
+        "Thin wrapper over a std::vector<ImWchar>"
     );
     initList<FloatList, float>(
         m,

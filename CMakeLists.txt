@@ -22,9 +22,9 @@ set(PYBIND11_NOPYTHON ON)
 
 add_subdirectory(third-party)
 
-set(INCLUDE_DIR source/inc)
+set(INCLUDE_DIR py-imgui-redux/inc)
 
-set(IMGUI_ROOT source/src)
+set(IMGUI_ROOT py-imgui-redux/src)
 
 set(IMGUI_CORE_ROOT ${IMGUI_ROOT}/imgui-core)
 set(IMGUI_MOD ${IMGUI_CORE_ROOT}/modules)
