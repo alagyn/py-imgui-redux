@@ -8,7 +8,7 @@
             "name": "run-example",
             "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/examples/test.py",
+            "program": "${workspaceFolder}/examples/window_boilerplate.py",
             "cwd": "${workspaceFolder}/examples",
             "console": "integratedTerminal",
             "justMyCode": true,
@@ -35,6 +35,21 @@
             "request": "launch",
             "pythonLaunchName": "run-example",
             "cppAttachName": "(gdb) Attach",
-            },
+        },
+        {
+            "name": "run-autogen",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/autogen/gen.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {"PYTHONPATH": "${workspaceFolder}/build/"},
+            "args":[
+                "autogen-configs/imgui.txt",
+                "build/generated/preprocessed_imgui.h",
+                "--header-out=/dev/null"
+            ]
+        },
     ]
 }

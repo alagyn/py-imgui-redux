@@ -14,13 +14,8 @@ using namespace py::literals;
 #define IMFUNC(x) #x, ImGui::x
 // clang-format on
 
-void init_imgui_context(py::module& m);
-void init_cursor_and_layout(py::module& m);
 void init_demos(py::module& m);
-void init_windows(py::module& m);
-void init_stacks(py::module& m);
 void init_imgui_structs(py::module& m);
-void init_styles(py::module& m);
 
 void init_widgets_text(py::module& m);
 void init_widgets_main(py::module& m);
@@ -29,12 +24,8 @@ void init_widgets_slide(py::module& m);
 void init_widgets_input(py::module& m);
 void init_widgets_colors(py::module& m);
 void init_widgets_tree(py::module& m);
-void init_widgets_tables(py::module& m);
-void init_widgets_tabs(py::module& m);
 void init_widgets_images(py::module& m);
-void init_widgets_multi_select(py::module& m);
 
-void init_imgui_enums(py::module& m);
 void init_drawlist(py::module& m);
 
 // Backends

@@ -1,6 +1,8 @@
 #include <bind-imgui/implot-modules.h>
 #include <binder/bind-modules.h>
 
+#include <implot-auto.h>
+
 void init_implot(py::module& m)
 {
     // Context

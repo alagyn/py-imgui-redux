@@ -15,7 +15,6 @@ using namespace py::literals;
 // clang-format on
 
 void init_implot_context(py::module& m);
-void init_implot_enums(py::module& m);
 void init_implot_structs(py::module& m);
 void init_setup_funcs(py::module& m);
 void init_plotting(py::module& m);

@@ -73,9 +73,4 @@ void init_demos(py::module& m)
         },
         "p_open"_a = nullptr
     );
-    m.def(IMFUNC(ShowStyleEditor), "ref"_a = nullptr);
-    m.def(IMFUNC(ShowStyleSelector), "label"_a);
-    m.def(IMFUNC(ShowFontSelector), "label"_a);
-    QUICK(ShowUserGuide);
-    QUICK(GetVersion);
 }

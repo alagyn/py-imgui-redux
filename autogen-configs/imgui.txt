@@ -1,0 +1,159 @@
+prefix imgui
+namespace ImGui
+
+include <imgui.h>
+include <imgui_internal.h>
+
+# Functions
+
+# demos.cpp
+func block ShowDemoWindow
+func block ShowMetricsWindow
+func block ShowDebugLogWindow
+func block ShowStackToolWindow
+func block ShowAboutWindow
+# im-windows.cpp
+func block Begin
+
+# colors.cpp
+func block ColorEdit3
+func block ColorEdit4
+func block ColorPicker3
+func block ColorPicker4
+func block ColorConvertU32ToFloat4
+func block ColorConvertFloat4ToU32
+func block ColorConvertRGBtoHSV
+func block ColorConvertHSVtoRGB
+# drag-inputs.cpp
+func block DragFloat
+func block DragFloat2
+func block DragFloat3
+func block DragFloat4
+func block DragFloatRange2
+func block DragInt
+func block DragInt2
+func block DragInt3
+func block DragInt4
+func block DragIntRange2
+# input.cpp
+func block InputText
+func block InputTextMultiline
+func block InputTextWithHint
+func block InputFloat
+func block InputFloat2
+func block InputFloat3
+func block InputFloat4
+func block InputInt
+func block InputInt2
+func block InputInt3
+func block InputInt4
+# main.cpp
+func block CheckBox
+func block CheckBoxFlags
+func block RadioButton
+func block Image
+func block ImageButton
+func block SetTooltip
+func block SetTooltipV
+func block SetItemTooltip
+func block SetItemTooltipV
+func block BeginPopupModal
+func block LogText
+func block LogTextV
+func block DebugLog
+func block DebugLogV
+# slide-inputs.cpp
+func block SliderFloat
+func block SliderFloat2
+func block SliderFloat3
+func block SliderFloat4
+func block SliderAngle
+func block VSliderFloat
+func block SliderInt
+func block SliderInt2
+func block SliderInt3
+func block SliderInt4
+func block VSliderInt
+# tabs.cpp
+func block BeginTabItem
+# text.cpp
+func block Text
+func block TextV
+func block TextUnformatted
+func block TextColored
+func block TextColoredV
+func block TextDisabled
+func block TextDisabledV
+func block TextWrapped
+func block TextWrappedV
+func block LabelText
+func block LabelTextV
+func block BulletText
+func block BulletTextV
+func block CalcTextSize
+# tree.cpp
+func block TreeNode
+func block TreeNodeEx
+func block TreeNodeV
+func block TreeNodeExV
+func block CollapsingHeader
+
+# Not implemented
+func block Combo
+func block ListBox
+func block DragScalar
+func block InputDouble
+func block InputScalar
+func block InputScalarN
+func block SetAllocatorFunctions
+func block GetAllocatorFunctions
+func block MemAlloc
+func block MemFree
+func block SetNextWindowSizeConstraints
+
+# this has a special implementation that calls the backend
+func block NewFrame
+
+# TODO structs?
+
+# Enums
+enum ImGuiKey block
+
+enum ImGuiWindowFlags_ > WindowFlags
+enum ImGuiChildFlags_ > ChildFlags
+enum ImGuiItemFlags_ > ItemFlags
+enum ImGuiInputTextFlags_ > InputTextFlags
+enum ImGuiTreeNodeFlags_ > TreeNodeFlags
+enum ImGuiPopupFlags_ > PopupFlags
+enum ImGuiSelectableFlags_ > SelectableFlags
+enum ImGuiComboFlags_ > ComboFlags
+enum ImGuiTabBarFlags_ > TabBarFlags
+enum ImGuiTabItemFlags_ > TabItemFlags
+enum ImGuiTableFlags_ > TableFlags
+enum ImGuiTableColumnFlags_ > TableColumnFlags
+enum ImGuiTableRowFlags_ > TableRowFlags
+enum ImGuiTableBgTarget_ > TableBgTarget
+enum ImGuiFocusedFlags_ > FocusedFlags
+enum ImGuiHoveredFlags_ > HoveredFlags
+enum ImGuiDragDropFlags_ > DragDropFlags
+enum ImGuiDir > Dir
+enum ImGuiSortDirection > SortDirection
+enum ImGuiInputFlags_ > InputFlags
+enum ImGuiConfigFlags_ > ConfigFlags
+enum ImGuiBackendFlags_ > BackendFlags
+enum ImGuiCol_ > Col
+enum ImGuiStyleVar_ > StyleVar
+enum ImGuiButtonFlags_ > ButtonFlags
+enum ImGuiColorEditFlags_ > ColorEditFlags
+enum ImGuiSliderFlags_ > SliderFlags
+enum ImGuiMouseButton_ > MouseButton
+enum ImGuiMouseCursor_ > MouseCursor
+enum ImGuiMouseSource_ > MouseSource
+enum ImGuiCond_ > Cond
+enum ImDrawFlags_ > DrawFlags
+enum ImDrawListFlags_ > DrawListFlags
+enum ImGuiViewportFlags_ > ViewportFlags
+enum ImGuiMultiSelectFlags_ > MultiSelectFlags
+enum ImGuiSelectionRequestType_ > SelectionRequestType
+enum ImGuiDataType_ > DataType
+enum ImFontAtlasFlags_ > FontAtlasFlags

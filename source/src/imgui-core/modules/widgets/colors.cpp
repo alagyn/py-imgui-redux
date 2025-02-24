@@ -51,16 +51,9 @@ void init_widgets_colors(py::module& m)
         "flags"_a = 0,
         "ref_col"_a = nullptr
     );
-    m.def(
-        IMFUNC(ColorButton),
-        "desc_id"_a,
-        "col"_a,
-        "flags"_a = 0,
-        py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)")
-    );
-    m.def(IMFUNC(SetColorEditOptions), "flags"_a);
 
     // Color Utilities
+    // Had to change the arg name for these to not be "in"
     m.def(IMFUNC(ColorConvertU32ToFloat4), "inColor"_a);
     m.def(IMFUNC(ColorConvertFloat4ToU32), "inColor"_a);
     m.def(

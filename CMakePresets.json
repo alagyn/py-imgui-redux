@@ -11,8 +11,7 @@
                 "CMAKE_EXPORT_COMPILE_COMMANDS": {
                     "type": "BOOL",
                     "value": "ON"
-                },
-                "Python3_ROOT_DIR": "${sourceDir}/venv/bin/"
+                }
             }
         }
     ],

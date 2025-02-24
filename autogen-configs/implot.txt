@@ -1,0 +1,37 @@
+prefix implot
+
+include <implot.h>
+
+enum ImAxis_ > Axis
+enum ImPlotFlags_ > PlotFlags
+enum ImPlotAxisFlags_ > AxisFlags
+enum ImPlotSubplotFlags_ > SubplotFlags
+enum ImPlotLegendFlags_ > LegendFlags
+enum ImPlotMouseTextFlags_ > MouseTextFlags
+enum ImPlotDragToolFlags_ > DragToolFlags
+enum ImPlotColormapScaleFlags_ > ColormapScaleFlags
+enum ImPlotItemFlags_ > ItemFlags
+enum ImPlotLineFlags_ > LineFlags
+enum ImPlotScatterFlags_ > ScatterFlags
+enum ImPlotStairsFlags_ > StairsFlags
+enum ImPlotShadedFlags_ > ShadedFlags
+enum ImPlotBarsFlags_ > BarsFlags
+enum ImPlotBarGroupsFlags_ > BarGroupsFlags
+enum ImPlotErrorBarsFlags_ > ErrorBarsFlags
+enum ImPlotStemsFlags_ > StemsFlags
+enum ImPlotInfLinesFlags_ > InfLinesFlags
+enum ImPlotPieChartFlags_ > PieChartFlags
+enum ImPlotHeatmapFlags_ > HeatmapFlags
+enum ImPlotHistogramFlags_ > HistogramFlags
+enum ImPlotDigitalFlags_ > DigitalFlags
+enum ImPlotImageFlags_ > ImageFlags
+enum ImPlotTextFlags_ > TextFlags
+enum ImPlotDummyFlags_ > DummyFlags
+enum ImPlotCond_ > Cond
+enum ImPlotCol_ > Col
+enum ImPlotStyleVar_ > StyleVar
+enum ImPlotScale_ > Scale
+enum ImPlotMarker_ > Marker
+enum ImPlotColormap_ > Colormap
+enum ImPlotLocation_ > Location
+enum ImPlotBin_ > Bin

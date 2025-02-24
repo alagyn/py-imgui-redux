@@ -76,13 +76,8 @@ set_target_properties(imgui-cpp
 
 target_compile_definitions(imgui-cpp
     PUBLIC
+    ${IMGUI_COMPILE_DEFS}
     IMGUI_USER_CONFIG=<bind-imconfig.h>
-)
-
-target_compile_definitions(imgui-cpp
-    PUBLIC
-    IMGUI_DISABLE_OBSOLETE_KEYIO
-    IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 )
 
 # -------------- stb ---------------

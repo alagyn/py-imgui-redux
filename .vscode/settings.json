@@ -111,4 +111,5 @@
     "python.analysis.exclude": [
         "third-party", "build", "venv"
     ],
+    "python.analysis.typeCheckingMode": "standard",
 }

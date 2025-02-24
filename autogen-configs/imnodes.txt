@@ -1,0 +1,10 @@
+prefix imnodes
+
+include <imnodes.h>
+
+enum ImNodesCol > Col
+enum ImNodesStyleVar > StyleVar
+enum ImNodesStyleFlags > StyleFlags
+enum ImNodesPinShape > PinShape
+enum ImNodesAttributeFlags > AttributeFlags
+enum ImNodesMiniMapLocation > MiniMapLocation

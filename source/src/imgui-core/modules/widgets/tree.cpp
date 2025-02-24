@@ -31,9 +31,6 @@ void init_widgets_tree(py::module& m)
         "flags"_a,
         "fmt"_a
     );
-    m.def("TreePush", py::overload_cast<const char*>(ImGui::TreePush), "str_id"_a);
-    QUICK(TreePop);
-    QUICK(GetTreeNodeToLabelSpacing);
     m.def(
         "CollapsingHeader",
         py::overload_cast<const char*, int>(ImGui::CollapsingHeader),
@@ -50,6 +47,4 @@ void init_widgets_tree(py::module& m)
         "p_visible"_a,
         "flags"_a = 0
     );
-    m.def(IMFUNC(SetNextItemOpen), "is_open"_a, "cond"_a = 0);
-    m.def(IMFUNC(SetNextItemStorageID), "storage_id"_a);
 }

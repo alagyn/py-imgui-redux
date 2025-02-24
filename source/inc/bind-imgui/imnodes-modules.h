@@ -13,6 +13,5 @@ using namespace py::literals;
 // Saves typing when making typical standard defs
 #define IMFUNC(x) #x, ImNodes::x
 
-void init_imnodes_enums(py::module& m);
 void init_imnodes_structs(py::module& m);
 void init_imnodes_context(py::module& m);

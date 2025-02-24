@@ -1,6 +1,8 @@
 #include <bind-imgui/imnodes-modules.h>
 #include <binder/bind-modules.h>
 
+#include <imnodes-auto.h>
+
 void init_imnodes(py::module& m)
 {
     // Enums

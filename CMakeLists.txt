@@ -4,7 +4,7 @@ project(imgui)
 
 set(CMAKE_DEBUG_POSTFIX, "-d")
 set(Python_FIND_REGISTRY NEVER)
-#set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(${MSVC})
     set(PY_COMPONENTS Interpreter Development)
@@ -12,18 +12,24 @@ else()
     set(PY_COMPONENTS Interpreter Development.Module)
 endif()
 
-find_package(Python
+find_package(Python 3.12
     COMPONENTS
     REQUIRED
     ${PY_COMPONENTS}
 )
 
+message(STATUS "Using python ${Python_EXECUTABLE}")
+
 set(PYBIND11_NOPYTHON ON)
 
+set(IMGUI_COMPILE_DEFS
+    -DIMGUI_DISABLE_OBSOLETE_KEYIO
+    -DIMGUI_DISABLE_OBSOLETE_FUNCTIONS
+    -DIMGUI_USE_WCHAR32
+    -DIMPLOT_DISABLE_OBSOLETE_FUNCTIONS
+)
+
 add_subdirectory(third-party)
-
-set(INCLUDE_DIR source/inc)
-
 set(IMGUI_ROOT source/src)
 
 set(IMGUI_CORE_ROOT ${IMGUI_ROOT}/imgui-core)
@@ -49,28 +55,19 @@ set(IMGUI_SRCS
     # Imgui Core
     ${IMGUI_CORE_ROOT}/bind-imgui-core.cpp
         # Modules
-        ${IMGUI_MOD}/cursor-layout.cpp
         ${IMGUI_MOD}/demos.cpp
         ${IMGUI_MOD}/drawlist.cpp
-        ${IMGUI_MOD}/imgui-context.cpp
-        ${IMGUI_MOD}/imgui-enums.cpp
         ${IMGUI_MOD}/imgui-structs.cpp
-        ${IMGUI_MOD}/im-windows.cpp
-        ${IMGUI_MOD}/stacks.cpp
-        ${IMGUI_MOD}/styles.cpp
 
         # Widgets
         ${IMGUI_WID}/colors.cpp
         ${IMGUI_WID}/drag-inputs.cpp
+        ${IMGUI_WID}/images.cpp
         ${IMGUI_WID}/input.cpp
         ${IMGUI_WID}/main.cpp
-        ${IMGUI_WID}/multi-select.cpp
         ${IMGUI_WID}/slide-inputs.cpp
-        ${IMGUI_WID}/tables.cpp
-        ${IMGUI_WID}/tabs.cpp
         ${IMGUI_WID}/text.cpp
         ${IMGUI_WID}/tree.cpp
-        ${IMGUI_WID}/images.cpp
 
         # Backends
         # ${BE}/opengl3.cpp
@@ -80,14 +77,14 @@ set(IMGUI_SRCS
     ${IMNODES_ROOT}/bind-imnodes.cpp
         # Modules
         ${IMNODES_MOD}/imnodes-context.cpp
-        ${IMNODES_MOD}/imnodes-enums.cpp
+        # ${IMNODES_MOD}/imnodes-enums.cpp
         ${IMNODES_MOD}/imnodes-structs.cpp
 
     # Implot
     ${IMPLOT_ROOT}/bind-implot.cpp
         # Modules
         ${IMPLOT_MOD}/implot-context.cpp
-        ${IMPLOT_MOD}/implot-enums.cpp
+        # ${IMPLOT_MOD}/implot-enums.cpp
         ${IMPLOT_MOD}/implot-structs.cpp
         ${IMPLOT_MOD}/implot-setup-funcs.cpp
         ${IMPLOT_MOD}/implot-plotting.cpp
@@ -106,7 +103,35 @@ set(IMGUI_SRCS
         ${GLFW_ROOT}/monitors.cpp
         ${GLFW_ROOT}/structs.cpp
         ${GLFW_ROOT}/windows.cpp
+)
 
+include(autogen)
+AutoGenWrapper(
+    CONFIG_FILE ${CMAKE_SOURCE_DIR}/autogen-configs/imgui.txt
+    INPUT_HEADER ${CMAKE_SOURCE_DIR}/third-party/imgui/imgui.h
+    NAME imgui-auto
+    SRCS IMGUI_SRCS
+    DEFINES ${IMGUI_COMPILE_DEFS}
+)
+
+AutoGenWrapper(
+    CONFIG_FILE ${CMAKE_SOURCE_DIR}/autogen-configs/implot.txt
+    INPUT_HEADER ${CMAKE_SOURCE_DIR}/third-party/implot/implot.h
+    NAME implot-auto
+    SRCS IMGUI_SRCS
+    DEFINES ${IMGUI_COMPILE_DEFS}
+    INCLUDES ${CMAKE_SOURCE_DIR}/third-party/imgui
+    NO_FUNCS
+)
+
+AutoGenWrapper(
+    CONFIG_FILE ${CMAKE_SOURCE_DIR}/autogen-configs/imnodes.txt
+    INPUT_HEADER ${CMAKE_SOURCE_DIR}/third-party/imnodes/imnodes.h
+    NAME imnodes-auto
+    SRCS IMGUI_SRCS
+    DEFINES ${IMGUI_COMPILE_DEFS}
+    INCLUDES ${CMAKE_SOURCE_DIR}/third-party/imgui
+    NO_FUNCS
 )
 
 Python_add_library(imgui ${IMGUI_SRCS})
@@ -128,7 +153,8 @@ target_link_libraries(imgui
 
 target_include_directories(imgui
     PRIVATE
-        ${INCLUDE_DIR}
+        source/inc
+        ${GENERATED_INCLUDE_DIR}
 )
 
 target_compile_definitions(imgui
