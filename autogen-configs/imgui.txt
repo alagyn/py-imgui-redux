@@ -148,12 +148,12 @@ enum ImGuiColorEditFlags_ > ColorEditFlags
 enum ImGuiSliderFlags_ > SliderFlags
 enum ImGuiMouseButton_ > MouseButton
 enum ImGuiMouseCursor_ > MouseCursor
-enum ImGuiMouseSource_ > MouseSource
+enum ImGuiMouseSource > MouseSource
 enum ImGuiCond_ > Cond
 enum ImDrawFlags_ > DrawFlags
 enum ImDrawListFlags_ > DrawListFlags
 enum ImGuiViewportFlags_ > ViewportFlags
 enum ImGuiMultiSelectFlags_ > MultiSelectFlags
-enum ImGuiSelectionRequestType_ > SelectionRequestType
+enum ImGuiSelectionRequestType > SelectionRequestType
 enum ImGuiDataType_ > DataType
 enum ImFontAtlasFlags_ > FontAtlasFlags

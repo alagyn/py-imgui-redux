@@ -14,9 +14,9 @@ class ParsedEnum:
         out.write(f'BindEnum(m, "{self.outputName}")\n')
         for value in self.values:
             if value == "None":
-                out.write(f'    .value("None_", {self.prefix}None)\n')
+                out.write(f'    .value("None_", {self.prefix}_None)\n')
             else:
-                out.write(f'    .value("{value}", {self.prefix}{value})\n')
+                out.write(f'    .value("{value}", {self.prefix}_{value})\n')
         out.write(";\n")
 
 
@@ -27,9 +27,12 @@ def parse(
     idx: int,
 ) -> tuple[int, ParsedEnum]:
 
+    if prefix.endswith("_"):
+        prefix = prefix.strip("_")
+
     out = ParsedEnum(prefix, outputName)
 
-    PARSE = re.compile(f'({prefix}_)?' + r"(?P<name>[a-zA-Z_0-9]+)( *=.*)?")
+    PARSE = re.compile(f'{prefix}' + r"_(?P<name>[a-zA-Z_0-9]+)( *=.*)?")
 
     while lines[idx] != "};":
         m = PARSE.match(lines[idx])

@@ -2,9 +2,9 @@ prefix imnodes
 
 include <imnodes.h>
 
-enum ImNodesCol > Col
-enum ImNodesStyleVar > StyleVar
-enum ImNodesStyleFlags > StyleFlags
-enum ImNodesPinShape > PinShape
-enum ImNodesAttributeFlags > AttributeFlags
-enum ImNodesMiniMapLocation > MiniMapLocation
+enum ImNodesCol_ > Col
+enum ImNodesStyleVar_ > StyleVar
+enum ImNodesStyleFlags_ > StyleFlags
+enum ImNodesPinShape_ > PinShape
+enum ImNodesAttributeFlags_ > AttributeFlags
+enum ImNodesMiniMapLocation_ > MiniMapLocation

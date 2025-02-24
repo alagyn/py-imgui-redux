@@ -29,7 +29,7 @@ class ParsedFunc:
             if arg[2] is not None:
                 f.write(f" = {arg[2]}")
             f.write(", ")
-        f.write("py::return_value_policy::reference);\n")
+        f.write("py::return_value_policy::automatic_reference);\n")
 
 
 def parse(name: str, argStr: str) -> ParsedFunc:
