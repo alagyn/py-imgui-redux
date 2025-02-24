@@ -29,7 +29,7 @@ void init_widgets_text(py::module& m)
         "text"_a
     );
     m.def(
-        "TextWrapper",
+        "TextWrapped",
         [](const char* text)
         {
             ImGui::TextWrapped(text);
