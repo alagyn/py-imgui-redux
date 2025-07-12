@@ -3,7 +3,7 @@
 void init_stacks(py::module& m)
 {
     // Parameter Stacks (Shared)
-    m.def(IMFUNC(PushFont), "font"_a);
+    m.def(IMFUNC(PushFont), "font"_a, "font_size_base_unscaled"_a);
     QUICK(PopFont);
     m.def(
         "PushStyleColor",

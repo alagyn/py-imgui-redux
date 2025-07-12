@@ -1,9 +1,10 @@
 
+// Include internal to get context class def
+#include <imnodes_internal.h>
+
 #include <bind-imgui/imnodes-modules.h>
 #include <binder/wraps.h>
 
-// Include internal to get context class def
-#include <imnodes_internal.h>
 #include <pybind11/stl.h>
 
 void init_imnodes_context(py::module& m)

@@ -81,21 +81,35 @@ void init_widgets_main(py::module& m)
     // Images
     m.def(
         "Image",
-        [](Texture tex,
-           ImVec2 size,
-           ImVec2 uv0,
-           ImVec2 uv1,
-           ImVec4 tint_col,
-           ImVec4 border_col)
+        [](const Texture& tex,
+           const ImVec2& size,
+           const ImVec2& uv0,
+           const ImVec2& uv1)
         {
-            ImGui::Image(tex.texID, size, uv0, uv1, tint_col, border_col);
+            ImGui::Image(ImTextureRef(tex.texID), size, uv0, uv1);
         },
         "texID"_a,
         "size"_a,
         py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
+        py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)")
+    );
+
+    m.def(
+        "ImageWithBg",
+        [](const Texture& tex,
+           const ImVec2& image_size,
+           const ImVec2& uv0,
+           const ImVec2& uv1,
+           const ImVec4& bg_col,
+           const ImVec4& tint_col)
+        {
+        },
+        "texID"_a,
+        "image_size"_a,
+        py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
         py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)"),
-        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)"),
-        py::arg_v("border_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)")
+        py::arg_v("ubg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
+        py::arg_v("uv1", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
     );
 
     m.def(
@@ -110,7 +124,7 @@ void init_widgets_main(py::module& m)
         {
             return ImGui::ImageButton(
                 str_id,
-                tex.texID,
+                ImTextureRef(tex.texID),
                 size,
                 uv0,
                 uv1,
@@ -147,7 +161,8 @@ void init_widgets_main(py::module& m)
     //Selectable
     m.def(
         "Selectable",
-        py::overload_cast<const char*, bool, int, const ImVec2&>(ImGui::Selectable
+        py::overload_cast<const char*, bool, int, const ImVec2&>(
+            ImGui::Selectable
         ),
         "label"_a,
         "selected"_a = false,
@@ -411,7 +426,8 @@ void init_widgets_main(py::module& m)
     );
     m.def(
         "IsMouseReleasedWithDelay",
-        py::overload_cast<ImGuiMouseButton, float>(ImGui::IsMouseReleasedWithDelay
+        py::overload_cast<ImGuiMouseButton, float>(
+            ImGui::IsMouseReleasedWithDelay
         ),
         "button"_a,
         "delay"_a

@@ -19,8 +19,8 @@ void init_drawlist(py::module& m)
         )
         .def(DEF(ImDrawList, PushClipRectFullScreen))
         .def(DEF(ImDrawList, PopClipRect))
-        .def(DEF(ImDrawList, PushTextureID))
-        .def(DEF(ImDrawList, PopTextureID))
+        .def(DEF(ImDrawList, PushTexture))
+        .def(DEF(ImDrawList, PopTexture))
         // Primitives
         .def(DEF(ImDrawList, AddLine), "p1"_a, "p2"_a, "col"_a, "thickness"_a = 1.0f)
         .def(
@@ -220,7 +220,14 @@ void init_drawlist(py::module& m)
                ImVec2 uv_max,
                ImU32 col)
             {
-                self->AddImage(tex.texID, p_min, p_max, uv_min, uv_max, col);
+                self->AddImage(
+                    ImTextureRef(tex.texID),
+                    p_min,
+                    p_max,
+                    uv_min,
+                    uv_max,
+                    col
+                );
             },
             "user_texture_id"_a,
             "p_min"_a,
@@ -243,7 +250,18 @@ void init_drawlist(py::module& m)
                ImVec2 uv4,
                ImU32 col)
             {
-                self->AddImageQuad(tex.texID, p1, p2, p3, p4, uv1, uv2, uv3, uv4, col);
+                self->AddImageQuad(
+                    ImTextureRef(tex.texID),
+                    p1,
+                    p2,
+                    p3,
+                    p4,
+                    uv1,
+                    uv2,
+                    uv3,
+                    uv4,
+                    col
+                );
             },
             "user_texture_id"_a,
             "p1"_a,
@@ -269,7 +287,7 @@ void init_drawlist(py::module& m)
                ImDrawFlags flags)
             {
                 self->AddImageRounded(
-                    tex.texID,
+                    ImTextureRef(tex.texID),
                     p_min,
                     p_max,
                     uv_min,

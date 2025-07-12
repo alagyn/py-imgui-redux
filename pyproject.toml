@@ -7,14 +7,14 @@ egg_base = "build"
 
 [project]
 name = "py-imgui-redux"
-version = "3.4.1"
+version = "4.0.0"
 authors = [{ name = "Alagyn" }]
 description = "A python wrapper for DearImGUI and popular extensions"
 readme = "README.md"
 requires-python = ">=3.7"
+license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",

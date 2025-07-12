@@ -40,9 +40,6 @@ class State:
             glyphRanges
         )
 
-        # Make sure to build the font atlas
-        io.Fonts.Build()
-
     def render(self):
         if im.Begin("Window"):
             im.Text("Wooooow")

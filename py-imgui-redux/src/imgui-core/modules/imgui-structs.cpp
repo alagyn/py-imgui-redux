@@ -24,7 +24,16 @@ void init_imgui_structs(py::module& m)
         .RW(ImVec2, x)
         .RW(ImVec2, y)
         .def(py::init<>())
-        .def(py::init<float, float>(), "x"_a, "y"_a);
+        .def(py::init<float, float>(), "x"_a, "y"_a)
+        .def(
+            "__str__",
+            [](ImVec2* self)
+            {
+                std::stringstream ss;
+                ss << "im.Vec2(" << self->x << ", " << self->y << ")";
+                return ss.str();
+            }
+        );
 
     py::class_<ImVec4>(m, "Vec4")
         .RW(ImVec4, x)
@@ -32,15 +41,30 @@ void init_imgui_structs(py::module& m)
         .RW(ImVec4, z)
         .RW(ImVec4, w)
         .def(py::init<>())
-        .def(py::init<float, float, float, float>(), "x"_a, "y"_a, "z"_a, "w"_a);
+        .def(py::init<float, float, float, float>(), "x"_a, "y"_a, "z"_a, "w"_a)
+        .def(
+            "__str__",
+            [](ImVec4* self)
+            {
+                std::stringstream ss;
+                ss << "im.Vec4(" << self->x << ", " << self->y << ", "
+                   << self->z << ", " << self->w,
+                    ")";
+                return ss.str();
+            }
+        );
 
     // Style
     py::class_<ImGuiStyle>(m, "Style")
+        .RW(ImGuiStyle, FontSizeBase)
+        .RW(ImGuiStyle, FontScaleMain)
+        .RW(ImGuiStyle, FontScaleDpi)
         .RW(ImGuiStyle, Alpha)
         .RW(ImGuiStyle, DisabledAlpha)
         .RW(ImGuiStyle, WindowPadding)
         .RW(ImGuiStyle, WindowRounding)
         .RW(ImGuiStyle, WindowBorderSize)
+        .RW(ImGuiStyle, WindowBorderHoverPadding)
         .RW(ImGuiStyle, WindowMinSize)
         .RW(ImGuiStyle, WindowTitleAlign)
         .RW(ImGuiStyle, WindowMenuButtonPosition)
@@ -62,13 +86,18 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, GrabMinSize)
         .RW(ImGuiStyle, GrabRounding)
         .RW(ImGuiStyle, LogSliderDeadzone)
+        .RW(ImGuiStyle, ImageBorderSize)
         .RW(ImGuiStyle, TabRounding)
         .RW(ImGuiStyle, TabBorderSize)
-        .RW(ImGuiStyle, TabMinWidthForCloseButton)
+        .RW(ImGuiStyle, TabCloseButtonMinWidthSelected)
+        .RW(ImGuiStyle, TabCloseButtonMinWidthUnselected)
         .RW(ImGuiStyle, TabBarBorderSize)
         .RW(ImGuiStyle, TabBarOverlineSize)
         .RW(ImGuiStyle, TableAngledHeadersAngle)
         .RW(ImGuiStyle, TableAngledHeadersTextAlign)
+        .RW(ImGuiStyle, TreeLinesFlags)
+        .RW(ImGuiStyle, TreeLinesSize)
+        .RW(ImGuiStyle, TreeLinesRounding)
         .RW(ImGuiStyle, ColorButtonPosition)
         .RW(ImGuiStyle, ButtonTextAlign)
         .RW(ImGuiStyle, SelectableTextAlign)
@@ -109,7 +138,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, LogFilename)
         // Fonts
         .RW(ImGuiIO, Fonts)
-        .RW(ImGuiIO, FontGlobalScale)
         .RW(ImGuiIO, FontAllowUserScaling)
         .RW(ImGuiIO, FontDefault)
         .RW(ImGuiIO, DisplayFramebufferScale)
@@ -146,6 +174,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, ConfigErrorRecoveryEnableTooltip)
         .RW(ImGuiIO, ConfigDebugIsDebuggerPresent)
         .RW(ImGuiIO, ConfigDebugHighlightIdConflicts)
+        .RW(ImGuiIO, ConfigDebugHighlightIdConflictsShowItemPicker)
         .RW(ImGuiIO, ConfigDebugBeginReturnValueOnce)
         .RW(ImGuiIO, ConfigDebugBeginReturnValueLoop)
         .RW(ImGuiIO, ConfigDebugIgnoreFocusLoss)
@@ -287,69 +316,88 @@ void init_imgui_structs(py::module& m)
         .def(DEF(ImColor, SetHSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f)
         .def_static(DEF(ImColor, HSV), "h"_a, "s"_a, "v"_a, "a"_a = 1.0f);
 
-    py::class_<ImFont>(m, "ImFont")
-        .RW(ImFont, IndexAdvanceX)
-        .RW(ImFont, FallbackAdvanceX)
-        .RW(ImFont, FontSize)
-        .RW(ImFont, IndexLookup)
-        .RW(ImFont, Glyphs)
-        .RW(ImFont, FallbackGlyph)
-        .RW(ImFont, ContainerAtlas)
-        .RW(ImFont, ConfigData)
-        .RW(ImFont, ConfigDataCount)
-        .RW(ImFont, FallbackChar)
-        .RW(ImFont, EllipsisChar)
-        .RW(ImFont, EllipsisCharCount)
-        .RW(ImFont, EllipsisWidth)
-        .RW(ImFont, EllipsisCharStep)
-        .RW(ImFont, DirtyLookupTables)
-        .RW(ImFont, Scale)
-        .RW(ImFont, Ascent)
-        .RW(ImFont, Descent)
-        .RW(ImFont, MetricsTotalSurface)
-        // TODO Used4kPagesMap?
-        .def(DEF(ImFont, FindGlyph), "c"_a, py::return_value_policy::reference)
+    py::class_<ImFontBaked>(m, "ImFontBaked")
+        // Should we expose these internals?
+        // .RO(ImFontBaked, IndexAdvanceX)
+        // .RO(ImFontBaked, FallbackAdvanceX)
+        // .RO(ImFontBaked, Size)
+        // .RO(ImFontBaked, RasterizerDensity)
+        // .RO(ImFontBaked, IndexLookup)
+        // .RO(ImFontBaked, Glyphs)
+        // .RO(ImFontBaked, FallbackGlyphIndex)
+        // .RO(ImFontBaked, Ascent)
+        // .RO(ImFontBaked, Descent)
+        .def(DEF(ImFontBaked, FindGlyph), "c"_a, py::return_value_policy::reference)
         .def(
-            DEF(ImFont, FindGlyphNoFallback),
+            DEF(ImFontBaked, FindGlyphNoFallback),
             "c"_a,
             py::return_value_policy::reference
         )
-        .def(DEF(ImFont, GetCharAdvance), "c"_a)
+        .def(DEF(ImFontBaked, GetCharAdvance), "c"_a)
+        .def(DEF(ImFontBaked, IsGlyphLoaded));
+
+    py::class_<ImFont>(m, "ImFont")
+        // .RO(ImFont, ContainerAtlas)
+        // .RO(ImFont, Flags)
+        // .RO(ImFont, CurrentRasterizerDensity)
+        // .RO(ImFont, FontId)
+        .RO(ImFont, LegacySize)
+        // TODO Sources?
+        .RO(ImFont, EllipsisChar)
+        .RO(ImFont, FallbackChar)
+        // TODO Used8kPagesMap?
+        // TODO RemapPairs?
+        .def(DEF(ImFont, IsGlyphInFont), "c"_a)
         .def(DEF(ImFont, IsLoaded))
-        .def(DEF(ImFont, GetDebugName), py::return_value_policy::reference)
+        .def(DEF(ImFont, GetDebugName))
+        .def(DEF(ImFont, GetFontBaked), "font_size"_a, "density"_a = -1.0f)
         .def(
             "CalcTextSizeA",
-            [](ImFont* self, const char* text, float max_width, float wrap_width)
+            [](ImFont* self,
+               float size,
+               const char* text,
+               float max_width,
+               float wrap_width)
             {
-                return self
-                    ->CalcTextSizeA(self->FontSize, max_width, wrap_width, text);
+                return self->CalcTextSizeA(size, max_width, wrap_width, text);
             },
+            "size"_a,
             "text"_a,
-            "max_width"_a = FLT_MAX,
-            "wrap_width"_a = -1.0
+            "max_width"_a,
+            "wrap_width"_a
         )
-        // TODO CalcWordWrapPositionA
-        .def(DEF(ImFont, RenderChar), "draw_list"_a, "size"_a, "pos"_a, "col"_a, "c"_a)
-        // TODO RenderText
+        .def(
+            "CalcWordWrapPosition",
+            [](ImFont* self, float size, const char* text, float wrap_width)
+            {
+                return self->CalcWordWrapPosition(size, text, nullptr, wrap_width);
+            },
+            "size"_a,
+            "text"_a,
+            "wrap_width"_a
+        )
+        // TODO Render funcs?
+        // TODO other internal stuff?
         ;
 
     py::class_<ImFontConfig>(m, "ImFontConfig")
         .RW(ImFontConfig, FontDataSize)
         .RW(ImFontConfig, FontDataOwnedByAtlas)
-        .RW(ImFontConfig, FontNo)
-        .RW(ImFontConfig, SizePixels)
+        .RW(ImFontConfig, MergeMode)
+        .RW(ImFontConfig, PixelSnapH)
+        .RW(ImFontConfig, PixelSnapV)
         .RW(ImFontConfig, OversampleH)
         .RW(ImFontConfig, OversampleV)
-        .RW(ImFontConfig, PixelSnapH)
-        .RW(ImFontConfig, GlyphExtraSpacing)
+        .RW(ImFontConfig, EllipsisChar)
+        .RW(ImFontConfig, SizePixels)
         .RW(ImFontConfig, GlyphOffset)
         .RW(ImFontConfig, GlyphMinAdvanceX)
         .RW(ImFontConfig, GlyphMaxAdvanceX)
-        .RW(ImFontConfig, MergeMode)
-        .RW(ImFontConfig, FontBuilderFlags)
+        .RW(ImFontConfig, GlyphExtraAdvanceX)
+        .RW(ImFontConfig, FontNo)
+        .RW(ImFontConfig, FontLoaderFlags)
         .RW(ImFontConfig, RasterizerMultiply)
         .RW(ImFontConfig, RasterizerDensity)
-        .RW(ImFontConfig, EllipsisChar)
         .def(py::init<>());
 
     py::class_<ImFontGlyph>(m, "ImFontGlyph")
@@ -396,7 +444,24 @@ void init_imgui_structs(py::module& m)
         .RW(ImFontGlyph, V0)
         .RW(ImFontGlyph, V1);
 
+    py::class_<ImFontAtlasRect>(m, "ImFontAtlasRect")
+        .RO(ImFontAtlasRect, x)
+        .RO(ImFontAtlasRect, y)
+        .RO(ImFontAtlasRect, w)
+        .RO(ImFontAtlasRect, h)
+        .RO(ImFontAtlasRect, uv0)
+        .RO(ImFontAtlasRect, uv1)
+        .def(py::init<>());
+
     py::class_<ImFontAtlas>(m, "ImFontAtlas")
+        .RW(ImFontAtlas, Flags)
+        .RW(ImFontAtlas, TexDesiredFormat)
+        .RW(ImFontAtlas, TexGlyphPadding)
+        .RW(ImFontAtlas, TexMinWidth)
+        .RW(ImFontAtlas, TexMinHeight)
+        .RW(ImFontAtlas, TexMaxWidth)
+        .RW(ImFontAtlas, TexMaxHeight)
+        .RO(ImFontAtlas, TexRef)
         .def(
             DEF(ImFontAtlas, AddFont),
             "font_cfg"_a,
@@ -433,34 +498,31 @@ void init_imgui_structs(py::module& m)
             py::return_value_policy::reference
         )
         // TODO AddFontFromMemory...?
-        .def(DEF(ImFontAtlas, ClearInputData))
-        .def(DEF(ImFontAtlas, ClearTexData))
-        .def(DEF(ImFontAtlas, ClearFonts))
+        .def(DEF(ImFontAtlas, RemoveFont), "font"_a)
         .def(DEF(ImFontAtlas, Clear))
-        .def(DEF(ImFontAtlas, Build))
-        // TODO GetTexData...?
-        .def(DEF(ImFontAtlas, IsBuilt))
-        .def(DEF(ImFontAtlas, SetTexID), "id"_a)
-        // TODO GetGlyphRanges...?
-        .def(DEF(ImFontAtlas, AddCustomRectRegular), "width"_a, "height"_a)
+        .def(DEF(ImFontAtlas, CompactCache))
+        // .def(DEF(ImFontAtlas, SetFontLoader), "font_loader"_a)
+        .def(DEF(ImFontAtlas, ClearInputData))
+        .def(DEF(ImFontAtlas, ClearFonts))
+        .def(DEF(ImFontAtlas, ClearTexData))
+        .def(DEF(ImFontAtlas, GetGlyphRangesDefault))
         .def(
-            DEF(ImFontAtlas, AddCustomRectFontGlyph),
-            "font"_a,
-            "id"_a,
+            DEF(ImFontAtlas, AddCustomRect),
             "width"_a,
             "height"_a,
-            "advance_x"_a,
-            py::arg_v("offset", ImVec2(0, 0), "Vec2(0, 0)")
+            "out_r"_a = nullptr
         )
-        // TODO GetCustomRectByIndex?
-        ;
+        .def(DEF(ImFontAtlas, RemoveCustomRect), "id"_a)
+        .def(DEF(ImFontAtlas, GetCustomRect), "id"_a, "out_r"_a);
 
     py::class_<ImGuiViewport>(m, "Viewport")
-        .RO(ImGuiViewport, Flags)
-        .RO(ImGuiViewport, Pos)
-        .RO(ImGuiViewport, Size)
-        .RO(ImGuiViewport, WorkPos)
-        .RO(ImGuiViewport, WorkSize);
+        .RW(ImGuiViewport, Flags)
+        .RW(ImGuiViewport, Pos)
+        .RW(ImGuiViewport, Size)
+        .RW(ImGuiViewport, WorkPos)
+        .RW(ImGuiViewport, WorkSize)
+        .def(DEF(ImGuiViewport, GetCenter))
+        .def(DEF(ImGuiViewport, GetWorkCenter));
 
     py::class_<ImGuiMultiSelectIO>(m, "MultiSelectIO")
         // TODO Requests
@@ -477,4 +539,16 @@ void init_imgui_structs(py::module& m)
         .RO(ImGuiSelectionRequest, RangeDirection)
         .RO(ImGuiSelectionRequest, RangeFirstItem)
         .RO(ImGuiSelectionRequest, RangeLastItem);
+
+    py::class_<ImDrawData>(m, "DrawData")
+        .RO(ImDrawData, Valid)
+        .RO(ImDrawData, CmdListsCount)
+        .RO(ImDrawData, TotalIdxCount)
+        .RO(ImDrawData, TotalVtxCount)
+        // TODO CmdLists
+        .RW(ImDrawData, DisplayPos)
+        .RW(ImDrawData, DisplaySize)
+        .RW(ImDrawData, FramebufferScale)
+        // TODO Funcs
+        ;
 }

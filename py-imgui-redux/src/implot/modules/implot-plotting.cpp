@@ -221,8 +221,12 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotShaded",
-        [](const char* label_id, T xs, T ys1, T ys2, ImPlotShadedFlags flags, int offset
-        )
+        [](const char* label_id,
+           T xs,
+           T ys1,
+           T ys2,
+           ImPlotShadedFlags flags,
+           int offset)
         {
             if(xs->size() != ys1->size() || xs->size() != ys2->size())
             {
@@ -443,8 +447,12 @@ template<typename T> void initWrapperPlotting(py::module& m)
     );
     m.def(
         "PlotStems",
-        [](const char* label_id, T xs, T ys, int ref, ImPlotStemsFlags flags, int offset
-        )
+        [](const char* label_id,
+           T xs,
+           T ys,
+           int ref,
+           ImPlotStemsFlags flags,
+           int offset)
         {
             if(xs->size() != ys->size())
             {
@@ -687,8 +695,11 @@ void init_plotting(py::module& m)
 
     m.def(
         "PlotLine",
-        [](const char* label_id, arr<double> xs, arr<double> ys, int flags, int offset
-        )
+        [](const char* label_id,
+           arr<double> xs,
+           arr<double> ys,
+           int flags,
+           int offset)
         {
             if(xs.size() != ys.size())
             {
@@ -1342,7 +1353,7 @@ void init_plotting(py::module& m)
         {
             ImPlot::PlotImage(
                 label_id,
-                tex.texID,
+                ImTextureRef(tex.texID),
                 bounds_min,
                 bounds_max,
                 uv0,
