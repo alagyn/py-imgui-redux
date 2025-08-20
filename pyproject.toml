@@ -11,7 +11,7 @@ version = "4.0.0"
 authors = [{ name = "Alagyn" }]
 description = "A python wrapper for DearImGUI and popular extensions"
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.9"
 license = "MIT"
 classifiers = [
     "Programming Language :: Python :: 3",
