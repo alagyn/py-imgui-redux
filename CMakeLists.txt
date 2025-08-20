@@ -4,6 +4,7 @@ project(imgui)
 
 set(CMAKE_DEBUG_POSTFIX, "-d")
 set(Python_FIND_REGISTRY NEVER)
+set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 if(${MSVC})
