@@ -18,11 +18,11 @@ public:
     {
     }
 
-    const char* toStr()
+    const std::string& toStr()
     {
         std::stringstream ss;
         ss << "Wrapper=" << val;
-        return ss.str().c_str();
+        return ss.str();
     }
 };
 
