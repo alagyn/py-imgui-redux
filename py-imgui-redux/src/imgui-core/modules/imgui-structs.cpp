@@ -48,8 +48,7 @@ void init_imgui_structs(py::module& m)
             {
                 std::stringstream ss;
                 ss << "im.Vec4(" << self->x << ", " << self->y << ", "
-                   << self->z << ", " << self->w,
-                    ")";
+                   << self->z << ", " << self->w << ")";
                 return ss.str();
             }
         );

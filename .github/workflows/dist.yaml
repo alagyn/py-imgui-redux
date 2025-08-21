@@ -30,6 +30,7 @@ jobs:
           path: dist/*.tar.gz
   wheels:
     runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
     strategy:
       matrix:
         include:
@@ -64,7 +65,6 @@ jobs:
         with:
           submodules: true
       - uses: pypa/cibuildwheel@v3.1.4
-        name: ${{ matrix.name }}
         env:
           CIBW_BEFORE_ALL_LINUX: ${{ matrix.prebuild }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
