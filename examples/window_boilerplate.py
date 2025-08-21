@@ -39,6 +39,16 @@ def window_mainloop(
     # create our window
     glfw.WindowHint(glfw.CONTEXT_VERSION_MAJOR, 4)
     glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR, 6)
+    glslVersion = "#version 130"
+
+    # MacOS example settings:
+    # glfw.WindowHint(glfw.CONTEXT_VERSION_MAJOR, 3)
+    # glfw.WindowHint(glfw.CONTEXT_VERSION_MINOR, 2)
+    # glfw.WindowHint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+    # glfw.WindowHint(glfw.OPENGL_FORWARD_COMPAT, 1)
+    # glfw.WindowHint(glfw.COCOA_GRAPHICS_SWITCHING, 1)
+    # glslVersion = "#version 150"
+
     window = glfw.CreateWindow(width, height, title)
     if window is None:
         print("Cannot create GLFW window")
@@ -55,7 +65,7 @@ def window_mainloop(
     imnodes.CreateContext()
 
     # Initialize glfw backend
-    im.InitContextForGLFW(window, "#version 130")
+    im.InitContextForGLFW(window, glslVersion)
 
     # 4) Setup style
     im.StyleColorsDark()
