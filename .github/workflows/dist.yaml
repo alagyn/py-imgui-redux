@@ -32,30 +32,44 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macos-13
-          - macos-14
+        include:
+          - name: manylinux
+            os: ubuntu-latest
+            build: "cp*manylinux*"
+            prebuild: >
+              dnf install -y
+              libXrandr-devel
+              libXinerama-devel
+              libXcursor-devel
+              libXi-devel
+              mesa-libGL-devel
+
+          # - name: musllinux
+          #   os: ubuntu-latest
+          #   build: "cp*musllinux*"
+          #   prebuild: >
+
+          - name: windows
+            os: windows-latest
+            build: "cp*amd64*"
+
+          - name: macos-13
+            os: macos-13
+
+          - name: macos-14
+            os: macos-14
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
       - uses: pypa/cibuildwheel@v3.1.4
+        name: ${{ matrix.name }}
         env:
-          CIBW_BEFORE_ALL_LINUX: >
-            dnf install -y
-            libXrandr-devel
-            libXinerama-devel
-            libXcursor-devel
-            libXi-devel
-            mesa-libGL-devel
+          CIBW_BEFORE_ALL_LINUX: ${{ matrix.prebuild }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           # only build cpython
-          CIBW_BUILD: cp*
-          # ignore win32
-          CIBW_SKIP: cp*-win32*
+          CIBW_BUILD: ${{ matrix.build }}
 
       - uses: actions/upload-artifact@v4
         if: always()
