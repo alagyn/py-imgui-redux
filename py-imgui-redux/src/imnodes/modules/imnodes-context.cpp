@@ -5,8 +5,6 @@
 #include <bind-imgui/imnodes-modules.h>
 #include <binder/wraps.h>
 
-#include <pybind11/stl.h>
-
 void init_imnodes_context(py::module& m)
 {
     // Define this with no data, it's opaque
@@ -197,35 +195,17 @@ void init_imnodes_context(py::module& m)
 
     m.def(
         "ClearNodeSelection",
-        [](std::optional<int> node_id)
-        {
-            if(node_id.has_value())
-            {
-                ImNodes::ClearNodeSelection(node_id.value());
-            }
-            else
-            {
-                ImNodes::ClearNodeSelection();
-            }
-        },
-        "node_id"_a = std::nullopt
+        py::overload_cast<int>(ImNodes::ClearNodeSelection),
+        "node_id"_a
     );
+    m.def("ClearNodeSelection", py::overload_cast<>(ImNodes::ClearNodeSelection));
 
     m.def(
         "ClearLinkSelection",
-        [](std::optional<int> link_id)
-        {
-            if(link_id.has_value())
-            {
-                ImNodes::ClearLinkSelection(link_id.value());
-            }
-            else
-            {
-                ImNodes::ClearLinkSelection();
-            }
-        },
-        "link_id"_a = std::nullopt
+        py::overload_cast<int>(ImNodes::ClearLinkSelection),
+        "link_id"_a
     );
+    m.def("ClearLinkSelection", py::overload_cast<>(ImNodes::ClearLinkSelection));
 
     m.def(IMFUNC(SelectNode), "node_id"_a);
     m.def(IMFUNC(IsNodeSelected), "node_id"_a);
