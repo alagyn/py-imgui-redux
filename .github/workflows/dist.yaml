@@ -78,13 +78,12 @@ jobs:
           path: wheelhouse/*.whl
   pypi-publish:
     runs-on: ubuntu-latest
-    # if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release' && github.event.action == 'published'
     needs:
       - sdist
       - wheels
     environment:
       name: pypi
-      url: https://test.pypi.org/p/py-imgui-redux
     permissions:
       id-token: write
     steps:
