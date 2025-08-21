@@ -18,7 +18,7 @@ public:
     {
     }
 
-    const std::string& toStr()
+    const std::string toStr()
     {
         std::stringstream ss;
         ss << "Wrapper=" << val;
