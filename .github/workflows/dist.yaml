@@ -42,7 +42,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - uses: pypa/cibuildwheel@v2.18.1
+      - uses: pypa/cibuildwheel@v3.1.4
         env:
           CIBW_BEFORE_ALL_LINUX: >
             dnf install -y
@@ -52,7 +52,6 @@ jobs:
             libXi-devel
             mesa-libGL-devel
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          CIBW_MANYLINUX_I686_IMAGE: manylinux_2_28
           # only build cpython
           CIBW_BUILD: cp*
           # ignore win32
