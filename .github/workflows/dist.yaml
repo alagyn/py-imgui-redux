@@ -76,15 +76,15 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
-  release:
+  pypi-publish:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
+    # if: github.event_name == 'release' && github.event.action == 'published'
     needs:
       - sdist
       - wheels
     environment:
       name: pypi
-      url: https://pypi.org/p/py-imgui-redux
+      url: https://test.pypi.org/p/py-imgui-redux
     permissions:
       id-token: write
     steps:
