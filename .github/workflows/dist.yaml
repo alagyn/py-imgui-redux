@@ -52,7 +52,8 @@ jobs:
             libXi-devel
             mesa-libGL-devel
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
-          
+          # only build cpython
+          CIBW_BUILD: cp*
 
       - uses: actions/upload-artifact@v4
         if: always()

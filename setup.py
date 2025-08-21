@@ -120,6 +120,9 @@ class InstallCMakeLibs(install_lib):
         except KeyError:
             oldPath = ""
 
+        log(f"Directory contents:")
+        log(os.listdir(bin_dir))
+
         if IS_WINDOWS:
             newPath = f"{bin_dir};" + oldPath
 
