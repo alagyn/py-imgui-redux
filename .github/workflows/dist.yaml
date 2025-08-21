@@ -84,6 +84,7 @@ jobs:
       - wheels
     environment:
       name: pypi
+      url: https://pypi.org/p/py-imgui-redux
     permissions:
       id-token: write
     steps:
