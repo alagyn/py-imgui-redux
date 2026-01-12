@@ -79,7 +79,9 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, InputTextFlags, CallbackAlways)
         .VALUE(ImGui, InputTextFlags, CallbackCharFilter)
         .VALUE(ImGui, InputTextFlags, CallbackResize)
-        .VALUE(ImGui, InputTextFlags, CallbackEdit);
+        .VALUE(ImGui, InputTextFlags, CallbackEdit)
+        // Multi-line Word-Wrapping
+        .VALUE(ImGui, InputTextFlags, WordWrap);
 
     ENUM(ImGui, TreeNodeFlags)
         .RAW_VALUE(None_, ImGuiTreeNodeFlags_None)
@@ -126,7 +128,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, SelectableFlags, AllowDoubleClick)
         .VALUE(ImGui, SelectableFlags, Disabled)
         .VALUE(ImGui, SelectableFlags, AllowOverlap)
-        .VALUE(ImGui, SelectableFlags, Highlight);
+        .VALUE(ImGui, SelectableFlags, Highlight)
+        .VALUE(ImGui, SelectableFlags, SelectOnNav);
 
     ENUM(ImGui, ComboFlags)
         .RAW_VALUE(None_, ImGuiComboFlags_None)
@@ -574,6 +577,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, StyleVar, CellPadding)
         .VALUE(ImGui, StyleVar, ScrollbarSize)
         .VALUE(ImGui, StyleVar, ScrollbarRounding)
+        .VALUE(ImGui, StyleVar, ScrollbarPadding)
         .VALUE(ImGui, StyleVar, GrabMinSize)
         .VALUE(ImGui, StyleVar, GrabRounding)
         .VALUE(ImGui, StyleVar, ImageBorderSize)
@@ -739,4 +743,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(Im, FontFlags, NoLoadError)
         .VALUE(Im, FontFlags, NoLoadGlyphs)
         .VALUE(Im, FontFlags, LockBakedSizes);
+
+    ENUM(ImGui, ListClipperFlags)
+        .RAW_VALUE(None_, ImGuiListClipperFlags_None)
+        .VALUE(ImGui, ListClipperFlags, NoSetTableRowCounters);
 }
