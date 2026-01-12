@@ -284,6 +284,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, DragDropFlags, AcceptBeforeDelivery)
         .VALUE(ImGui, DragDropFlags, AcceptNoDrawDefaultRect)
         .VALUE(ImGui, DragDropFlags, AcceptNoPreviewTooltip)
+        .VALUE(ImGui, DragDropFlags, AcceptDrawAsHovered)
         .VALUE(ImGui, DragDropFlags, AcceptPeekOnly);
 
     ENUM(ImGui, Dir)
@@ -722,7 +723,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, MultiSelectFlags, ScopeRect)
         .VALUE(ImGui, MultiSelectFlags, SelectOnClick)
         .VALUE(ImGui, MultiSelectFlags, SelectOnClickRelease)
-        .VALUE(ImGui, MultiSelectFlags, NavWrapX);
+        .VALUE(ImGui, MultiSelectFlags, NavWrapX)
+        .VALUE(ImGui, MultiSelectFlags, NoSelectOnRightClick);
 
     ENUM(ImGui, SelectionRequestType)
         .RAW_VALUE(None_, ImGuiSelectionRequestType_None)
