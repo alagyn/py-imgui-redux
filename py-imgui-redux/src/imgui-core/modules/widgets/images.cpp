@@ -86,8 +86,8 @@ Texture LoadTexture(
         throw py::value_error("height == 0");
     }
 
-    unsigned len = bytes.attr("__len__")().cast<unsigned>();
-    unsigned calcLen = width * height * numChannels;
+    size_t len = py::len(bytes);
+    size_t calcLen = width * height * numChannels;
 
     if(calcLen != len)
     {
