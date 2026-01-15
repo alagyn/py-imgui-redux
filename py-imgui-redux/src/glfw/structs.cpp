@@ -135,7 +135,12 @@ void init_structs(pybind11::module& m)
                     GLFWimage out;
                     out.width = width;
                     out.height = height;
-                    out.pixels = data;
+                    // Copy this out so we don't conflict with stbi's allocate/deallocate
+                    size_t len = width * height * 4;
+                    out.pixels = new unsigned char[len];
+                    std::copy(data, data + len, out.pixels);
+
+                    stbi_image_free(data);
 
                     return out;
                 }
