@@ -79,7 +79,9 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, InputTextFlags, CallbackAlways)
         .VALUE(ImGui, InputTextFlags, CallbackCharFilter)
         .VALUE(ImGui, InputTextFlags, CallbackResize)
-        .VALUE(ImGui, InputTextFlags, CallbackEdit);
+        .VALUE(ImGui, InputTextFlags, CallbackEdit)
+        // Multi-line Word-Wrapping
+        .VALUE(ImGui, InputTextFlags, WordWrap);
 
     ENUM(ImGui, TreeNodeFlags)
         .RAW_VALUE(None_, ImGuiTreeNodeFlags_None)
@@ -126,7 +128,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, SelectableFlags, AllowDoubleClick)
         .VALUE(ImGui, SelectableFlags, Disabled)
         .VALUE(ImGui, SelectableFlags, AllowOverlap)
-        .VALUE(ImGui, SelectableFlags, Highlight);
+        .VALUE(ImGui, SelectableFlags, Highlight)
+        .VALUE(ImGui, SelectableFlags, SelectOnNav);
 
     ENUM(ImGui, ComboFlags)
         .RAW_VALUE(None_, ImGuiComboFlags_None)
@@ -149,7 +152,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, TabBarFlags, NoTabListScrollingButtons)
         .VALUE(ImGui, TabBarFlags, NoTooltip)
         .VALUE(ImGui, TabBarFlags, DrawSelectedOverline)
-        .VALUE(ImGui, TabBarFlags, FittingPolicyResizeDown)
+        .VALUE(ImGui, TabBarFlags, FittingPolicyMixed)
+        .VALUE(ImGui, TabBarFlags, FittingPolicyShrink)
         .VALUE(ImGui, TabBarFlags, FittingPolicyScroll)
         .VALUE(ImGui, TabBarFlags, FittingPolicyMask_)
         .VALUE(ImGui, TabBarFlags, FittingPolicyDefault_);
@@ -280,6 +284,7 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, DragDropFlags, AcceptBeforeDelivery)
         .VALUE(ImGui, DragDropFlags, AcceptNoDrawDefaultRect)
         .VALUE(ImGui, DragDropFlags, AcceptNoPreviewTooltip)
+        .VALUE(ImGui, DragDropFlags, AcceptDrawAsHovered)
         .VALUE(ImGui, DragDropFlags, AcceptPeekOnly);
 
     ENUM(ImGui, Dir)
@@ -547,6 +552,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, Col, TextSelectedBg)
         .VALUE(ImGui, Col, TreeLines)
         .VALUE(ImGui, Col, DragDropTarget)
+        .VALUE(ImGui, Col, DragDropTargetBg)
+        .VALUE(ImGui, Col, UnsavedMarker)
         .VALUE(ImGui, Col, NavCursor)
         .VALUE(ImGui, Col, NavWindowingHighlight)
         .VALUE(ImGui, Col, NavWindowingDimBg)
@@ -573,12 +580,16 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, StyleVar, CellPadding)
         .VALUE(ImGui, StyleVar, ScrollbarSize)
         .VALUE(ImGui, StyleVar, ScrollbarRounding)
+        .VALUE(ImGui, StyleVar, ScrollbarPadding)
         .VALUE(ImGui, StyleVar, GrabMinSize)
         .VALUE(ImGui, StyleVar, GrabRounding)
         .VALUE(ImGui, StyleVar, ImageBorderSize)
         .VALUE(ImGui, StyleVar, TabRounding)
         .VALUE(ImGui, StyleVar, TabBorderSize)
+        .VALUE(ImGui, StyleVar, TabMinWidthBase)
+        .VALUE(ImGui, StyleVar, TabMinWidthShrink)
         .VALUE(ImGui, StyleVar, TabBarBorderSize)
+        .VALUE(ImGui, StyleVar, TabBarOverlineSize)
         .VALUE(ImGui, StyleVar, TableAngledHeadersAngle)
         .VALUE(ImGui, StyleVar, TableAngledHeadersTextAlign)
         .VALUE(ImGui, StyleVar, ButtonTextAlign)
@@ -712,7 +723,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, MultiSelectFlags, ScopeRect)
         .VALUE(ImGui, MultiSelectFlags, SelectOnClick)
         .VALUE(ImGui, MultiSelectFlags, SelectOnClickRelease)
-        .VALUE(ImGui, MultiSelectFlags, NavWrapX);
+        .VALUE(ImGui, MultiSelectFlags, NavWrapX)
+        .VALUE(ImGui, MultiSelectFlags, NoSelectOnRightClick);
 
     ENUM(ImGui, SelectionRequestType)
         .RAW_VALUE(None_, ImGuiSelectionRequestType_None)
@@ -735,4 +747,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(Im, FontFlags, NoLoadError)
         .VALUE(Im, FontFlags, NoLoadGlyphs)
         .VALUE(Im, FontFlags, LockBakedSizes);
+
+    ENUM(ImGui, ListClipperFlags)
+        .RAW_VALUE(None_, ImGuiListClipperFlags_None)
+        .VALUE(ImGui, ListClipperFlags, NoSetTableRowCounters);
 }

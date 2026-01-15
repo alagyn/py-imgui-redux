@@ -56,11 +56,14 @@ jobs:
             os: windows-latest
             build: "cp*amd64*"
 
-          - name: macos-13
-            os: macos-13
-
           - name: macos-14
             os: macos-14
+            
+          - name: macos-15-intel
+            os: macos-15-intel
+
+          - name: macos-latest
+            os: macos-latest
       fail-fast: false
     steps:
       - uses: actions/checkout@v4

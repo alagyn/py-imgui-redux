@@ -3,6 +3,7 @@ Example boilerplate for a setting up/shutting down the ImGui context and
 GLFW window correctly, as well as a basic render loop
 """
 from typing import Callable, Optional
+import os
 
 import imgui as im
 from imgui import glfw, imnodes, implot
@@ -57,6 +58,16 @@ def window_mainloop(
     glfw.MakeContextCurrent(window)
     # enable vsync
     glfw.SwapInterval(1)
+
+    # Set window icon
+    # Get a path to our image
+    imageFile = os.path.join(
+        os.path.split(__file__)[0], "..", "docs", "pyimgui-logo-512.png"
+    )
+    # Can also load image bytes via the methods in the image example openCV/PILLOW/etc.
+    # Byte data must be RGBA
+    icon = glfw.Image(imageFile)
+    glfw.SetWindowIcon(window, [icon])
 
     # Create ImGui context
     im.CreateContext()

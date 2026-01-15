@@ -1,5 +1,7 @@
 #include <bind-imgui/glfw-modules.h>
 
+#include <pybind11/stl.h>
+
 namespace bindGLFW {
 
 void init_windows(py::module& m)
@@ -41,13 +43,12 @@ void init_windows(py::module& m)
     m.def("SetWindowTitle", glfwSetWindowTitle, "window"_a, "title"_a);
     m.def(
         "SetWindowIcon",
-        [](GLFWwindow* window, GLFWimage* image)
+        [](GLFWwindow* window, const std::vector<GLFWimage>& images)
         {
-            // TODO allow this to take a list?
-            glfwSetWindowIcon(window, 1, image);
+            glfwSetWindowIcon(window, images.size(), images.data());
         },
         "window"_a,
-        "image"_a
+        "images"_a
     );
 
     m.def(
