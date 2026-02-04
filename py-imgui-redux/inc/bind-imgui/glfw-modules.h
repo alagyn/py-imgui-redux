@@ -6,23 +6,12 @@
 
 #include <pybind11/pybind11.h>
 
+#include <bind-imgui/glfw-stubs.h>
+
 namespace py = pybind11;
 using namespace py::literals;
 
 #define QUICK(func) m.def(#func, glfw##func);
-
-// Stub definitions for opaque classes to make PyBind happy
-struct GLFWwindow
-{
-};
-
-struct GLFWmonitor
-{
-};
-
-struct GLFWcursor
-{
-};
 
 namespace bindGLFW {
 
