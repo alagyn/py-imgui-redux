@@ -78,6 +78,8 @@ def normWidgets(state: State):
         # shorthand for the above if statement
         imgui.RadioButton("Radio1", state.radio, 1)
 
+        imgui.SliderInt("slide int", state.intVal1, 0, 25)
+
         imgui.ProgressBar(state.progress, imgui.Vec2(100, 20))
         if time.perf_counter() - state.progressTime > 0.5:
             state.progress += 0.1
@@ -183,6 +185,11 @@ def normWidgets(state: State):
             imgui.EndMenu()
 
         imgui.ColorEdit4("Color Edit", state.color)
+        imgui.ColorPicker4("Color picker", state.color)
+        if imgui.Button("Copy color"):
+            imgui.SetClipboardText(
+                f'{round(state.color.x, 3)}, {round(state.color.y, 3)}, {round(state.color.z, 3)}'
+            )
 
 
 def tables():

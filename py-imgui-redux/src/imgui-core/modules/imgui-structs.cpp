@@ -8,16 +8,26 @@
         #VALUE, \
         [](STRUCT* self) \
         { \
+            return ConstListWrapper<TYPE>(self->VALUE, SIZE); \
+        } \
+    )
+
+#define RW_ARRAY(STRUCT, TYPE, VALUE, SIZE) \
+    def_property_readonly( \
+        #VALUE, \
+        [](STRUCT* self) \
+        { \
             return ListWrapper<TYPE>(self->VALUE, SIZE); \
         } \
     )
 
 void init_imgui_structs(py::module& m)
 {
-    initListWrapper<bool>(m, "ListWrapperBool");
-    initListWrapper<ImVec2>(m, "ListWrapperImVec2");
-    initListWrapper<double>(m, "ListWrapperDouble");
-    initListWrapper<ImGuiTableColumnSortSpecs>(m, "ListWrapperTCSS");
+    initConstListWrapper<bool>(m, "ConstListWrapperBool");
+    initConstListWrapper<ImVec2>(m, "ConstListWrapperImVec2");
+    initConstListWrapper<double>(m, "ConstListWrapperDouble");
+    initConstListWrapper<ImGuiTableColumnSortSpecs>(m, "ConstListWrapperTCSS");
+    initListWrapper<ImVec4>(m, "ListWrapperVec4");
 
     // Vectors
     py::class_<ImVec2>(m, "Vec2")
@@ -117,7 +127,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, AntiAliasedFill)
         .RW(ImGuiStyle, CurveTessellationTol)
         .RW(ImGuiStyle, CircleTessellationMaxError)
-        .RO_ARRAY(ImGuiStyle, ImVec4, Colors, ImGuiCol_COUNT)
+        .RW_ARRAY(ImGuiStyle, ImVec4, Colors, ImGuiCol_COUNT)
         .RW(ImGuiStyle, HoverStationaryDelay)
         .RW(ImGuiStyle, HoverDelayShort)
         .RW(ImGuiStyle, HoverDelayNormal)

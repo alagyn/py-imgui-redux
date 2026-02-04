@@ -5,7 +5,7 @@ namespace bindGLFW {
 
 void init_monitors(py::module& m)
 {
-    initListWrapper<GLFWmonitor*>(m, "ListWrapperMonitor");
+    initConstListWrapper<GLFWmonitor*>(m, "ListWrapperMonitor");
 
     m.def(
         "GetMonitors",
@@ -13,7 +13,7 @@ void init_monitors(py::module& m)
         {
             int count;
             GLFWmonitor** monitors = glfwGetMonitors(&count);
-            return ListWrapper<GLFWmonitor*>(monitors, count);
+            return ConstListWrapper<GLFWmonitor*>(monitors, count);
         }
     );
 
@@ -72,7 +72,7 @@ void init_monitors(py::module& m)
     // TODO glfwSetMonitorUserPointer? Might not be useful
     // glfwGetMonitorUserPointer
 
-    initListWrapper<GLFWvidmode>(m, "ListWrapperVidmode");
+    initConstListWrapper<GLFWvidmode>(m, "ListWrapperVidmode");
 
     m.def(
         "GetVideoModes",
@@ -80,7 +80,7 @@ void init_monitors(py::module& m)
         {
             int count;
             const GLFWvidmode* modes = glfwGetVideoModes(monitor, &count);
-            return ListWrapper<GLFWvidmode>(modes, count);
+            return ConstListWrapper<GLFWvidmode>(modes, count);
         },
         "monitor"_a
     );

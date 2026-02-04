@@ -15,16 +15,20 @@ void init_joystick(py::module& m)
         "jid"_a
     );
 
+    initConstListWrapper<float>(m, "ConstListWrapperFloat");
+
     m.def(
         "GetJoystickAxes",
         [](int jid)
         {
             int count = 0;
             const float* axes = glfwGetJoystickAxes(jid, &count);
-            return ListWrapper<float>(axes, count);
+            return ConstListWrapper<float>(axes, count);
         },
         "jid"_a
     );
+
+    initConstListWrapper<unsigned char>(m, "ConstListWrapperUChar");
 
     m.def(
         "GetJoystickButtons",
@@ -32,7 +36,7 @@ void init_joystick(py::module& m)
         {
             int count = 0;
             const unsigned char* buttons = glfwGetJoystickButtons(jid, &count);
-            return ListWrapper<unsigned char>(buttons, count);
+            return ConstListWrapper<unsigned char>(buttons, count);
         },
         "jid"_a
     );
@@ -43,7 +47,7 @@ void init_joystick(py::module& m)
         {
             int count = 0;
             const unsigned char* hats = glfwGetJoystickHats(jid, &count);
-            return ListWrapper<unsigned char>(hats, count);
+            return ConstListWrapper<unsigned char>(hats, count);
         },
         "jid"_a
     );

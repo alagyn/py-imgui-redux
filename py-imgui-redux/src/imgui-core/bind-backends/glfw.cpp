@@ -9,7 +9,9 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
-void initContextForGLFW(void* window, const char* glsl_version)
+#include <bind-imgui/glfw-stubs.h>
+
+void initContextForGLFW(GLFWwindow* window, const char* glsl_version)
 {
     int version = gladLoadGL(glfwGetProcAddress);
 
@@ -18,10 +20,8 @@ void initContextForGLFW(void* window, const char* glsl_version)
         throw std::runtime_error("Failed to load OpenGL bindings");
     }
 
-    GLFWwindow* gWindow = static_cast<GLFWwindow*>(window);
-
     // Setup Platform/Renderer backends
-    if(!ImGui_ImplGlfw_InitForOpenGL(gWindow, true))
+    if(!ImGui_ImplGlfw_InitForOpenGL(window, true))
     {
         throw std::runtime_error("Failed to init ImGui for GLFW+OpenGL");
     }
@@ -44,12 +44,11 @@ void NewFrame()
     ImGui::NewFrame();
 }
 
-void Render(void* window, const ImVec4& clear_color)
+void Render(GLFWwindow* window, const ImVec4& clear_color)
 {
     ImGui::Render();
-    GLFWwindow* gWindow = static_cast<GLFWwindow*>(window);
     int display_w, display_h;
-    glfwGetFramebufferSize(gWindow, &display_w, &display_h);
+    glfwGetFramebufferSize(window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(
         clear_color.x * clear_color.w,
