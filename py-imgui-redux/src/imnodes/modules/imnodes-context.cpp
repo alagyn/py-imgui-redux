@@ -9,13 +9,14 @@ void init_imnodes_context(py::module& m)
 {
     // Define this with no data, it's opaque
     py::class_<ImNodesContext>(m, "Context");
+    py::class_<ImNodesEditorContext>(m, "EditorContext");
 
     m.def(IMFUNC(CreateContext), py::return_value_policy::reference);
     m.def(IMFUNC(GetCurrentContext), py::return_value_policy::reference);
     m.def(IMFUNC(SetCurrentContext), "ctx"_a);
     m.def(IMFUNC(DestroyContext), "ctx"_a = nullptr);
 
-    QUICK(EditorContextCreate);
+    m.def(IMFUNC(EditorContextCreate), py::return_value_policy::reference);
     m.def(IMFUNC(EditorContextFree), "ctx"_a);
     m.def(IMFUNC(EditorContextSet), "ctx"_a);
     QUICK(EditorContextGetPanning);
@@ -23,7 +24,7 @@ void init_imnodes_context(py::module& m)
     m.def(IMFUNC(EditorContextMoveToNode), "node_id"_a);
 
     m.def(IMFUNC(GetIO), py::return_value_policy::reference);
-    QUICK(GetStyle);
+    m.def(IMFUNC(GetStyle), py::return_value_policy::reference);
     m.def(IMFUNC(StyleColorsDark), "dest"_a = nullptr);
     m.def(IMFUNC(StyleColorsClassic), "dest"_a = nullptr);
     m.def(IMFUNC(StyleColorsLight), "dest"_a = nullptr);
