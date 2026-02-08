@@ -18,8 +18,9 @@ import imgui
 
 class Node:
 
-    def __init__(self, id: int, inputIDs: List[int],
-                 outputIDs: List[int]) -> None:
+    def __init__(
+        self, id: int, inputIDs: List[int], outputIDs: List[int]
+    ) -> None:
         self.id = id
         self.inputIDs = inputIDs
         self.outputIDs = outputIDs
@@ -65,37 +66,58 @@ class State:
         # User must hold shift to disconnect a link
         io.SetLinkDetachedWithModifierClick(imgui.ImKey.Mod_Shift)
 
+        self.context1 = imnodes.EditorContextCreate()
+        self.context2 = imnodes.EditorContextCreate()
+
     def render(self) -> bool:
         imgui.SetNextWindowSize(imgui.Vec2(600, 600), imgui.Cond.Once)
         if imgui.Begin("Nodes"):
-            imnodes.BeginNodeEditor()
+            if imgui.BeginChild("editor_1", imgui.Vec2(0, 500)):
+                imnodes.EditorContextSet(self.context1)
+                imnodes.BeginNodeEditor()
 
-            for n in self.nodes:
-                n.render()
+                for n in self.nodes:
+                    n.render()
 
-            for idx, (idA, idB) in enumerate(self.links):
-                imnodes.Link(idx, idA, idB)
+                for idx, (idA, idB) in enumerate(self.links):
+                    imnodes.Link(idx, idA, idB)
 
-            imnodes.EndNodeEditor()
+                imnodes.EndNodeEditor()
+
+                start = imgui.IntRef()
+                end = imgui.IntRef()
+                if imnodes.IsLinkCreated(start, end):
+                    self.links.append((start.val, end.val))
+
+                linkID = imgui.IntRef()
+                if imnodes.IsLinkDestroyed(linkID):
+                    self.links.pop(linkID.val)
+            imgui.EndChild()
+            imgui.Separator()
+
+            if imgui.BeginChild("editor_2", imgui.Vec2(0, 500)):
+                imnodes.EditorContextSet(self.context2)
+
+                imnodes.BeginNodeEditor()
+
+                imnodes.BeginNode(4)
+                imnodes.BeginNodeTitleBar()
+                imgui.Text("Look at this")
+                imnodes.EndNodeTitleBar()
+
+                imgui.Text("My data here")
+                imnodes.EndNode()
+
+                imnodes.EndNodeEditor()
+            imgui.EndChild()
 
         imgui.End()
-
-        start = imgui.IntRef()
-        end = imgui.IntRef()
-        if imnodes.IsLinkCreated(start, end):
-            self.links.append((start.val, end.val))
-
-        linkID = imgui.IntRef()
-        if imnodes.IsLinkDestroyed(linkID):
-            self.links.pop(linkID.val)
 
         return False
 
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("ImNodes Demo",
-                    1024,
-                    768,
-                    init=state.setup,
-                    draw=state.render)
+    window_mainloop(
+        "ImNodes Demo", 1024, 768, init=state.setup, draw=state.render
+    )

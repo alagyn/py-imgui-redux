@@ -7,7 +7,7 @@ egg_base = "build"
 
 [project]
 name = "py-imgui-redux"
-version = "5.1.0"
+version = "5.1.1"
 authors = [{ name = "Alagyn" }]
 description = "A python wrapper for DearImGUI and popular extensions"
 readme = "README.md"
