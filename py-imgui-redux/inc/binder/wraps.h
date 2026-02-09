@@ -75,7 +75,7 @@ public:
         return pybind11::make_iterator(vals.begin(), vals.end());
     }
 
-    T getItem(int index)
+    T getItem(int index) const
     {
         return vals[index];
     }

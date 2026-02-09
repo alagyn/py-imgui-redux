@@ -1,4 +1,5 @@
 #include <bind-imgui/imgui-modules.h>
+#include <binder/wraps.h>
 
 void init_widgets_text(py::module& m)
 {
@@ -12,10 +13,27 @@ void init_widgets_text(py::module& m)
         "text"_a
     );
     m.def(
+        "Text",
+        [](const StrRef& text)
+        {
+            ImGui::TextUnformatted(text.vals.data());
+        },
+        "text"_a
+    );
+    m.def(
         "TextColored",
         [](const ImVec4& col, const char* text)
         {
             ImGui::TextColored(col, text);
+        },
+        "col"_a,
+        "text"_a
+    );
+    m.def(
+        "TextColored",
+        [](const ImVec4& col, const StrRef& text)
+        {
+            ImGui::TextColored(col, text.vals.data());
         },
         "col"_a,
         "text"_a
@@ -29,10 +47,26 @@ void init_widgets_text(py::module& m)
         "text"_a
     );
     m.def(
+        "TextDisabled",
+        [](const StrRef& text)
+        {
+            ImGui::TextDisabled(text.vals.data());
+        },
+        "text"_a
+    );
+    m.def(
         "TextWrapped",
         [](const char* text)
         {
             ImGui::TextWrapped(text);
+        },
+        "text"_a
+    );
+    m.def(
+        "TextWrapped",
+        [](const StrRef& text)
+        {
+            ImGui::TextWrapped(text.vals.data());
         },
         "text"_a
     );
@@ -46,6 +80,15 @@ void init_widgets_text(py::module& m)
         "text"_a
     );
     m.def(
+        "LabelText",
+        [](const char* label, const StrRef& text)
+        {
+            ImGui::LabelText(label, text.vals.data());
+        },
+        "label"_a,
+        "text"_a
+    );
+    m.def(
         "BulletText",
         [](const char* text)
         {
@@ -53,7 +96,23 @@ void init_widgets_text(py::module& m)
         },
         "text"_a
     );
+    m.def(
+        "BulletText",
+        [](const StrRef& text)
+        {
+            ImGui::BulletText(text.vals.data());
+        },
+        "text"_a
+    );
     m.def("SeparatorText", ImGui::SeparatorText, "label"_a);
+    m.def(
+        "SeparatorText",
+        [](const StrRef& label)
+        {
+            ImGui::SeparatorText(label.vals.data());
+        },
+        "label"_a
+    );
 
     // Text utils
     m.def(
@@ -62,6 +121,21 @@ void init_widgets_text(py::module& m)
         {
             return ImGui::CalcTextSize(
                 text,
+                nullptr,
+                hide_text_after_double_hash,
+                wrap_width
+            );
+        },
+        "text"_a,
+        "hide_text_after_double_hash"_a = false,
+        "wrap_width"_a = -1.0f
+    );
+    m.def(
+        "CalcTextSize",
+        [](const StrRef& text, bool hide_text_after_double_hash, float wrap_width)
+        {
+            return ImGui::CalcTextSize(
+                text.vals.data(),
                 nullptr,
                 hide_text_after_double_hash,
                 wrap_width
