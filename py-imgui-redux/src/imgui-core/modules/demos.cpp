@@ -46,7 +46,7 @@ void init_demos(py::module& m)
         "p_open"_a = nullptr
     );
     m.def(
-        "ShowStackToolWindow",
+        "ShowIDStackToolWindow",
         [](BoolRef p_open)
         {
             bool* xxx = nullptr;
