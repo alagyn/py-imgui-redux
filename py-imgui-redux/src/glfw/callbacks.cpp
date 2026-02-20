@@ -189,6 +189,12 @@ void WindowContentScaleCB(GLFWwindow* window, float xscale, float yscale)
         "callback"_a \
     )
 
+#define CALLBACK_CLEANUP(CB_VAR) \
+    if(CB_VAR) \
+    { \
+        CB_VAR = nullptr; \
+    }
+
 void init_callbacks(py::module& m)
 {
     m.def(
@@ -244,6 +250,35 @@ void init_callbacks(py::module& m)
     WINDOW_CALLBACK(WindowMaximize);
     WINDOW_CALLBACK(FramebufferSize);
     WINDOW_CALLBACK(WindowContentScale);
+
+    auto cleanup_callback = []()
+    {
+        // Cleanup callbacks.
+        // Need to do this manually here since this will
+        // occur while the GIL is held, otherwise we crash on shutdown
+        CALLBACK_CLEANUP(Error);
+        CALLBACK_CLEANUP(Key);
+        CALLBACK_CLEANUP(Char);
+        CALLBACK_CLEANUP(CharMods);
+        CALLBACK_CLEANUP(MouseButton);
+        CALLBACK_CLEANUP(CursorPos);
+        CALLBACK_CLEANUP(CursorEnter);
+        CALLBACK_CLEANUP(Scroll);
+        CALLBACK_CLEANUP(Drop);
+        CALLBACK_CLEANUP(JoyStick);
+        CALLBACK_CLEANUP(Monitor);
+        CALLBACK_CLEANUP(WindowPos);
+        CALLBACK_CLEANUP(WindowSize);
+        CALLBACK_CLEANUP(WindowClose);
+        CALLBACK_CLEANUP(WindowRefresh);
+        CALLBACK_CLEANUP(WindowFocus);
+        CALLBACK_CLEANUP(WindowIconify);
+        CALLBACK_CLEANUP(WindowMaximize);
+        CALLBACK_CLEANUP(FramebufferSize);
+        CALLBACK_CLEANUP(WindowContentScale);
+    };
+
+    m.add_object("_cleanup", py::capsule(cleanup_callback));
 }
 
 } //namespace bindGLFW

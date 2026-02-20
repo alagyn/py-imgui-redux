@@ -53,6 +53,18 @@ class State:
         return False
 
 
+def textCallback(data: imgui.InputTextCallbackData):
+    # Print called when TAB is pressed
+    if data.EventFlag == imgui.InputTextFlags.CallbackCompletion:
+        print(
+            "Text callback, cursor pos:",
+            data.CursorPos,
+            "user_data:",
+            data.UserData
+        )
+    return 0
+
+
 def normWidgets(state: State):
     if imgui.BeginTable("tab1", 3):
         imgui.TableNextRow()
@@ -148,7 +160,13 @@ def normWidgets(state: State):
 
         imgui.TableNextColumn()
 
-        imgui.InputText("My Text", state.text)
+        imgui.InputText(
+            "My Text",
+            state.text,
+            flags=imgui.InputTextFlags.CallbackCompletion,
+            callback=textCallback,
+            user_data="this is my data"
+        )
 
         imgui.Text(state.text)
 

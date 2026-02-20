@@ -16,6 +16,10 @@ def errorCallback(err: int, msg: str) -> None:
     print(f'GLFW Error Code: {err}, Msg: {msg}')
 
 
+def cursorPosCallback(window, xpos, ypos):
+    print("GLFW callback", xpos, ypos)
+
+
 def window_mainloop(
     title: str,
     width: int,
@@ -32,7 +36,7 @@ def window_mainloop(
     """
 
     # set error callback func
-    #glfw.SetErrorCallback(errorCallback)
+    glfw.SetErrorCallback(errorCallback)
     if not glfw.Init():
         print("Cannot initialize GLFW")
         return
@@ -54,6 +58,9 @@ def window_mainloop(
     if window is None:
         print("Cannot create GLFW window")
         return
+
+    # Example callback
+    # glfw.SetCursorPosCallback(window, cursorPosCallback)
 
     glfw.MakeContextCurrent(window)
     # enable vsync

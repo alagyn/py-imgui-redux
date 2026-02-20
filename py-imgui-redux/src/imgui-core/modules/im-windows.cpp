@@ -1,5 +1,15 @@
+#include <bind-imgui/callback-structs.h>
 #include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
+
+void sizeCallback(ImGuiSizeCallbackData* data)
+{
+    auto* userData = static_cast<SizeCallbackData*>(data->UserData);
+    if(userData->callback)
+    {
+        userData->callback(data);
+    }
+}
 
 void init_windows(py::module& m)
 {
@@ -64,7 +74,26 @@ void init_windows(py::module& m)
         py::arg_v("pivot", ImVec2(0, 0), "Vec2(0, 0)")
     );
     m.def(IMFUNC(SetNextWindowSize), "size"_a, "cond"_a = 0);
-    // Ignoring SetNextWindowSizeConstraints because func pointer
+    m.def(
+        "SetNextWindowSizeConstraints",
+        [](const ImVec2& size_min,
+           const ImVec2& size_max,
+           SizeCallback callback,
+           py::object userData)
+        {
+            SizeCallbackData data{callback, userData};
+            ImGui::SetNextWindowSizeConstraints(
+                size_min,
+                size_max,
+                sizeCallback,
+                &data
+            );
+        },
+        "size_min"_a,
+        "size_max"_a,
+        "custom_callbacl"_a = nullptr,
+        "custom_callback_data"_a = py::none()
+    );
     m.def(IMFUNC(SetNextWindowContentSize), "size"_a);
     m.def(IMFUNC(SetNextWindowCollapsed), "collapsed"_a, "cond"_a = 0);
     QUICK(SetNextWindowFocus);
@@ -110,8 +139,7 @@ void init_windows(py::module& m)
     );
     m.def(
         "SetWindowCollapsed",
-        py::overload_cast<const char*, bool, ImGuiCond>(ImGui::SetWindowCollapsed
-        ),
+        py::overload_cast<const char*, bool, ImGuiCond>(ImGui::SetWindowCollapsed),
         "name"_a,
         "collapsed"_a,
         "cond"_a = 0
