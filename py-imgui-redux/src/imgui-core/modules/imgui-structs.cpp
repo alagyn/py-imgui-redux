@@ -96,6 +96,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, GrabMinSize)
         .RW(ImGuiStyle, GrabRounding)
         .RW(ImGuiStyle, LogSliderDeadzone)
+        .RW(ImGuiStyle, ImageRounding)
         .RW(ImGuiStyle, ImageBorderSize)
         .RW(ImGuiStyle, TabRounding)
         .RW(ImGuiStyle, TabBorderSize)
@@ -113,6 +114,7 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiStyle, DragDropTargetRounding)
         .RW(ImGuiStyle, DragDropTargetBorderSize)
         .RW(ImGuiStyle, DragDropTargetPadding)
+        .RW(ImGuiStyle, ColorMarkerSize)
         .RW(ImGuiStyle, ColorButtonPosition)
         .RW(ImGuiStyle, ButtonTextAlign)
         .RW(ImGuiStyle, SelectableTextAlign)
@@ -400,7 +402,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImFontConfig, FontDataOwnedByAtlas)
         .RW(ImFontConfig, MergeMode)
         .RW(ImFontConfig, PixelSnapH)
-        .RW(ImFontConfig, PixelSnapV)
         .RW(ImFontConfig, OversampleH)
         .RW(ImFontConfig, OversampleV)
         .RW(ImFontConfig, EllipsisChar)
@@ -484,6 +485,16 @@ void init_imgui_structs(py::module& m)
         )
         .def(
             DEF(ImFontAtlas, AddFontDefault),
+            "font_cfg"_a = nullptr,
+            py::return_value_policy::reference
+        )
+        .def(
+            DEF(ImFontAtlas, AddFontDefaultVector),
+            "font_cfg"_a = nullptr,
+            py::return_value_policy::reference
+        )
+        .def(
+            DEF(ImFontAtlas, AddFontDefaultBitmap),
             "font_cfg"_a = nullptr,
             py::return_value_policy::reference
         )

@@ -244,23 +244,23 @@ void init_widgets_main(py::module& m)
         "id"_a,
         "popup_flags"_a = 0
     );
-    m.def(IMFUNC(OpenPopupOnItemClick), "str_id"_a = nullptr, "popup_flags"_a = 1);
+    m.def(IMFUNC(OpenPopupOnItemClick), "str_id"_a = nullptr, "popup_flags"_a = 0);
     QUICK(CloseCurrentPopup);
 
     m.def(
         IMFUNC(BeginPopupContextItem),
         "str_id"_a = nullptr,
-        "popup_flags"_a = 1
+        "popup_flags"_a = 0
     );
     m.def(
         IMFUNC(BeginPopupContextWindow),
         "str_id"_a = nullptr,
-        "popup_flags"_a = 1
+        "popup_flags"_a = 0
     );
     m.def(
         IMFUNC(BeginPopupContextVoid),
         "str_id"_a = nullptr,
-        "popup_flags"_a = 1
+        "popup_flags"_a = 0
     );
     m.def(
         "IsPopupOpen",
@@ -329,6 +329,7 @@ void init_widgets_main(py::module& m)
     QUICK(GetItemRectMin);
     QUICK(GetItemRectMax);
     QUICK(GetItemRectSize);
+    QUICK(GetItemFlags);
 
     // Viewports
     QUICK(GetMainViewport);
