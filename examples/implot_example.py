@@ -19,6 +19,12 @@ import imgui.implot as implot
 import imgui
 
 
+def formatterCallback(val: float, buf: imgui.EditableStrWrapper, userData):
+    label = f'{userData} {val}'
+    buf.set(label)
+    return 0
+
+
 class State:
 
     def __init__(self) -> None:
@@ -28,8 +34,9 @@ class State:
         self.plotMin = 0
         self.plotMax = 10
         self.plotX = np.arange(self.plotSize, dtype=np.float64)
-        self.plotY = np.array(np.random.rand(self.plotSize) * self.plotMax,
-                              dtype=np.float64)
+        self.plotY = np.array(
+            np.random.rand(self.plotSize) * self.plotMax, dtype=np.float64
+        )
         self.plotIdx = 0
 
         self.lastUpate = time.perf_counter()
@@ -46,10 +53,16 @@ class State:
 
             if implot.BeginPlot("data", imgui.Vec2(500, 500)):
                 if self.plotMode == 0:
+                    # The return value from this has to exist until the PlotXXX function
+                    # is called
+                    formatterData = implot.SetupAxisFormat(
+                        implot.Axis.X1, formatterCallback, "data"
+                    )
                     if time.perf_counter(
                     ) - self.lastUpate > self.updatePeriod:
-                        self.plotY[self.plotIdx] = random.triangular(
-                            self.plotMin, self.plotMax)
+                        self.plotY[
+                            self.plotIdx
+                        ] = random.triangular(self.plotMin, self.plotMax)
                         self.plotIdx = (self.plotIdx + 1) % self.plotSize
                         self.lastUpate = time.perf_counter()
                     implot.PlotScatter("DATA", self.plotX, self.plotY)
@@ -60,8 +73,14 @@ class State:
                         self.plotY[self.plotIdx] += random.triangular(-1, 1)
                         self.plotIdx = (self.plotIdx + 1) % (size * size)
                         self.lastUpate = time.perf_counter()
-                    implot.PlotHeatmap("DATA", self.plotY, size, size,
-                                       self.plotMin, self.plotMax)
+                    implot.PlotHeatmap(
+                        "DATA",
+                        self.plotY,
+                        size,
+                        size,
+                        self.plotMin,
+                        self.plotMax
+                    )
                 implot.EndPlot()
         imgui.End()
 

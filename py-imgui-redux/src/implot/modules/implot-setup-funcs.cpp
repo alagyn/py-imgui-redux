@@ -4,7 +4,6 @@
 
 #include <pybind11/functional.h>
 
-/* Dead code for formatter callbacks
 using FormatterCallback =
     std::function<int(double, EditableStrWrapper, py::object)>;
 
@@ -25,7 +24,6 @@ int plotFormatterCallback(double value, char* buff, int size, void* user_data)
 
     return 0;
 }
-*/
 
 void init_setup_funcs(py::module& m)
 {
@@ -65,34 +63,37 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "format"_a
     );
-    /*
-    TODO figure out this callback
 
+    /*
     This is different than the imgui text callbacks, because the callback is not
     used in this function. It is store with the user data until later.
     Therefore, the userdata needs to exist for an indeterminate amount of time.
 
     Presumably, the formatter is called more than once, so we can't just dealloc
-    there. Perhaps we can store it in a map based on plot ID?
+    there.
 
-    This is probably a low priority, since there probably aren't many use cases
-    that can't be solved with a simple format string
-
-    Could maybe return a smart pointer, and make clients hold onto it, but idk
-    if the python interpreter might optimize that out
+    Therefore, the simplest we can do is return the user data and let python
+    take ownership and in most use cases, it won't get destructed until after
+    the plotting funcs are called.
+    */
+    py::class_<FormatterCallbackData>(m, "_FormatterCallbackData");
 
     m.def(
         "SetupAxisFormat",
         [](ImAxis axis, FormatterCallback formatter, py::object userData)
         {
-            FormatterCallbackData data{formatter, userData};
-            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, &data);
+            FormatterCallbackData* data =
+                new FormatterCallbackData{formatter, userData};
+            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data);
+            return data;
         },
+        "IMPORTANT: you must keep the return from this function around until "
+        "the next PlotXXX call",
         "axis"_a,
         "formatter"_a,
-        "data"_a = py::none()
+        "data"_a = py::none(),
+        py::return_value_policy::take_ownership
     );
-    */
     m.def(
         "SetupAxisTicks",
         [](ImAxis axis, DoubleListPtr values, StrListPtr labels, bool keep_default)

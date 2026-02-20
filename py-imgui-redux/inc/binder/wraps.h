@@ -133,9 +133,6 @@ public:
 
 using StrRefPtr = StrRef*;
 
-/*
-Dead code, unless we figure out the implot formatter callback
-
 class EditableStrWrapper
 {
 public:
@@ -145,4 +142,3 @@ public:
     char* buff;
     size_t maxSize;
 };
-*/
