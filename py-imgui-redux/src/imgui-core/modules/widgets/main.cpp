@@ -153,7 +153,6 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flags"_a = 0);
     QUICK(EndCombo);
 
-    // Ignoring old Combo() funcs
     // Use Selectable instead
 
     // Listbox
@@ -179,7 +178,7 @@ void init_widgets_main(py::module& m)
     );
 
     // Ignoring core ImGUI plotting in favor of ImPlot
-    // Ignoring Value() funcs
+    // Ignoring Value() funcs in favor of python string formatting
 
     // Menus
     QUICK(BeginMenuBar);
@@ -196,7 +195,20 @@ void init_widgets_main(py::module& m)
         "selected"_a = false,
         "enabled"_a = true
     );
-    // Ignoring other Menu item overload
+    m.def(
+        "MenuItem",
+        [](const char* label,
+           const char* shortcut,
+           BoolRef p_selected,
+           bool enabled)
+        {
+            return ImGui::MenuItem(label, shortcut, &p_selected->val, enabled);
+        },
+        "label"_a,
+        "shortcut"_a, // no default for this one
+        "selected"_a = nullptr,
+        "enabled"_a = true
+    );
 
     // Tooltips
     QUICK(BeginTooltip);

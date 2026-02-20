@@ -22,7 +22,6 @@ int inputTextCallback(ImGuiInputTextCallbackData* data)
 
 void init_widgets_input(py::module& m)
 {
-    // Ignoring user-data
     m.def(
         "InputText",
         [](const char* label,

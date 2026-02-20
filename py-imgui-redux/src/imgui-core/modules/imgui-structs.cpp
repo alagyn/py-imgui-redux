@@ -202,7 +202,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, BackendPlatformUserData)
         .RW(ImGuiIO, BackendRendererUserData)
         .RW(ImGuiIO, BackendLanguageUserData)
-        // TODO Ignoring Clipboard stuff/Moved to PlatformIO?
         .def(DEF(ImGuiIO, AddKeyEvent), "key"_a, "down"_a)
         .def(DEF(ImGuiIO, AddKeyAnalogEvent), "key"_a, "down"_a, "v"_a)
         .def(DEF(ImGuiIO, AddMousePosEvent), "x"_a, "y"_a)
