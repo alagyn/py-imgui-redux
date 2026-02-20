@@ -132,3 +132,17 @@ public:
 };
 
 using StrRefPtr = StrRef*;
+
+/*
+Dead code, unless we figure out the implot formatter callback
+
+class EditableStrWrapper
+{
+public:
+    EditableStrWrapper(char* data, size_t size);
+    void set(const std::string& val);
+
+    char* buff;
+    size_t maxSize;
+};
+*/

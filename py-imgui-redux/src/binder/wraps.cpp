@@ -89,6 +89,24 @@ void initList(py::module& m, const char* name, const char* desc)
         .def("__setitem__", &T::setItem, "index"_a, "val"_a);
 }
 
+/*
+EditableStrWrapper::EditableStrWrapper(char* data, size_t maxSize)
+    : buff(data)
+    , maxSize(maxSize - 1) // minus one for zero char
+{
+}
+
+void EditableStrWrapper::set(const std::string& val)
+{
+    size_t toCopy = std::min(maxSize, val.size());
+    for(size_t i = 0; i < toCopy; ++i)
+    {
+        buff[i] = val[i];
+    }
+    buff[toCopy] = 0;
+}
+    */
+
 void init_wraps(py::module& m)
 {
     initRef<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool", false);
@@ -172,4 +190,10 @@ void init_wraps(py::module& m)
     initConstListWrapper<unsigned short>(m, "ConstListWrapperUShort");
     initConstListWrapper<double>(m, "ConstListWrapperDouble");
     initConstListWrapper<float>(m, "ConstListWrapperFloat");
+
+    /*
+    py::class_<EditableStrWrapper>(m, "EditableStrWrapper")
+        .def("set", &EditableStrWrapper::set, "val"_a)
+        .def_readonly("size", &EditableStrWrapper::maxSize);
+    */
 }

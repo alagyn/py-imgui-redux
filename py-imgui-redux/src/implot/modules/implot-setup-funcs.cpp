@@ -1,5 +1,31 @@
 #include <bind-imgui/implot-modules.h>
+#include <binder/list-wrapper.h>
 #include <binder/wraps.h>
+
+#include <pybind11/functional.h>
+
+/* Dead code for formatter callbacks
+using FormatterCallback =
+    std::function<int(double, EditableStrWrapper, py::object)>;
+
+struct FormatterCallbackData
+{
+    FormatterCallback callback;
+    py::object userdata;
+};
+
+int plotFormatterCallback(double value, char* buff, int size, void* user_data)
+{
+    auto* data = static_cast<FormatterCallbackData*>(user_data);
+    if(data->callback)
+    {
+        EditableStrWrapper wrapper(buff, size);
+        return data->callback(value, wrapper, data->userdata);
+    }
+
+    return 0;
+}
+*/
 
 void init_setup_funcs(py::module& m)
 {
@@ -39,7 +65,34 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "format"_a
     );
-    // TODO SetupAxisFormat with callback, need to wrap in an object?
+    /*
+    TODO figure out this callback
+
+    This is different than the imgui text callbacks, because the callback is not
+    used in this function. It is store with the user data until later.
+    Therefore, the userdata needs to exist for an indeterminate amount of time.
+
+    Presumably, the formatter is called more than once, so we can't just dealloc
+    there. Perhaps we can store it in a map based on plot ID?
+
+    This is probably a low priority, since there probably aren't many use cases
+    that can't be solved with a simple format string
+
+    Could maybe return a smart pointer, and make clients hold onto it, but idk
+    if the python interpreter might optimize that out
+
+    m.def(
+        "SetupAxisFormat",
+        [](ImAxis axis, FormatterCallback formatter, py::object userData)
+        {
+            FormatterCallbackData data{formatter, userData};
+            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, &data);
+        },
+        "axis"_a,
+        "formatter"_a,
+        "data"_a = py::none()
+    );
+    */
     m.def(
         "SetupAxisTicks",
         [](ImAxis axis, DoubleListPtr values, StrListPtr labels, bool keep_default)
