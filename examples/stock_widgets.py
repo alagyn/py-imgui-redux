@@ -39,6 +39,8 @@ class State:
 
         self.color = imgui.Vec4(0.5, 0.1, 0.1, 1.0)
 
+        self.text = imgui.StrRef(256)
+
     def showAll(self):
         if imgui.Begin("Widgets"):
             normWidgets(self)
@@ -146,21 +148,35 @@ def normWidgets(state: State):
 
         imgui.TableNextColumn()
 
+        imgui.InputText("My Text", state.text)
+
+        imgui.Text(state.text)
+
+        imgui.InputInt("int 1", state.intVal1)
+        imgui.InputInt2("int 1-2", state.intList)
+        imgui.InputInt3("int 1-3", state.intList)
+        imgui.InputInt4("int 1-4", state.intList)
+
         # int drags
-        imgui.DragInt("int 1", state.intVal1)
-        imgui.DragInt2("int 2", state.intList)
-        imgui.DragInt3("int 3", state.intList)
-        imgui.DragInt4("int 4", state.intList)
-        imgui.DragIntRange2("int range 2", state.intVal2, state.intVal3)
+        imgui.DragInt("drag int 1", state.intVal1)
+        imgui.DragInt2("drag int 2", state.intList)
+        imgui.DragInt3("drag int 3", state.intList)
+        imgui.DragInt4("drag int 4", state.intList)
+        imgui.DragIntRange2("drag int range 2", state.intVal2, state.intVal3)
 
         imgui.Dummy(imgui.Vec2(10, 30))
 
+        imgui.InputFloat("flt 1", state.fltVal1)
+        imgui.InputFloat2("flt 1-2", state.fltList)
+        imgui.InputFloat3("flt 1-3", state.fltList)
+        imgui.InputFloat4("flt 1-4", state.fltList)
+
         # float drags
-        imgui.DragFloat("flt 1", state.fltVal1)
-        imgui.DragFloat2("flt 2", state.fltList)
-        imgui.DragFloat3("flt 3", state.fltList)
-        imgui.DragFloat4("flt 4", state.fltList)
-        imgui.DragFloatRange2("flt range 2", state.fltVal2, state.fltVal3)
+        imgui.DragFloat("drag flt 1", state.fltVal1)
+        imgui.DragFloat2("drag flt 2", state.fltList)
+        imgui.DragFloat3("drag flt 3", state.fltList)
+        imgui.DragFloat4("drag flt 4", state.fltList)
+        imgui.DragFloatRange2("drag flt range 2", state.fltVal2, state.fltVal3)
 
         imgui.EndTable()
 

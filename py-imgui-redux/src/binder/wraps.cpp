@@ -151,13 +151,6 @@ void init_wraps(py::module& m)
             "Get a copy of the string"
         )
         .def(
-            "view",
-            &StrRef::data,
-            py::return_value_policy::reference,
-            "Get a reference to the string, only valid while this object "
-            "exists"
-        )
-        .def(
             "set",
             &StrRef::set,
             "newVal"_a,
