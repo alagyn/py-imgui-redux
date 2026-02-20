@@ -103,13 +103,21 @@ void init_widgets_main(py::module& m)
            const ImVec4& bg_col,
            const ImVec4& tint_col)
         {
+            ImGui::ImageWithBg(
+                ImTextureRef(tex.texID),
+                image_size,
+                uv0,
+                uv1,
+                bg_col,
+                tint_col
+            );
         },
         "texID"_a,
         "image_size"_a,
         py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
         py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)"),
-        py::arg_v("ubg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
-        py::arg_v("uv1", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
+        py::arg_v("bg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
+        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
     );
 
     m.def(

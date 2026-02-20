@@ -23,9 +23,7 @@
 
 void init_imgui_structs(py::module& m)
 {
-    initConstListWrapper<bool>(m, "ConstListWrapperBool");
     initConstListWrapper<ImVec2>(m, "ConstListWrapperImVec2");
-    initConstListWrapper<double>(m, "ConstListWrapperDouble");
     initConstListWrapper<ImGuiTableColumnSortSpecs>(m, "ConstListWrapperTCSS");
     initListWrapper<ImVec4>(m, "ListWrapperVec4");
 

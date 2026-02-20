@@ -109,6 +109,6 @@
         "IMGUI_DISABLE_OBSOLETE_FUNCTIONS=1"
     ],
     "python.analysis.exclude": [
-        "third-party", "build", "venv"
+        "third-party", "build", "venv", "__pycache__", "**/node_modules", "**/.*"
     ],
 }

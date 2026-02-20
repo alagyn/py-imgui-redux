@@ -22,11 +22,6 @@ public:
 
 void init_structs(pybind11::module& m)
 {
-    initListWrapper<unsigned short>(m, "ListWrapperUS");
-    initListWrapper<unsigned char>(m, "ListWrapperUC");
-    initListWrapper<float>(m, "ListWrapperF");
-    initListWrapper<const char*>(m, "ListWrapperStr");
-
     py::class_<GLFWvidmode>(m, "Vidmode")
         .RO(GLFWvidmode, width)
         .RO(GLFWvidmode, height)

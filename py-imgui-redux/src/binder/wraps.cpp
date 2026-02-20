@@ -1,5 +1,7 @@
 #include <binder/bind-modules.h>
+#include <binder/list-wrapper.h>
 #include <binder/wraps.h>
+
 #include <pybind11/stl.h>
 #include <sstream>
 
@@ -159,4 +161,15 @@ void init_wraps(py::module& m)
             "the maxSize will remain unchanged and extra chars will be "
             "dropped"
         );
+
+    initListWrapper<unsigned char>(m, "ListWrapperUC");
+    initListWrapper<unsigned short>(m, "ListWrapperUS");
+    initListWrapper<unsigned int>(m, "ListWrapperUInt");
+    initListWrapper<float>(m, "ListWrapperF");
+    initListWrapper<const char*>(m, "ListWrapperStr");
+    initConstListWrapper<bool>(m, "ConstListWrapperBool");
+    initConstListWrapper<unsigned char>(m, "ConstListWrapperUChar");
+    initConstListWrapper<unsigned short>(m, "ConstListWrapperUShort");
+    initConstListWrapper<double>(m, "ConstListWrapperDouble");
+    initConstListWrapper<float>(m, "ConstListWrapperFloat");
 }

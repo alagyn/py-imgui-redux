@@ -15,8 +15,6 @@ void init_joystick(py::module& m)
         "jid"_a
     );
 
-    initConstListWrapper<float>(m, "ConstListWrapperFloat");
-
     m.def(
         "GetJoystickAxes",
         [](int jid)
@@ -27,8 +25,6 @@ void init_joystick(py::module& m)
         },
         "jid"_a
     );
-
-    initConstListWrapper<unsigned char>(m, "ConstListWrapperUChar");
 
     m.def(
         "GetJoystickButtons",
