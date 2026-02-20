@@ -40,12 +40,23 @@ class State:
             glyphRanges
         )
 
+        self.font2 = io.Fonts.AddFontDefaultVector(None)
+        self.font3 = io.Fonts.AddFontDefaultBitmap(None)
+
     def render(self):
+        style = im.GetStyle()
+        im.PushFont(self.font, style.FontSizeBase)
         if im.Begin("Window"):
             im.Text("Wooooow")
+            im.PushFont(self.font2, style.FontSizeBase * 2)
             im.Text("Look at that font")
+            im.PopFont()
+            im.PushFont(self.font3, self.font3.LegacySize)
+            im.Text("What about this one")
+            im.PopFont()
             im.Text("This is an icon \ue61e and here is another \ueb1d")
         im.End()
+        im.PopFont()
 
         return False
 
