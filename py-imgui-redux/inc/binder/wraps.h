@@ -132,3 +132,13 @@ public:
 };
 
 using StrRefPtr = StrRef*;
+
+class EditableStrWrapper
+{
+public:
+    EditableStrWrapper(char* data, size_t size);
+    void set(const std::string& val);
+
+    char* buff;
+    size_t maxSize;
+};

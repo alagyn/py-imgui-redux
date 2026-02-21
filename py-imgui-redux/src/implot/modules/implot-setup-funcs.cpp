@@ -1,5 +1,29 @@
 #include <bind-imgui/implot-modules.h>
+#include <binder/list-wrapper.h>
 #include <binder/wraps.h>
+
+#include <pybind11/functional.h>
+
+using FormatterCallback =
+    std::function<int(double, EditableStrWrapper, py::object)>;
+
+struct FormatterCallbackData
+{
+    FormatterCallback callback;
+    py::object userdata;
+};
+
+int plotFormatterCallback(double value, char* buff, int size, void* user_data)
+{
+    auto* data = static_cast<FormatterCallbackData*>(user_data);
+    if(data->callback)
+    {
+        EditableStrWrapper wrapper(buff, size);
+        return data->callback(value, wrapper, data->userdata);
+    }
+
+    return 0;
+}
 
 void init_setup_funcs(py::module& m)
 {
@@ -39,7 +63,37 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "format"_a
     );
-    // TODO SetupAxisFormat with callback, need to wrap in an object?
+
+    /*
+    This is different than the imgui text callbacks, because the callback is not
+    used in this function. It is store with the user data until later.
+    Therefore, the userdata needs to exist for an indeterminate amount of time.
+
+    Presumably, the formatter is called more than once, so we can't just dealloc
+    there.
+
+    Therefore, the simplest we can do is return the user data and let python
+    take ownership and in most use cases, it won't get destructed until after
+    the plotting funcs are called.
+    */
+    py::class_<FormatterCallbackData>(m, "_FormatterCallbackData");
+
+    m.def(
+        "SetupAxisFormat",
+        [](ImAxis axis, FormatterCallback formatter, py::object userData)
+        {
+            FormatterCallbackData* data =
+                new FormatterCallbackData{formatter, userData};
+            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data);
+            return data;
+        },
+        "IMPORTANT: you must keep the return from this function around until "
+        "the next PlotXXX call",
+        "axis"_a,
+        "formatter"_a,
+        "data"_a = py::none(),
+        py::return_value_policy::take_ownership
+    );
     m.def(
         "SetupAxisTicks",
         [](ImAxis axis, DoubleListPtr values, StrListPtr labels, bool keep_default)

@@ -1,12 +1,20 @@
+#include <bind-imgui/imgui-callback-structs.h>
 #include <bind-imgui/imgui-modules.h>
 #include <binder/wraps.h>
 
+#include <pybind11/functional.h>
+
 int inputTextCallback(ImGuiInputTextCallbackData* data)
 {
-    StrRefPtr value = static_cast<StrRefPtr>(data->UserData);
+    auto* userData = static_cast<InputTextCallbackData*>(data->UserData);
     if(data->EventFlag == ImGuiInputTextFlags_CallbackAlways)
     {
-        value->strLen = data->BufTextLen;
+        userData->value->strLen = data->BufTextLen;
+    }
+
+    if(userData->callback)
+    {
+        return userData->callback(data);
     }
 
     return 0;
@@ -14,69 +22,85 @@ int inputTextCallback(ImGuiInputTextCallbackData* data)
 
 void init_widgets_input(py::module& m)
 {
-    // Ignoring callbacks and user-data
     m.def(
         "InputText",
-        [](const char* label, StrRefPtr value, const int flags)
+        [](const char* label,
+           StrRefPtr value,
+           const int flags,
+           InputTextCallback callback,
+           py::object userData)
         {
+            InputTextCallbackData data{value, callback, userData};
             return ImGui::InputText(
                 label,
                 value->data(),
                 value->vals.capacity(),
                 flags | ImGuiInputTextFlags_CallbackAlways,
                 inputTextCallback,
-                value
+                &data
             );
         },
         "label"_a,
         "value"_a,
         "flags"_a = 0,
+        "callback"_a = nullptr,
+        "user_data"_a = py::none(),
         "Single line text input"
     );
     m.def(
         "InputTextMultiline",
-        [](const char* label, StrRefPtr value, const ImVec2& size, const int flags)
+        [](const char* label,
+           StrRefPtr value,
+           const ImVec2& size,
+           const int flags,
+           InputTextCallback callback,
+           py::object userData)
         {
-            bool out = ImGui::InputTextMultiline(
+            InputTextCallbackData data{value, callback, userData};
+            return ImGui::InputTextMultiline(
                 label,
                 value->data(),
                 value->size(),
                 size,
-                flags
+                flags,
+                inputTextCallback,
+                &data
             );
-            if(out)
-            {
-                value->calcLen();
-            }
-            return out;
         },
         "label"_a,
         "value"_a,
         py::arg_v("size", ImVec2(0, 0), "Vec2(0, 0)"),
         "flags"_a = 0,
+        "callback"_a = nullptr,
+        "user_data"_a = py::none(),
         "Multiline text input"
     );
     m.def(
         "InputTextWithHint",
-        [](const char* label, const char* hint, StrRefPtr value, const int flags)
+        [](const char* label,
+           const char* hint,
+           StrRefPtr value,
+           const int flags,
+           InputTextCallback callback,
+           py::object userData)
         {
-            bool out = ImGui::InputTextWithHint(
+            InputTextCallbackData data{value, callback, userData};
+            return ImGui::InputTextWithHint(
                 label,
                 hint,
                 value->data(),
                 value->size(),
-                flags
+                flags,
+                inputTextCallback,
+                &data
             );
-            if(out)
-            {
-                value->calcLen();
-            }
-            return out;
         },
         "label"_a,
         "hint"_a,
         "value"_a,
         "flags"_a = 0,
+        "callback"_a = nullptr,
+        "user_data"_a = py::none(),
         "Single line text input with placeholder hint"
     );
     m.def(

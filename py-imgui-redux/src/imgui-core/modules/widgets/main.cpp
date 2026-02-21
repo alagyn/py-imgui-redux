@@ -103,13 +103,21 @@ void init_widgets_main(py::module& m)
            const ImVec4& bg_col,
            const ImVec4& tint_col)
         {
+            ImGui::ImageWithBg(
+                ImTextureRef(tex.texID),
+                image_size,
+                uv0,
+                uv1,
+                bg_col,
+                tint_col
+            );
         },
         "texID"_a,
         "image_size"_a,
         py::arg_v("uv0", ImVec2(0, 0), "Vec2(0, 0)"),
         py::arg_v("uv1", ImVec2(1, 1), "Vec2(1, 1)"),
-        py::arg_v("ubg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
-        py::arg_v("uv1", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
+        py::arg_v("bg_col", ImVec4(0, 0, 0, 0), "Vec4(0, 0, 0, 0)"),
+        py::arg_v("tint_col", ImVec4(1, 1, 1, 1), "Vec4(1, 1, 1, 1)")
     );
 
     m.def(
@@ -145,7 +153,6 @@ void init_widgets_main(py::module& m)
     m.def(IMFUNC(BeginCombo), "label"_a, "preview_value"_a, "flags"_a = 0);
     QUICK(EndCombo);
 
-    // Ignoring old Combo() funcs
     // Use Selectable instead
 
     // Listbox
@@ -171,7 +178,7 @@ void init_widgets_main(py::module& m)
     );
 
     // Ignoring core ImGUI plotting in favor of ImPlot
-    // Ignoring Value() funcs
+    // Ignoring Value() funcs in favor of python string formatting
 
     // Menus
     QUICK(BeginMenuBar);
@@ -188,7 +195,20 @@ void init_widgets_main(py::module& m)
         "selected"_a = false,
         "enabled"_a = true
     );
-    // Ignoring other Menu item overload
+    m.def(
+        "MenuItem",
+        [](const char* label,
+           const char* shortcut,
+           BoolRef p_selected,
+           bool enabled)
+        {
+            return ImGui::MenuItem(label, shortcut, &p_selected->val, enabled);
+        },
+        "label"_a,
+        "shortcut"_a, // no default for this one
+        "selected"_a = nullptr,
+        "enabled"_a = true
+    );
 
     // Tooltips
     QUICK(BeginTooltip);

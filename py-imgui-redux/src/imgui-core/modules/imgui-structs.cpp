@@ -1,7 +1,9 @@
+#include <bind-imgui/imgui-callback-structs.h>
 #include <bind-imgui/imgui-modules.h>
 #include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
 #include <binder/wraps.h>
+#include <imgui_internal.h>
 
 #define RO_ARRAY(STRUCT, TYPE, VALUE, SIZE) \
     def_property_readonly( \
@@ -23,9 +25,7 @@
 
 void init_imgui_structs(py::module& m)
 {
-    initConstListWrapper<bool>(m, "ConstListWrapperBool");
     initConstListWrapper<ImVec2>(m, "ConstListWrapperImVec2");
-    initConstListWrapper<double>(m, "ConstListWrapperDouble");
     initConstListWrapper<ImGuiTableColumnSortSpecs>(m, "ConstListWrapperTCSS");
     initListWrapper<ImVec4>(m, "ListWrapperVec4");
 
@@ -202,7 +202,6 @@ void init_imgui_structs(py::module& m)
         .RW(ImGuiIO, BackendPlatformUserData)
         .RW(ImGuiIO, BackendRendererUserData)
         .RW(ImGuiIO, BackendLanguageUserData)
-        // TODO Ignoring Clipboard stuff/Moved to PlatformIO?
         .def(DEF(ImGuiIO, AddKeyEvent), "key"_a, "down"_a)
         .def(DEF(ImGuiIO, AddKeyAnalogEvent), "key"_a, "down"_a, "v"_a)
         .def(DEF(ImGuiIO, AddMousePosEvent), "x"_a, "y"_a)
@@ -577,4 +576,55 @@ void init_imgui_structs(py::module& m)
         .RW(ImDrawData, FramebufferScale)
         // TODO Funcs
         ;
+
+    py::class_<ImGuiInputTextCallbackData>(m, "InputTextCallbackData")
+        .RO(ImGuiInputTextCallbackData, Ctx)
+        .RO(ImGuiInputTextCallbackData, EventFlag)
+        .RO(ImGuiInputTextCallbackData, Flags)
+        .def_property_readonly(
+            "UserData",
+            [](ImGuiInputTextCallbackData* self)
+            {
+                auto data = static_cast<InputTextCallbackData*>(self->UserData);
+                return data->userData;
+            }
+        )
+        .RO(ImGuiInputTextCallbackData, ID)
+        .RO(ImGuiInputTextCallbackData, EventKey)
+        .RW(ImGuiInputTextCallbackData, EventChar)
+        .RO(ImGuiInputTextCallbackData, EventActivated)
+        .RW(ImGuiInputTextCallbackData, BufDirty)
+        .RW(ImGuiInputTextCallbackData, Buf)
+        .RW(ImGuiInputTextCallbackData, BufTextLen)
+        .RO(ImGuiInputTextCallbackData, BufSize)
+        .RW(ImGuiInputTextCallbackData, CursorPos)
+        .RW(ImGuiInputTextCallbackData, SelectionStart)
+        .RW(ImGuiInputTextCallbackData, SelectionEnd)
+        .def(DEF(ImGuiInputTextCallbackData, DeleteChars), "pos"_a, "bytes_count"_a)
+        .def(
+            "InsertChars",
+            [](ImGuiInputTextCallbackData* self, int pos, const char* text)
+            {
+                self->InsertChars(pos, text);
+            },
+            "pos"_a,
+            "text"_a
+        )
+        .def(DEF(ImGuiInputTextCallbackData, SelectAll))
+        .def(DEF(ImGuiInputTextCallbackData, SetSelection), "s"_a, "e"_a)
+        .def(DEF(ImGuiInputTextCallbackData, ClearSelection))
+        .def(DEF(ImGuiInputTextCallbackData, HasSelection));
+
+    py::class_<ImGuiSizeCallbackData>(m, "SizeCallbackData")
+        .def_property_readonly(
+            "UserData",
+            [](ImGuiSizeCallbackData* self)
+            {
+                auto data = static_cast<SizeCallbackData*>(self->UserData);
+                return data->userData;
+            }
+        )
+        .RO(ImGuiSizeCallbackData, Pos)
+        .RO(ImGuiSizeCallbackData, CurrentSize)
+        .RW(ImGuiSizeCallbackData, DesiredSize);
 }

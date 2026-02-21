@@ -7,11 +7,11 @@ PYBIND11_MODULE(imgui, m)
     py::options options;
     //options.disable_function_signatures();
 
+    init_wraps(m);
+
     // GLFW first so that the Window object is defined
     auto glfw = m.def_submodule("glfw", "GLFW Library");
     bindGLFW::init_glfw(glfw);
-
-    init_wraps(m);
 
     init_core_imgui(m);
 

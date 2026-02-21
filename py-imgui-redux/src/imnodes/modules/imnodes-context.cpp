@@ -5,6 +5,25 @@
 #include <bind-imgui/imnodes-modules.h>
 #include <binder/wraps.h>
 
+#include <pybind11/functional.h>
+
+using MinimapHoverCallback = std::function<void(int, py::object)>;
+
+struct MinimapHoverCallbackData
+{
+    MinimapHoverCallback callback;
+    py::object userData;
+};
+
+void minimapHoverCallback(int id, void* userData)
+{
+    auto* data = static_cast<MinimapHoverCallbackData*>(userData);
+    if(data->callback)
+    {
+        data->callback(id, data->userData);
+    }
+}
+
 void init_imnodes_context(py::module& m)
 {
     // Define this with no data, it's opaque
@@ -32,15 +51,35 @@ void init_imnodes_context(py::module& m)
     QUICK(BeginNodeEditor);
     QUICK(EndNodeEditor);
 
-    // TODO wrap callbacks?
+    py::class_<MinimapHoverCallbackData>(m, "_MinimapHoverCallbackData");
+
+    // This one needs to exist until the EndNodeEditor
     m.def(
         "MiniMap",
-        [](float size_fraction, ImNodesMiniMapLocation loc)
+        [](float size_fraction,
+           ImNodesMiniMapLocation loc,
+           MinimapHoverCallback callback,
+           py::object userData)
         {
-            ImNodes::MiniMap(size_fraction, loc);
+            if(callback)
+            {
+                auto* data = new MinimapHoverCallbackData{callback, userData};
+                ImNodes::MiniMap(size_fraction, loc, minimapHoverCallback, data);
+                return data;
+            }
+            else
+            {
+                ImNodes::MiniMap(size_fraction, loc);
+                return static_cast<MinimapHoverCallbackData*>(nullptr);
+            }
         },
+        "IMPORTANT: if using a callback, you must keep the return from this "
+        "function around until EndNodeEditor is called",
         "size_fraction"_a = 0.2f,
-        "location"_a = (int)ImNodesMiniMapLocation_TopLeft
+        "location"_a = (int)ImNodesMiniMapLocation_TopLeft,
+        "node_hovering_callback"_a = nullptr,
+        "node_hovering_callback_data"_a = py::none(),
+        py::return_value_policy::take_ownership
     );
 
     m.def(IMFUNC(PushColorStyle), "item"_a, "color"_a);

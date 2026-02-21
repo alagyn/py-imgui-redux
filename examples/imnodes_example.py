@@ -16,6 +16,10 @@ from imgui import imnodes
 import imgui
 
 
+def minimapHoverCallback(nodeID: int, userData):
+    imgui.SetTooltip(f'This node {nodeID} says {userData}')
+
+
 class Node:
 
     def __init__(
@@ -99,6 +103,12 @@ class State:
                 imnodes.EditorContextSet(self.context2)
 
                 imnodes.BeginNodeEditor()
+                # Have to keep the return around until EndNodeEditor()
+                callbackData = imnodes.MiniMap(
+                    location=imnodes.MiniMapLocation.TopRight,
+                    node_hovering_callback=minimapHoverCallback,
+                    node_hovering_callback_data="Yeet"
+                )
 
                 imnodes.BeginNode(4)
                 imnodes.BeginNodeTitleBar()
