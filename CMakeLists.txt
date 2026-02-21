@@ -39,6 +39,8 @@ set(IMPLOT_MOD ${IMPLOT_ROOT}/modules)
 
 set(GLFW_ROOT ${IMGUI_ROOT}/glfw)
 
+set(IMGUI_KNOBS_ROOT ${IMGUI_ROOT}/imgui-knobs)
+
 set(IMGUI_SRCS
     # Binder
     ${IMGUI_ROOT}/binder/enum-utility.cpp
@@ -96,6 +98,9 @@ set(IMGUI_SRCS
         ${IMPLOT_MOD}/implot-utils.cpp
         ${IMPLOT_MOD}/implot-colormap.cpp
         ${IMPLOT_MOD}/implot-misc.cpp
+
+    # imgui-knobs
+    ${IMGUI_KNOBS_ROOT}/bind-imgui-knobs.cpp
 
     # GLFW
     ${GLFW_ROOT}/bind-glfw.cpp

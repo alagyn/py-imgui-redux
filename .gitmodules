@@ -13,3 +13,6 @@
 [submodule "third-party/glfw"]
 	path = third-party/glfw
 	url = git@github.com:glfw/glfw.git
+[submodule "third-party/imgui-knobs"]
+	path = third-party/imgui-knobs
+	url = git@github.com:altschuler/imgui-knobs.git
