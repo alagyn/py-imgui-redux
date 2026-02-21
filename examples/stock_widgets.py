@@ -14,6 +14,7 @@ sys.path.append(os.path.split(__file__)[0])
 from window_boilerplate import window_mainloop
 
 import imgui
+from imgui import knobs
 
 
 # Data holder for our UI state
@@ -41,6 +42,9 @@ class State:
 
         self.text = imgui.StrRef(256)
 
+        self.knob1 = imgui.FloatRef()
+        self.knob2 = imgui.IntRef()
+
     def showAll(self):
         if imgui.Begin("Widgets"):
             normWidgets(self)
@@ -48,6 +52,10 @@ class State:
 
         if imgui.Begin("Tables"):
             tables()
+            imgui.End()
+
+        if imgui.Begin("Knobs"):
+            renderKnobs(self)
             imgui.End()
 
         return False
@@ -63,6 +71,15 @@ def textCallback(data: imgui.InputTextCallbackData):
             data.UserData
         )
     return 0
+
+
+def renderKnobs(state: State):
+    knobs.Knob("Wiper", state.knob1, 0, 20, variant=knobs.Variant.Wiper)
+    knobs.Knob("Stepped", state.knob1, 0, 20, variant=knobs.Variant.Stepped)
+    knobs.Knob("Space", state.knob1, 0, 20, variant=knobs.Variant.Space)
+    knobs.KnobInt(
+        "WiperDot", state.knob2, -10, 10, variant=knobs.Variant.WiperDot
+    )
 
 
 def normWidgets(state: State):

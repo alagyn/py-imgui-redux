@@ -49,6 +49,9 @@ set(imgui_SRCS
     implot/implot.cpp
     implot/implot_items.cpp
     implot/implot_demo.cpp
+
+    # imgui-knobs
+    imgui-knobs/imgui-knobs.cpp
 )
 
 add_library(imgui-cpp
@@ -62,6 +65,7 @@ target_include_directories(imgui-cpp
     imnodes
     implot
     imconfig
+    imgui-knobs
 )
 
 target_link_libraries(imgui-cpp

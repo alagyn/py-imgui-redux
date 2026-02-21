@@ -22,6 +22,7 @@ pip install py-imgui-redux
 `imgui` - [Core DearImGUI](https://github.com/ocornut/imgui)  
 `imgui.implot` - [ImPlot library](https://github.com/epezent/implot)  
 `imgui.imnodes` - [ImNodes library](https://github.com/Nelarius/imnodes)  
+`imgui.knobs` - [ImGui-Knobs library](https://github.com/altschuler/imgui-knobs)  
 `imgui.glfw` - [GLFW Bindings](https://www.glfw.org)
 
 

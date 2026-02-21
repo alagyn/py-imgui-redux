@@ -20,4 +20,7 @@ PYBIND11_MODULE(imgui, m)
 
     auto implot = m.def_submodule("implot", "ImPlot Library");
     init_implot(implot);
+
+    auto knobs = m.def_submodule("knobs", "ImGui-Knobs library");
+    init_imgui_knobs(knobs);
 }

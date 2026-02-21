@@ -9,6 +9,7 @@ void init_wraps(py::module& m);
 void init_core_imgui(py::module& m);
 void init_imnodes(py::module& m);
 void init_implot(py::module& m);
+void init_imgui_knobs(py::module& m);
 
 namespace bindGLFW {
 void init_glfw(py::module& m);
