@@ -1,5 +1,7 @@
-<img src="https://github.com/alagyn/py-imgui-redux/blob/main/docs/pyimgui-logo-512.png?raw=true" width="256" align="right"/>
 
+<table>
+<tr>
+<td>
 
 # PyImGui
 DearImGui wrapper for python made with PyBind11
@@ -9,6 +11,13 @@ DearImGui wrapper for python made with PyBind11
 Read below for adjustments made to the standard APIs.
 Otherwise, all documentation from the original libraries remains 100% valid.
 Check out the examples folder for some concrete code.
+
+</td>
+<td>
+<img src="https://github.com/alagyn/py-imgui-redux/blob/main/docs/pyimgui-logo-512.png?raw=true" width="512" align="right"/>
+</td>
+</tr>
+</table>
 
 ## Install
 
