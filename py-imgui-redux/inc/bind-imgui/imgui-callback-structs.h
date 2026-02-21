@@ -12,6 +12,7 @@ struct InputTextCallbackData
 {
     StrRefPtr value;
     InputTextCallback callback;
+    int flags;
     pybind11::object userData;
 };
 

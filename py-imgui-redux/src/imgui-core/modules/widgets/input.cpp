@@ -12,7 +12,9 @@ int inputTextCallback(ImGuiInputTextCallbackData* data)
         userData->value->strLen = data->BufTextLen;
     }
 
-    if(userData->callback)
+    // Recheck flags here so we don't pass the callback to the client
+    // unless they asked for it
+    if(userData->callback && userData->flags & data->EventFlag)
     {
         return userData->callback(data);
     }
@@ -30,11 +32,12 @@ void init_widgets_input(py::module& m)
            InputTextCallback callback,
            py::object userData)
         {
-            InputTextCallbackData data{value, callback, userData};
+            InputTextCallbackData data{value, callback, flags, userData};
             return ImGui::InputText(
                 label,
                 value->data(),
                 value->vals.capacity(),
+                // Use the callback to keep track of the string lenth
                 flags | ImGuiInputTextFlags_CallbackAlways,
                 inputTextCallback,
                 &data
@@ -56,7 +59,7 @@ void init_widgets_input(py::module& m)
            InputTextCallback callback,
            py::object userData)
         {
-            InputTextCallbackData data{value, callback, userData};
+            InputTextCallbackData data{value, callback, flags, userData};
             return ImGui::InputTextMultiline(
                 label,
                 value->data(),
@@ -84,7 +87,7 @@ void init_widgets_input(py::module& m)
            InputTextCallback callback,
            py::object userData)
         {
-            InputTextCallbackData data{value, callback, userData};
+            InputTextCallbackData data{value, callback, flags, userData};
             return ImGui::InputTextWithHint(
                 label,
                 hint,
