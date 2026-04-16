@@ -603,7 +603,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, ButtonFlags, MouseButtonRight)
         .VALUE(ImGui, ButtonFlags, MouseButtonMiddle)
         .VALUE(ImGui, ButtonFlags, MouseButtonMask_)
-        .VALUE(ImGui, ButtonFlags, EnableNav);
+        .VALUE(ImGui, ButtonFlags, EnableNav)
+        .VALUE(ImGui, ButtonFlags, AllowOverlap);
 
     ENUM(ImGui, ColorEditFlags)
         .RAW_VALUE(None_, ImGuiColorEditFlags_None)
@@ -724,7 +725,8 @@ void init_imgui_enums(py::module& m)
         .VALUE(ImGui, MultiSelectFlags, ClearOnClickVoid)
         .VALUE(ImGui, MultiSelectFlags, ScopeWindow)
         .VALUE(ImGui, MultiSelectFlags, ScopeRect)
-        .VALUE(ImGui, MultiSelectFlags, SelectOnClick)
+        .VALUE(ImGui, MultiSelectFlags, SelectOnAuto)
+        .VALUE(ImGui, MultiSelectFlags, SelectOnClickAlways)
         .VALUE(ImGui, MultiSelectFlags, SelectOnClickRelease)
         .VALUE(ImGui, MultiSelectFlags, NavWrapX)
         .VALUE(ImGui, MultiSelectFlags, NoSelectOnRightClick);

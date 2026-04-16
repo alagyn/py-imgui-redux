@@ -52,4 +52,5 @@ void init_widgets_tree(py::module& m)
     );
     m.def(IMFUNC(SetNextItemOpen), "is_open"_a, "cond"_a = 0);
     m.def(IMFUNC(SetNextItemStorageID), "storage_id"_a);
+    m.def(IMFUNC(TreeNodeGetOpen), "storage_id"_a);
 }

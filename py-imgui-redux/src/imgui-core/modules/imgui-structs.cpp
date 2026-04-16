@@ -289,7 +289,8 @@ void init_imgui_structs(py::module& m)
         )
         .def(DEF(ImGuiListClipper, SeekCursorForItem), "item_index"_a)
         .RO(ImGuiListClipper, DisplayStart)
-        .RO(ImGuiListClipper, DisplayEnd);
+        .RO(ImGuiListClipper, DisplayEnd)
+        .RW(ImGuiListClipper, UserIndex);
 
     py::class_<ImGuiTableSortSpecs>(m, "TableSortSpecs")
         .def(py::init<>())
