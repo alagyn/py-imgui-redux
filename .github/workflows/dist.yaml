@@ -17,10 +17,10 @@ jobs:
   sdist:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.10'
       - name: Install dependencies
@@ -66,17 +66,17 @@ jobs:
             os: macos-latest
       fail-fast: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
-      - uses: pypa/cibuildwheel@v3.1.4
+      - uses: pypa/cibuildwheel@v3.4.1
         env:
           CIBW_BEFORE_ALL_LINUX: ${{ matrix.prebuild }}
           CIBW_MANYLINUX_X86_64_IMAGE: manylinux_2_28
           # only build cpython
           CIBW_BUILD: ${{ matrix.build }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: wheels-${{ matrix.os }}
@@ -93,7 +93,7 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
           path: dist
