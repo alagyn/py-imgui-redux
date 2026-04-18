@@ -98,6 +98,7 @@ jobs:
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           print-hash: true
+          repository-url: https://test.pypi.org/legacy/
   pypi-publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
