@@ -82,6 +82,8 @@ jobs:
 
   verify-wheels:
     runs-on: ubuntu-latest
+    needs:
+      - wheels
     if: always()
     steps:
       - uses: actions/download-artifact@v8
