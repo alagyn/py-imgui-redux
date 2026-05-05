@@ -79,32 +79,25 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
-  test-pypi-publish:
+
+  verify-wheels:
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.action != 'published'
-    needs:
-      - sdist
-      - wheels
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/py-imgui-redux
-    permissions:
-      id-token: write
+    if: always()
     steps:
       - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
           path: dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          print-hash: true
-          repository-url: https://test.pypi.org/legacy/
+      - run: python3 -m pip install twine
+      - run: twine check dist/*.whl
+
   pypi-publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     needs:
       - sdist
       - wheels
+      - verify-wheels
     environment:
       name: pypi
       url: https://pypi.org/p/py-imgui-redux
