@@ -65,7 +65,24 @@ void init_widgets_colors(py::module& m)
     m.def(IMFUNC(ColorConvertFloat4ToU32), "inColor"_a);
     m.def(
         "ColorConvertRGBtoHSV",
-        [](float r, float g, float b)
+        [](const ImVec4* vec)
+        {
+            ImVec4 out;
+            ImGui::ColorConvertRGBtoHSV(
+                vec->x,
+                vec->y,
+                vec->z,
+                out.x,
+                out.y,
+                out.z
+            );
+            out.w = vec->w;
+            return out;
+        }
+    );
+    m.def(
+        "ColorConvertRGBtoHSV",
+        [](float r, float g, float b) -> py::typing::Tuple<float, float, float>
         {
             float outH, outS, outV;
             ImGui::ColorConvertRGBtoHSV(r, g, b, outH, outS, outV);
@@ -73,11 +90,30 @@ void init_widgets_colors(py::module& m)
         },
         "r"_a,
         "g"_a,
-        "b"_a
+        "b"_a,
+        "Convert RGB color to HSV. Returns (H, S, V)"
+    );
+    ;
+    m.def(
+        "ColorConvertHSVtoRGB",
+        [](const ImVec4* vec)
+        {
+            ImVec4 out;
+            ImGui::ColorConvertHSVtoRGB(
+                vec->x,
+                vec->y,
+                vec->z,
+                out.x,
+                out.y,
+                out.z
+            );
+            out.w = vec->w;
+            return out;
+        }
     );
     m.def(
         "ColorConvertHSVtoRGB",
-        [](float h, float s, float v)
+        [](float h, float s, float v) -> py::typing::Tuple<float, float, float>
         {
             float outR, outG, outB;
             ImGui::ColorConvertHSVtoRGB(h, s, v, outR, outG, outB);
@@ -85,6 +121,7 @@ void init_widgets_colors(py::module& m)
         },
         "h"_a,
         "s"_a,
-        "v"_a
+        "v"_a,
+        "Convert HSV color to RGB. Returns (R, G, B)"
     );
 }
