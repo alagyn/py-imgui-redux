@@ -58,6 +58,7 @@ set(IMGUI_SRCS
         ${IMGUI_MOD}/imgui-context.cpp
         ${IMGUI_MOD}/imgui-enums.cpp
         ${IMGUI_MOD}/imgui-structs.cpp
+        ${IMGUI_MOD}/imgui-vectors.cpp
         ${IMGUI_MOD}/im-windows.cpp
         ${IMGUI_MOD}/stacks.cpp
         ${IMGUI_MOD}/styles.cpp
