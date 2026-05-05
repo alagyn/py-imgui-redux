@@ -10,10 +10,9 @@ import random
 
 import numpy as np
 
-# Add this file's dir to the path just in case we can't find the other files
-sys.path.append(os.path.split(__file__)[0])
-# Import the boilerplate loop from "window_boilerplate.py"
-from window_boilerplate import window_mainloop
+# Import a basic main loop for a simple UI
+# This is included with the library for you to use as well
+from imgui_utils.boilerplate import window_mainloop
 
 import imgui.implot as implot
 import imgui
@@ -89,4 +88,4 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("Plotting", 1024, 640, state.render)
+    window_mainloop("Plotting", state.render, 1024, 640)

@@ -9,7 +9,6 @@ import shutil
 import pathlib
 import sys
 import subprocess
-import sysconfig
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
@@ -120,17 +119,8 @@ class InstallCMakeLibs(install_lib):
         except KeyError:
             oldPath = ""
 
-        log(f"Directory contents:")
-        log(os.listdir(bin_dir))
-
         if IS_WINDOWS:
             newPath = f"{bin_dir};" + oldPath
-
-            # force glfw dll to be in the same dir
-            # because we can't change the DLL lookup path via PATH
-            # because reasons
-            # https://docs.python.org/3/library/os.html#os.add_dll_directory
-            # shutil.copy(f'{sysconfig.get_path("purelib")}/glfw3.dll', bin_dir)
         else:
             newPath = f"{bin_dir}:" + oldPath
 
@@ -152,6 +142,13 @@ class InstallCMakeLibs(install_lib):
             shutil.rmtree(stub_dir)
 
         shutil.move(os.path.join(bin_dir, "stubs/imgui-stubs"), stub_dir)
+
+        # copy python helpers in imgui_utils
+        shutil.copytree(
+            os.path.join(SOURCE_DIR, "imgui_utils"),
+            os.path.join(self.build_dir, "imgui_utils"),
+            dirs_exist_ok=True
+        )
 
         # Mark the libs for installation, adding them to
         # distribution.data_files seems to ensure that setuptools' record

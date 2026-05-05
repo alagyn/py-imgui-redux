@@ -7,10 +7,9 @@ import sys
 import os
 from typing import List, Tuple
 
-# Add this file's dir to the path just in case we can't find the other files
-sys.path.append(os.path.split(__file__)[0])
-# Import the boilerplate loop from "window_boilerplate.py"
-from window_boilerplate import window_mainloop
+# Import a basic main loop for a simple UI
+# This is included with the library for you to use as well
+from imgui_utils.boilerplate import window_mainloop
 
 from imgui import imnodes
 import imgui
@@ -128,6 +127,4 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop(
-        "ImNodes Demo", 1024, 768, init=state.setup, draw=state.render
-    )
+    window_mainloop("ImNodes Demo", state.render, 1024, 768, init=state.setup)
