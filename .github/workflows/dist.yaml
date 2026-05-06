@@ -90,11 +90,17 @@ jobs:
         with:
           merge-multiple: true
           path: dist
+          skip-decompress: true
       - run: |
           python3 -m venv venv
           source venv/bin/activate
           python -m pip install twine
-          twine check dist/*.whl
+          cd dist
+          for f in *.zip
+          do
+            unzip $f
+          done
+          twine check *.whl
 
   pypi-publish:
     runs-on: ubuntu-latest
