@@ -41,7 +41,7 @@ class State:
         self.font2 = io.Fonts.AddFontDefaultVector(None)
         self.font3 = io.Fonts.AddFontDefaultBitmap(None)
 
-    def render(self):
+    def render(self, dt: float):
         style = im.GetStyle()
         im.PushFont(self.font, style.FontSizeBase)
         if im.Begin("Window"):

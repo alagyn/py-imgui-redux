@@ -72,7 +72,7 @@ class State:
         self.context1 = imnodes.EditorContextCreate()
         self.context2 = imnodes.EditorContextCreate()
 
-    def render(self) -> bool:
+    def render(self, dt: float) -> bool:
         imgui.SetNextWindowSize(imgui.Vec2(600, 600), imgui.Cond.Once)
         if imgui.Begin("Nodes"):
             if imgui.BeginChild("editor_1", imgui.Vec2(0, 500)):

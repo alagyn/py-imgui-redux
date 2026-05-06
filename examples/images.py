@@ -78,7 +78,7 @@ class State:
         # we no longer need the image data once loaded in a texture
         self.textures = [("built-in", tex1), ("openCV", tex2), ("PIL", tex3)]
 
-    def render(self):
+    def render(self, dt: float):
         im.SetNextWindowSize(im.Vec2(700, 300))
         if im.Begin("Window"):
             if im.BeginTable("_im", len(self.textures)):

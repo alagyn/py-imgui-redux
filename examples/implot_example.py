@@ -3,8 +3,6 @@ Basic example of implot usage.
 See the ImPlot docs for more info.
 """
 
-import sys
-import os
 import time
 import random
 
@@ -38,10 +36,11 @@ class State:
         )
         self.plotIdx = 0
 
-        self.lastUpate = time.perf_counter()
+        self.lastUpate = 0
         self.updatePeriod = 0.5
 
-    def render(self):
+    def render(self, dt: float):
+        self.lastUpate += dt
         if imgui.Begin("Plot"):
             if imgui.RadioButton("Scatter", self.plotMode == 0):
                 self.plotMode = 0
@@ -57,13 +56,13 @@ class State:
                     formatterData = implot.SetupAxisFormat(
                         implot.Axis.X1, formatterCallback, "data"
                     )
-                    if time.perf_counter(
-                    ) - self.lastUpate > self.updatePeriod:
+                    if self.lastUpate > self.updatePeriod:
                         self.plotY[
                             self.plotIdx
                         ] = random.triangular(self.plotMin, self.plotMax)
                         self.plotIdx = (self.plotIdx + 1) % self.plotSize
-                        self.lastUpate = time.perf_counter()
+                        self.lastUpate = 0
+
                     implot.PlotScatter("DATA", self.plotX, self.plotY)
                 elif self.plotMode == 1:
                     size = 10

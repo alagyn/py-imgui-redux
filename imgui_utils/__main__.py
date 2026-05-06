@@ -4,7 +4,7 @@ from imgui_utils import boilerplate
 
 if __name__ == '__main__':
 
-    def showDemo():
+    def showDemo(dt: float):
         imgui.ShowDemoWindow()
         implot.ShowDemoWindow()
         return False

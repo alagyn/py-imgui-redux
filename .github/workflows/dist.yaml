@@ -90,8 +90,11 @@ jobs:
         with:
           merge-multiple: true
           path: dist
-      - run: python3 -m pip install twine
-      - run: twine check dist/*.whl
+      - run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install twine
+          twine check dist/*.whl
 
   pypi-publish:
     runs-on: ubuntu-latest

@@ -8,8 +8,8 @@ import platform
 import imgui as im
 from imgui import glfw, imnodes, implot
 
-# Define a DrawFunc as a callable that takes no arguments and returns a bool
-DrawFunc = Callable[[], bool]
+# Define a DrawFunc as a callable that takes a single argument (delta_t) and returns a bool
+DrawFunc = Callable[[float], bool]
 # Define an InitFunc as a callable that takes no arguments and returns None
 InitFunc = Callable[[], None]
 # Define a CleanupFunc as a callable that takes no arguments and returns None
@@ -110,14 +110,18 @@ def window_mainloop(
     if init is not None:
         init()
 
+    prevTime = glfw.GetTime()
+
     # 5) Main Loop
     while True:
         # pre-frame init
         glfw.PollEvents()
         im.NewFrame()
 
+        newTime = glfw.GetTime()
         # Do GUI processing
-        shouldExit = draw()
+        shouldExit = draw(newTime - prevTime)
+        prevTime = newTime
 
         # Render the frame
         im.Render(window, clear_color)

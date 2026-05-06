@@ -46,7 +46,7 @@ class State:
         self.knob1 = imgui.FloatRef()
         self.knob2 = imgui.IntRef()
 
-    def showAll(self):
+    def showAll(self, dt: float):
         if imgui.Begin("Widgets"):
             normWidgets(self)
             imgui.End()
