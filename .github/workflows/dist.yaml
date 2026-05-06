@@ -28,6 +28,7 @@ jobs:
         with:
           name: sdist
           path: dist/*.tar.gz
+          archive: false
   wheels:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
@@ -79,6 +80,7 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
+          compression-level: 0
 
   verify-wheels:
     runs-on: ubuntu-latest
