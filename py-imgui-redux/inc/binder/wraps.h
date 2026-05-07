@@ -62,10 +62,9 @@ public:
         return self;
     }
 
-    friend MathWrapper<T> operator+(T o, MathWrapper<T> self)
+    friend T operator+(T o, MathWrapper<T> self)
     {
-        self.val += o;
-        return self;
+        return o + self.val;
     }
 
     // Subtraction
@@ -94,10 +93,9 @@ public:
         return self;
     }
 
-    friend MathWrapper<T> operator-(T o, MathWrapper<T> self)
+    friend T operator-(T o, MathWrapper<T> self)
     {
-        self.val = o - self.val;
-        return self;
+        return o - self.val;
     }
 
     // Multiplication
@@ -126,10 +124,9 @@ public:
         return self;
     }
 
-    friend MathWrapper<T> operator*(T o, MathWrapper<T> self)
+    friend T operator*(T o, MathWrapper<T> self)
     {
-        self.val *= o;
-        return self;
+        return o * self.val;
     }
 
     // Division
@@ -158,10 +155,9 @@ public:
         return self;
     }
 
-    friend MathWrapper<T> operator/(T o, MathWrapper<T> self)
+    friend T operator/(T o, MathWrapper<T> self)
     {
-        self.val = o / self.val;
-        return self;
+        return o / self.val;
     }
 
     // Equality
@@ -263,7 +259,7 @@ MathWrapper<int>& operator%=(MathWrapper<int>& self, int o);
 MathWrapper<int>& operator%=(MathWrapper<int>& self, const MathWrapper<int>& o);
 MathWrapper<int> operator%(MathWrapper<int> self, int o);
 MathWrapper<int> operator%(MathWrapper<int> self, const MathWrapper<int>& o);
-MathWrapper<int> operator%(int o, MathWrapper<int> self);
+int operator%(int o, MathWrapper<int> self);
 
 MathWrapper<float>& operator%=(MathWrapper<float>& self, float o);
 MathWrapper<float>&
@@ -271,7 +267,7 @@ operator%=(MathWrapper<float>& self, const MathWrapper<float>& o);
 MathWrapper<float> operator%(MathWrapper<float> self, float o);
 MathWrapper<float>
 operator%(MathWrapper<float> self, const MathWrapper<float>& o);
-MathWrapper<float> operator%(float o, MathWrapper<float> self);
+float operator%(float o, MathWrapper<float> self);
 
 MathWrapper<double>& operator%=(MathWrapper<double>& self, double o);
 MathWrapper<double>&
@@ -279,10 +275,7 @@ operator%=(MathWrapper<double>& self, const MathWrapper<double>& o);
 MathWrapper<double> operator%(MathWrapper<double> self, double o);
 MathWrapper<double>
 operator%(MathWrapper<double> self, const MathWrapper<double>& o);
-MathWrapper<double> operator%(double o, MathWrapper<double> self);
-
-using BoolRef_ = Wrapper<bool>;
-using BoolRef = BoolRef_*;
+double operator%(double o, MathWrapper<double> self);
 
 using FloatRef_ = MathWrapper<float>;
 using FloatRef = FloatRef_*;
@@ -292,6 +285,22 @@ using DoubleRef = DoubleRef_*;
 
 using IntRef_ = MathWrapper<int>;
 using IntRef = IntRef_*;
+
+class BoolRef_ : public Wrapper<bool>
+{
+public:
+    BoolRef_(bool val)
+        : Wrapper(val)
+    {
+    }
+
+    inline bool toBool()
+    {
+        return val;
+    }
+};
+
+using BoolRef = BoolRef_*;
 
 template<class T> class ImList
 {
