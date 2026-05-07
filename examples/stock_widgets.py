@@ -60,6 +60,13 @@ class State:
         assert x == 1
         assert x != 26
 
+        # Bool refs can be used directly in logical statements
+        logic = imgui.BoolRef(False)
+
+        assert logic or True
+        if not logic:
+            print("It works")
+
     def showAll(self, dt: float):
         if imgui.Begin("Widgets"):
             normWidgets(self)

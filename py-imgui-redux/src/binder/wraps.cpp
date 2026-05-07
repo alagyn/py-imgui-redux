@@ -170,7 +170,6 @@ void EditableStrWrapper::set(const std::string& val)
 
 void init_wraps(py::module& m)
 {
-    initRef<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool", false);
     initMathRef<IntRef_>(m, "IntRef", "A pass-by-ref wrapper for an int", 0);
     initMathRef<FloatRef_>(
         m,
@@ -184,6 +183,12 @@ void init_wraps(py::module& m)
         "A pass-by-ref wrapper for a double",
         0.0
     );
+
+    py::class_<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool")
+        .def(py::init<bool>(), "val"_a = false)
+        .def_readwrite("val", &BoolRef_::val, "The wrapped value")
+        .def("__str__", &BoolRef_::toStr)
+        .def("__bool__", &BoolRef_::toBool);
 
     initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
     initList<WCharList, ImWchar>(
@@ -292,10 +297,9 @@ MathWrapper<int> operator%(MathWrapper<int> self, const MathWrapper<int>& o)
     return self;
 }
 
-MathWrapper<int> operator%(int o, MathWrapper<int> self)
+int operator%(int o, MathWrapper<int> self)
 {
-    self.val = o % self.val;
-    return self;
+    return o % self.val;
 }
 
 // Modulus float
@@ -324,10 +328,9 @@ MathWrapper<float> operator%(MathWrapper<float> self, const MathWrapper<float>& 
     return self;
 }
 
-MathWrapper<float> operator%(float o, MathWrapper<float> self)
+float operator%(float o, MathWrapper<float> self)
 {
-    self.val = std::fmod(o, self.val);
-    return self;
+    return std::fmod(o, self.val);
 }
 
 // Modulus double
@@ -357,8 +360,7 @@ operator%(MathWrapper<double> self, const MathWrapper<double>& o)
     return self;
 }
 
-MathWrapper<double> operator%(double o, MathWrapper<double> self)
+double operator%(double o, MathWrapper<double> self)
 {
-    self.val = std::fmod(o, self.val);
-    return self;
+    return std::fmod(o, self.val);
 }
