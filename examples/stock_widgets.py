@@ -46,6 +46,20 @@ class State:
         self.knob1 = imgui.FloatRef()
         self.knob2 = imgui.IntRef()
 
+        # You can do math with ref values
+        val = imgui.IntRef(5)
+        val += 5
+        # and check equality
+        assert val == 10
+        assert val == imgui.IntRef(10)
+        x = val - 10
+        assert x == 0
+        x.val = 21
+        x %= 2
+        assert x > 0
+        assert x == 1
+        assert x != 26
+
     def showAll(self, dt: float):
         if imgui.Begin("Widgets"):
             normWidgets(self)
@@ -105,7 +119,7 @@ def normWidgets(state: State):
         # TODO checkbox flags
         if imgui.Button("Reset Radio"):
             state.radio.val = -1
-        if imgui.RadioButton("Radio0", state.radio.val == 0):
+        if imgui.RadioButton("Radio0", state.radio == 0):
             state.radio.val = 0
         # shorthand for the above if statement
         imgui.RadioButton("Radio1", state.radio, 1)

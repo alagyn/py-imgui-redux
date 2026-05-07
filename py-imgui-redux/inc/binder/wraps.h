@@ -5,10 +5,12 @@
 
 #include <imgui.h>
 
+#include <cmath>
+
 // Forward declares of wrapper types
 // These are used to wrap arguments that are supposed to be pointers to output variables
 
-template<class T> class Wrapper
+template<typename T> class Wrapper
 {
 public:
     T val;
@@ -26,16 +28,269 @@ public:
     }
 };
 
+template<typename T> class MathWrapper : public Wrapper<T>
+{
+public:
+    explicit MathWrapper(T val)
+        : Wrapper<T>(val)
+    {
+    }
+
+    // Addition
+    MathWrapper<T>& operator+=(T o)
+    {
+        this->val += o;
+        return *this;
+    }
+
+    MathWrapper<T>& operator+=(const MathWrapper<T>& o)
+    {
+        this->val += o.val;
+        return *this;
+    }
+
+    friend MathWrapper<T> operator+(MathWrapper<T> self, T o)
+    {
+        // Self is passed by value
+        self += o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator+(MathWrapper<T> self, const MathWrapper<T>& o)
+    {
+        self += o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator+(T o, MathWrapper<T> self)
+    {
+        self.val += o;
+        return self;
+    }
+
+    // Subtraction
+    MathWrapper<T>& operator-=(T o)
+    {
+        this->val -= o;
+        return *this;
+    }
+
+    MathWrapper<T>& operator-=(const MathWrapper<T>& o)
+    {
+        this->val -= o.val;
+        return *this;
+    }
+
+    friend MathWrapper<T> operator-(MathWrapper<T> self, T o)
+    {
+        // Self is passed by value
+        self -= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator-(MathWrapper<T> self, const MathWrapper<T>& o)
+    {
+        self -= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator-(T o, MathWrapper<T> self)
+    {
+        self.val = o - self.val;
+        return self;
+    }
+
+    // Multiplication
+    MathWrapper<T>& operator*=(T o)
+    {
+        this->val *= o;
+        return *this;
+    }
+
+    MathWrapper<T>& operator*=(const MathWrapper<T>& o)
+    {
+        this->val *= o.val;
+        return *this;
+    }
+
+    friend MathWrapper<T> operator*(MathWrapper<T> self, T o)
+    {
+        // Self is passed by value
+        self *= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator*(MathWrapper<T> self, const MathWrapper<T>& o)
+    {
+        self *= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator*(T o, MathWrapper<T> self)
+    {
+        self.val *= o;
+        return self;
+    }
+
+    // Division
+    MathWrapper<T>& operator/=(T o)
+    {
+        this->val /= o;
+        return *this;
+    }
+
+    MathWrapper<T>& operator/=(const MathWrapper<T>& o)
+    {
+        this->val /= o.val;
+        return *this;
+    }
+
+    friend MathWrapper<T> operator/(MathWrapper<T> self, T o)
+    {
+        // Self is passed by value
+        self /= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator/(MathWrapper<T> self, const MathWrapper<T>& o)
+    {
+        self /= o;
+        return self;
+    }
+
+    friend MathWrapper<T> operator/(T o, MathWrapper<T> self)
+    {
+        self.val = o / self.val;
+        return self;
+    }
+
+    // Equality
+    friend bool operator==(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val == b.val;
+    }
+
+    friend bool operator==(const MathWrapper<T>& a, T b)
+    {
+        return a.val == b;
+    }
+
+    friend bool operator==(T a, const MathWrapper<T>& b)
+    {
+        return a == b.val;
+    }
+
+    // Inequality
+    friend bool operator!=(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val != b.val;
+    }
+
+    friend bool operator!=(const MathWrapper<T>& a, T b)
+    {
+        return a.val != b;
+    }
+
+    friend bool operator!=(T a, const MathWrapper<T>& b)
+    {
+        return a != b.val;
+    }
+
+    // Comparison <
+    friend bool operator<(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val < b.val;
+    }
+
+    friend bool operator<=(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val <= b.val;
+    }
+
+    friend bool operator<(const MathWrapper<T>& a, T b)
+    {
+        return a.val < b;
+    }
+
+    friend bool operator<=(const MathWrapper<T>& a, T b)
+    {
+        return a.val <= b;
+    }
+
+    friend bool operator<(T a, const MathWrapper<T>& b)
+    {
+        return a < b.val;
+    }
+
+    friend bool operator<=(T a, const MathWrapper<T>& b)
+    {
+        return a <= b.val;
+    }
+
+    // Comparison >
+    friend bool operator>(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val > b.val;
+    }
+
+    friend bool operator>=(const MathWrapper<T>& a, const MathWrapper<T>& b)
+    {
+        return a.val >= b.val;
+    }
+
+    friend bool operator>(const MathWrapper<T>& a, T b)
+    {
+        return a.val > b;
+    }
+
+    friend bool operator>=(const MathWrapper<T>& a, T b)
+    {
+        return a.val >= b;
+    }
+
+    friend bool operator>(T a, const MathWrapper<T>& b)
+    {
+        return a > b.val;
+    }
+
+    friend bool operator>=(T a, const MathWrapper<T>& b)
+    {
+        return a >= b.val;
+    }
+};
+
+MathWrapper<int>& operator%=(MathWrapper<int>& self, int o);
+MathWrapper<int>& operator%=(MathWrapper<int>& self, const MathWrapper<int>& o);
+MathWrapper<int> operator%(MathWrapper<int> self, int o);
+MathWrapper<int> operator%(MathWrapper<int> self, const MathWrapper<int>& o);
+MathWrapper<int> operator%(int o, MathWrapper<int> self);
+
+MathWrapper<float>& operator%=(MathWrapper<float>& self, float o);
+MathWrapper<float>&
+operator%=(MathWrapper<float>& self, const MathWrapper<float>& o);
+MathWrapper<float> operator%(MathWrapper<float> self, float o);
+MathWrapper<float>
+operator%(MathWrapper<float> self, const MathWrapper<float>& o);
+MathWrapper<float> operator%(float o, MathWrapper<float> self);
+
+MathWrapper<double>& operator%=(MathWrapper<double>& self, double o);
+MathWrapper<double>&
+operator%=(MathWrapper<double>& self, const MathWrapper<double>& o);
+MathWrapper<double> operator%(MathWrapper<double> self, double o);
+MathWrapper<double>
+operator%(MathWrapper<double> self, const MathWrapper<double>& o);
+MathWrapper<double> operator%(double o, MathWrapper<double> self);
+
 using BoolRef_ = Wrapper<bool>;
 using BoolRef = BoolRef_*;
 
-using FloatRef_ = Wrapper<float>;
+using FloatRef_ = MathWrapper<float>;
 using FloatRef = FloatRef_*;
 
-using DoubleRef_ = Wrapper<double>;
+using DoubleRef_ = MathWrapper<double>;
 using DoubleRef = DoubleRef_*;
 
-using IntRef_ = Wrapper<int>;
+using IntRef_ = MathWrapper<int>;
 using IntRef = IntRef_*;
 
 template<class T> class ImList

@@ -2,7 +2,9 @@
 #include <binder/list-wrapper.h>
 #include <binder/wraps.h>
 
+#include <pybind11/operators.h>
 #include <pybind11/stl.h>
+
 #include <sstream>
 
 namespace py = pybind11;
@@ -69,6 +71,67 @@ void initRef(py::module& m, const char* name, const char* desc, U defaultVal)
 }
 
 template<class T, class U>
+void initMathRef(py::module& m, const char* name, const char* desc, U defaultVal)
+{
+    py::class_<T>(m, name, desc)
+        .def(py::init<U>(), "val"_a = defaultVal)
+        .def_readwrite("val", &T::val, "The wrapped value")
+        .def("__str__", &T::toStr)
+        // Addition
+        .def(py::self += U())
+        .def(py::self += py::self)
+        .def(py::self + U())
+        .def(py::self + py::self)
+        .def(U() + py::self)
+        // Subtraction
+        .def(py::self -= U())
+        .def(py::self -= py::self)
+        .def(py::self - U())
+        .def(py::self - py::self)
+        .def(U() - py::self)
+        // Multiplication
+        .def(py::self *= U())
+        .def(py::self *= py::self)
+        .def(py::self * U())
+        .def(py::self * py::self)
+        .def(U() * py::self)
+        // Division
+        .def(py::self /= U())
+        .def(py::self /= py::self)
+        .def(py::self / U())
+        .def(py::self / py::self)
+        .def(U() / py::self)
+        // Modulus
+        .def(py::self %= U())
+        .def(py::self %= py::self)
+        .def(py::self % U())
+        .def(py::self % py::self)
+        .def(U() % py::self)
+        // Equality
+        .def(py::self == py::self)
+        .def(py::self == U())
+        .def(U() == py::self)
+        // Inequality
+        .def(py::self != py::self)
+        .def(py::self != U())
+        .def(U() != py::self)
+        // Comparison <
+        .def(py::self < py::self)
+        .def(py::self <= py::self)
+        .def(py::self < U())
+        .def(py::self <= U())
+        .def(U() < py::self)
+        .def(U() <= py::self)
+        // Comparison >
+        .def(py::self > py::self)
+        .def(py::self >= py::self)
+        .def(py::self > U())
+        .def(py::self >= U())
+        .def(U() > py::self)
+        .def(U() >= py::self);
+}
+
+template<class T, class U>
 void initList(py::module& m, const char* name, const char* desc)
 {
     py::class_<T>(m, name, desc)
@@ -108,9 +171,19 @@ void EditableStrWrapper::set(const std::string& val)
 void init_wraps(py::module& m)
 {
     initRef<BoolRef_>(m, "BoolRef", "A pass-by-ref wrapper for a bool", false);
-    initRef<IntRef_>(m, "IntRef", "A pass-by-ref wrapper for an int", 0);
-    initRef<FloatRef_>(m, "FloatRef", "A pass-by-ref wrapper for a float", 0.0f);
-    initRef<DoubleRef_>(m, "DoubleRef", "A pass-by-ref wrapper for a double", 0.0);
+    initMathRef<IntRef_>(m, "IntRef", "A pass-by-ref wrapper for an int", 0);
+    initMathRef<FloatRef_>(
+        m,
+        "FloatRef",
+        "A pass-by-ref wrapper for a float",
+        0.0f
+    );
+    initMathRef<DoubleRef_>(
+        m,
+        "DoubleRef",
+        "A pass-by-ref wrapper for a double",
+        0.0
+    );
 
     initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
     initList<WCharList, ImWchar>(
@@ -192,4 +265,100 @@ void init_wraps(py::module& m)
     py::class_<EditableStrWrapper>(m, "EditableStrWrapper")
         .def("set", &EditableStrWrapper::set, "val"_a)
         .def_readonly("size", &EditableStrWrapper::maxSize);
+}
+
+// Modulus Int
+MathWrapper<int>& operator%=(MathWrapper<int>& self, int o)
+{
+    self.val %= o;
+    return self;
+}
+
+MathWrapper<int>& operator%=(MathWrapper<int>& self, const MathWrapper<int>& o)
+{
+    self.val %= o.val;
+    return self;
+}
+
+MathWrapper<int> operator%(MathWrapper<int> self, int o)
+{
+    self %= o;
+    return self;
+}
+
+MathWrapper<int> operator%(MathWrapper<int> self, const MathWrapper<int>& o)
+{
+    self %= o;
+    return self;
+}
+
+MathWrapper<int> operator%(int o, MathWrapper<int> self)
+{
+    self.val = o % self.val;
+    return self;
+}
+
+// Modulus float
+MathWrapper<float>& operator%=(MathWrapper<float>& self, float o)
+{
+    self.val = std::fmod(self.val, o);
+    return self;
+}
+
+MathWrapper<float>&
+operator%=(MathWrapper<float>& self, const MathWrapper<float>& o)
+{
+    self.val = std::fmod(self.val, o.val);
+    return self;
+}
+
+MathWrapper<float> operator%(MathWrapper<float> self, float o)
+{
+    self %= o;
+    return self;
+}
+
+MathWrapper<float> operator%(MathWrapper<float> self, const MathWrapper<float>& o)
+{
+    self %= o;
+    return self;
+}
+
+MathWrapper<float> operator%(float o, MathWrapper<float> self)
+{
+    self.val = std::fmod(o, self.val);
+    return self;
+}
+
+// Modulus double
+MathWrapper<double>& operator%=(MathWrapper<double>& self, double o)
+{
+    self.val = std::fmod(self.val, o);
+    return self;
+}
+
+MathWrapper<double>&
+operator%=(MathWrapper<double>& self, const MathWrapper<double>& o)
+{
+    self.val = std::fmod(self.val, o.val);
+    return self;
+}
+
+MathWrapper<double> operator%(MathWrapper<double> self, double o)
+{
+    self.val = std::fmod(self.val, o);
+    return self;
+}
+
+MathWrapper<double>
+operator%(MathWrapper<double> self, const MathWrapper<double>& o)
+{
+    self %= o;
+    return self;
+}
+
+MathWrapper<double> operator%(double o, MathWrapper<double> self)
+{
+    self.val = std::fmod(o, self.val);
+    return self;
 }

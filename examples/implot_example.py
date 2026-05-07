@@ -27,7 +27,7 @@ class State:
     def __init__(self) -> None:
         self.plotMode = 0
 
-        self.plotSize = 1000
+        self.plotSize = 100
         self.plotMin = 0
         self.plotMax = 10
         self.plotX = np.arange(self.plotSize, dtype=np.float64)
@@ -66,11 +66,10 @@ class State:
                     implot.PlotScatter("DATA", self.plotX, self.plotY)
                 elif self.plotMode == 1:
                     size = 10
-                    if time.perf_counter(
-                    ) - self.lastUpate > self.updatePeriod:
+                    if self.lastUpate > self.updatePeriod:
                         self.plotY[self.plotIdx] += random.triangular(-1, 1)
                         self.plotIdx = (self.plotIdx + 1) % (size * size)
-                        self.lastUpate = time.perf_counter()
+                        self.lastUpate = 0
                     implot.PlotHeatmap(
                         "DATA",
                         self.plotY,
@@ -87,4 +86,4 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("Plotting", state.render, 1024, 640)
+    window_mainloop("Plotting", state.render, 1024, 640, init_implot=True)
