@@ -83,12 +83,21 @@ if imgui.DragIntRange2("Label", min_val, max_val):
 
 These are thin wrappers around a single value.
 ```python
+imgui.BoolRefs
 imgui.IntRef
 imgui.FloatRef
-imgui.BoolRef
+imgui.DoubleRef
 # The value can be accessed like so
 myNum = imgui.IntRef(25)
-myNum.val += 2
+myNum.val = 2
+# Or, you can use the various operator overloads without specifying XX.val
+myNum += 2
+myNum -= 3
+myOtherNum = im.IntRef(6)
+x = myNum * myOtherNum
+assert x > myNum
+assert myOtherNum == 6
+# Every standard math operator is available
 ```
 
 ---
