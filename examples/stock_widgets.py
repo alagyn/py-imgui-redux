@@ -58,6 +58,7 @@ class State:
         x %= 2
         assert x > 0
         assert x == 1
+        assert x != 26
 
     def showAll(self, dt: float):
         if imgui.Begin("Widgets"):
