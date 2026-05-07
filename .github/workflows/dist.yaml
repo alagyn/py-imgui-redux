@@ -55,9 +55,6 @@ jobs:
             os: windows-latest
             build: "cp*amd64*"
 
-          - name: macos-14
-            os: macos-14
-            
           - name: macos-15-intel
             os: macos-15-intel
 
