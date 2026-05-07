@@ -28,6 +28,7 @@ jobs:
         with:
           name: sdist
           path: dist/*.tar.gz
+          archive: false
   wheels:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.name }}
@@ -54,9 +55,6 @@ jobs:
             os: windows-latest
             build: "cp*amd64*"
 
-          - name: macos-14
-            os: macos-14
-            
           - name: macos-15-intel
             os: macos-15-intel
 
@@ -79,32 +77,37 @@ jobs:
         with:
           name: wheels-${{ matrix.os }}
           path: wheelhouse/*.whl
-  test-pypi-publish:
+          compression-level: 0
+
+  verify-wheels:
     runs-on: ubuntu-latest
-    if: github.event_name != 'release' || github.event.action != 'published'
     needs:
-      - sdist
       - wheels
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/py-imgui-redux
-    permissions:
-      id-token: write
+    if: always()
     steps:
       - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
           path: dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          print-hash: true
-          repository-url: https://test.pypi.org/legacy/
+          skip-decompress: true
+      - run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          python -m pip install twine
+          cd dist
+          for f in *.zip
+          do
+            unzip $f
+          done
+          twine check *.whl
+
   pypi-publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     needs:
       - sdist
       - wheels
+      - verify-wheels
     environment:
       name: pypi
       url: https://pypi.org/p/py-imgui-redux

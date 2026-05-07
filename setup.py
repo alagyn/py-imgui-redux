@@ -9,7 +9,6 @@ import shutil
 import pathlib
 import sys
 import subprocess
-import sysconfig
 
 BITS = struct.calcsize("P") * 8
 SOURCE_DIR, _ = os.path.split(__file__)
@@ -120,17 +119,8 @@ class InstallCMakeLibs(install_lib):
         except KeyError:
             oldPath = ""
 
-        log(f"Directory contents:")
-        log(os.listdir(bin_dir))
-
         if IS_WINDOWS:
             newPath = f"{bin_dir};" + oldPath
-
-            # force glfw dll to be in the same dir
-            # because we can't change the DLL lookup path via PATH
-            # because reasons
-            # https://docs.python.org/3/library/os.html#os.add_dll_directory
-            # shutil.copy(f'{sysconfig.get_path("purelib")}/glfw3.dll', bin_dir)
         else:
             newPath = f"{bin_dir}:" + oldPath
 
@@ -147,11 +137,37 @@ class InstallCMakeLibs(install_lib):
             cwd=bin_dir
         )
 
-        stub_dir = os.path.join(self.build_dir, "imgui")
-        if os.path.exists(stub_dir):
-            shutil.rmtree(stub_dir)
+        gen_stub_dir = os.path.join(bin_dir, "stubs/imgui-stubs")
+        out_stub_dir = os.path.join(self.build_dir, "imgui")
+        if os.path.exists(out_stub_dir):
+            shutil.rmtree(out_stub_dir)
 
-        shutil.move(os.path.join(bin_dir, "stubs/imgui-stubs"), stub_dir)
+        # Stub fixups
+        # Hacks to fix some impossible to rectify type hints
+        fixups = {
+            "def PushFont(font: ImFont, font_size_base_unscaled: typing.SupportsFloat) -> None:\n":
+            "def PushFont(font: ImFont | None, font_size_base_unscaled: typing.SupportsFloat) -> None:\n"
+        }
+        base_stubs = os.path.join(gen_stub_dir, "__init__.pyi")
+        temp_stubs = os.path.join(gen_stub_dir, "temp.pyi")
+        shutil.move(base_stubs, temp_stubs)
+        with open(temp_stubs, mode='r') as i, open(base_stubs, mode='w') as o:
+            for line in i:
+                try:
+                    o.write(fixups[line])
+                except KeyError:
+                    o.write(line)
+
+        os.remove(temp_stubs)
+
+        shutil.move(gen_stub_dir, out_stub_dir)
+
+        # copy python helpers in imgui_utils
+        shutil.copytree(
+            os.path.join(SOURCE_DIR, "imgui_utils"),
+            os.path.join(self.build_dir, "imgui_utils"),
+            dirs_exist_ok=True
+        )
 
         # Mark the libs for installation, adding them to
         # distribution.data_files seems to ensure that setuptools' record

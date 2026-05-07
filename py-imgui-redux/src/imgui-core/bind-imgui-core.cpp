@@ -4,6 +4,7 @@
 void init_core_imgui(py::module& m)
 {
     // Structs
+    init_imgui_vectors(m);
     init_imgui_structs(m);
     // Enums
     init_imgui_enums(m);

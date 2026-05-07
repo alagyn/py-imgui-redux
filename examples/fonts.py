@@ -1,11 +1,9 @@
 import sys
 import os
 
-# Add this file's dir to the path just in case we can't find the other files
-sys.path.append(os.path.split(__file__)[0])
-
-# Import the boilerplate loop from "window_boilerplate.py"
-from window_boilerplate import window_mainloop
+# Import a basic main loop for a simple UI
+# This is included with the library for you to use as well
+from imgui_utils.boilerplate import window_mainloop
 
 import imgui as im
 
@@ -15,7 +13,7 @@ EXAMPLE_DIR = os.path.dirname(__file__)
 class State:
 
     def __init__(self) -> None:
-        self.font = None
+        pass
 
     def setup(self):
         io = im.GetIO()
@@ -43,7 +41,7 @@ class State:
         self.font2 = io.Fonts.AddFontDefaultVector(None)
         self.font3 = io.Fonts.AddFontDefaultBitmap(None)
 
-    def render(self):
+    def render(self, dt: float):
         style = im.GetStyle()
         im.PushFont(self.font, style.FontSizeBase)
         if im.Begin("Window"):
@@ -65,8 +63,8 @@ if __name__ == '__main__':
     state = State()
     window_mainloop(
         "Images",
+        state.render,
         1024,
         768,
-        state.render,
         init=state.setup,
     )

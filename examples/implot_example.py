@@ -3,17 +3,14 @@ Basic example of implot usage.
 See the ImPlot docs for more info.
 """
 
-import sys
-import os
 import time
 import random
 
 import numpy as np
 
-# Add this file's dir to the path just in case we can't find the other files
-sys.path.append(os.path.split(__file__)[0])
-# Import the boilerplate loop from "window_boilerplate.py"
-from window_boilerplate import window_mainloop
+# Import a basic main loop for a simple UI
+# This is included with the library for you to use as well
+from imgui_utils.boilerplate import window_mainloop
 
 import imgui.implot as implot
 import imgui
@@ -39,10 +36,11 @@ class State:
         )
         self.plotIdx = 0
 
-        self.lastUpate = time.perf_counter()
+        self.lastUpate = 0
         self.updatePeriod = 0.5
 
-    def render(self):
+    def render(self, dt: float):
+        self.lastUpate += dt
         if imgui.Begin("Plot"):
             if imgui.RadioButton("Scatter", self.plotMode == 0):
                 self.plotMode = 0
@@ -58,13 +56,13 @@ class State:
                     formatterData = implot.SetupAxisFormat(
                         implot.Axis.X1, formatterCallback, "data"
                     )
-                    if time.perf_counter(
-                    ) - self.lastUpate > self.updatePeriod:
+                    if self.lastUpate > self.updatePeriod:
                         self.plotY[
                             self.plotIdx
                         ] = random.triangular(self.plotMin, self.plotMax)
                         self.plotIdx = (self.plotIdx + 1) % self.plotSize
-                        self.lastUpate = time.perf_counter()
+                        self.lastUpate = 0
+
                     implot.PlotScatter("DATA", self.plotX, self.plotY)
                 elif self.plotMode == 1:
                     size = 10
@@ -89,4 +87,4 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("Plotting", 1024, 640, state.render)
+    window_mainloop("Plotting", state.render, 1024, 640)

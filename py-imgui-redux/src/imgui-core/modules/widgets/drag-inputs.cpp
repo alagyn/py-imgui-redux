@@ -307,7 +307,7 @@ void init_widgets_drags(py::module& m)
            const char* format_max,
            const int flags)
         {
-            bool out = ImGui::DragIntRange2(
+            return ImGui::DragIntRange2(
                 label,
                 &curMin->val,
                 &curMax->val,
@@ -318,7 +318,6 @@ void init_widgets_drags(py::module& m)
                 format_max,
                 flags
             );
-            return py::make_tuple(out, curMin, curMax);
         },
         "label"_a,
         "v_current_min"_a,

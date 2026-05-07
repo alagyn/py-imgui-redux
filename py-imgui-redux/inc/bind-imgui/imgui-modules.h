@@ -19,6 +19,7 @@ void init_cursor_and_layout(py::module& m);
 void init_demos(py::module& m);
 void init_windows(py::module& m);
 void init_stacks(py::module& m);
+void init_imgui_vectors(py::module& m);
 void init_imgui_structs(py::module& m);
 void init_styles(py::module& m);
 

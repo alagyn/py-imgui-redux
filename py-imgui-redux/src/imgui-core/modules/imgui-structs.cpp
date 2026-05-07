@@ -29,40 +29,6 @@ void init_imgui_structs(py::module& m)
     initConstListWrapper<ImGuiTableColumnSortSpecs>(m, "ConstListWrapperTCSS");
     initListWrapper<ImVec4>(m, "ListWrapperVec4");
 
-    // Vectors
-    py::class_<ImVec2>(m, "Vec2")
-        .RW(ImVec2, x)
-        .RW(ImVec2, y)
-        .def(py::init<>())
-        .def(py::init<float, float>(), "x"_a, "y"_a)
-        .def(
-            "__str__",
-            [](ImVec2* self)
-            {
-                std::stringstream ss;
-                ss << "im.Vec2(" << self->x << ", " << self->y << ")";
-                return ss.str();
-            }
-        );
-
-    py::class_<ImVec4>(m, "Vec4")
-        .RW(ImVec4, x)
-        .RW(ImVec4, y)
-        .RW(ImVec4, z)
-        .RW(ImVec4, w)
-        .def(py::init<>())
-        .def(py::init<float, float, float, float>(), "x"_a, "y"_a, "z"_a, "w"_a)
-        .def(
-            "__str__",
-            [](ImVec4* self)
-            {
-                std::stringstream ss;
-                ss << "im.Vec4(" << self->x << ", " << self->y << ", "
-                   << self->z << ", " << self->w << ")";
-                return ss.str();
-            }
-        );
-
     // Style
     py::class_<ImGuiStyle>(m, "Style")
         .RW(ImGuiStyle, FontSizeBase)
