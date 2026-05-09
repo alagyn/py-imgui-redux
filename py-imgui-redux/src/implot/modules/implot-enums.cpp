@@ -11,6 +11,25 @@ void init_implot_enums(py::module& m)
         .VALUE(Im, Axis, Y2)
         .VALUE(Im, Axis, Y3);
 
+    ENUM(Im, PlotProp)
+        .VALUE(Im, PlotProp, LineColor)
+        .VALUE(Im, PlotProp, LineColors)
+        .VALUE(Im, PlotProp, LineWeight)
+        .VALUE(Im, PlotProp, FillColor)
+        .VALUE(Im, PlotProp, FillColors)
+        .VALUE(Im, PlotProp, FillAlpha)
+        .VALUE(Im, PlotProp, Marker)
+        .VALUE(Im, PlotProp, MarkerSize)
+        .VALUE(Im, PlotProp, MarkerSizes)
+        .VALUE(Im, PlotProp, MarkerLineColor)
+        .VALUE(Im, PlotProp, MarkerLineColors)
+        .VALUE(Im, PlotProp, MarkerFillColor)
+        .VALUE(Im, PlotProp, MarkerFillColors)
+        .VALUE(Im, PlotProp, Size)
+        .VALUE(Im, PlotProp, Offset)
+        .VALUE(Im, PlotProp, Stride)
+        .VALUE(Im, PlotProp, Flags);
+
     ENUM(Im, PlotFlags)
         .RAW_VALUE(None_, ImPlotFlags_None)
         .VALUE(Im, PlotFlags, NoTitle)
@@ -68,7 +87,8 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, LegendFlags, NoMenus)
         .VALUE(ImPlot, LegendFlags, Outside)
         .VALUE(ImPlot, LegendFlags, Horizontal)
-        .VALUE(ImPlot, LegendFlags, Sort);
+        .VALUE(ImPlot, LegendFlags, Sort)
+        .VALUE(ImPlot, LegendFlags, Reverse);
 
     ENUM(ImPlot, MouseTextFlags)
         .RAW_VALUE(None_, ImPlotMouseTextFlags_None)
@@ -106,6 +126,12 @@ void init_implot_enums(py::module& m)
         .RAW_VALUE(None_, ImPlotScatterFlags_None)
         .VALUE(ImPlot, ScatterFlags, NoClip);
 
+    ENUM(ImPlot, BubblesFlags).RAW_VALUE(None_, ImPlotBubblesFlags_None);
+
+    ENUM(ImPlot, PolygonFlags)
+        .RAW_VALUE(None_, ImPlotPolygonFlags_None)
+        .VALUE(ImPlot, PolygonFlags, Concave);
+
     ENUM(ImPlot, StairsFlags)
         .RAW_VALUE(None_, ImPlotStairsFlags_None)
         .VALUE(ImPlot, StairsFlags, PreStep)
@@ -138,7 +164,8 @@ void init_implot_enums(py::module& m)
         .RAW_VALUE(None_, ImPlotPieChartFlags_None)
         .VALUE(ImPlot, PieChartFlags, Normalize)
         .VALUE(ImPlot, PieChartFlags, IgnoreHidden)
-        .VALUE(ImPlot, PieChartFlags, Exploding);
+        .VALUE(ImPlot, PieChartFlags, Exploding)
+        .VALUE(ImPlot, PieChartFlags, NoSliceBorder);
 
     ENUM(ImPlot, HeatmapFlags)
         .RAW_VALUE(None_, ImPlotHeatmapFlags_None)
@@ -168,11 +195,6 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, Cond, Once);
 
     ENUM(ImPlot, Col)
-        .VALUE(ImPlot, Col, Line)
-        .VALUE(ImPlot, Col, Fill)
-        .VALUE(ImPlot, Col, MarkerOutline)
-        .VALUE(ImPlot, Col, MarkerFill)
-        .VALUE(ImPlot, Col, ErrorBar)
         .VALUE(ImPlot, Col, FrameBg)
         .VALUE(ImPlot, Col, PlotBg)
         .VALUE(ImPlot, Col, PlotBorder)
@@ -191,15 +213,8 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, Col, Crosshairs);
 
     ENUM(ImPlot, StyleVar)
-        .VALUE(ImPlot, StyleVar, LineWeight)
-        .VALUE(ImPlot, StyleVar, Marker)
-        .VALUE(ImPlot, StyleVar, MarkerSize)
-        .VALUE(ImPlot, StyleVar, MarkerWeight)
-        .VALUE(ImPlot, StyleVar, FillAlpha)
-        .VALUE(ImPlot, StyleVar, ErrorBarSize)
-        .VALUE(ImPlot, StyleVar, ErrorBarWeight)
-        .VALUE(ImPlot, StyleVar, DigitalBitHeight)
-        .VALUE(ImPlot, StyleVar, DigitalBitGap)
+        .VALUE(ImPlot, StyleVar, PlotDefaultSize)
+        .VALUE(ImPlot, StyleVar, PlotMinSize)
         .VALUE(ImPlot, StyleVar, PlotBorderSize)
         .VALUE(ImPlot, StyleVar, MinorAlpha)
         .VALUE(ImPlot, StyleVar, MajorTickLen)
@@ -216,8 +231,8 @@ void init_implot_enums(py::module& m)
         .VALUE(ImPlot, StyleVar, MousePosPadding)
         .VALUE(ImPlot, StyleVar, AnnotationPadding)
         .VALUE(ImPlot, StyleVar, FitPadding)
-        .VALUE(ImPlot, StyleVar, PlotDefaultSize)
-        .VALUE(ImPlot, StyleVar, PlotMinSize);
+        .VALUE(ImPlot, StyleVar, DigitalPadding)
+        .VALUE(ImPlot, StyleVar, DigitalSpacing);
 
     ENUM(ImPlot, Scale)
         .VALUE(ImPlot, Scale, Linear)
@@ -227,6 +242,7 @@ void init_implot_enums(py::module& m)
 
     ENUM(ImPlot, Marker)
         .RAW_VALUE(None_, ImPlotMarker_None)
+        .VALUE(ImPlot, Marker, Auto)
         .VALUE(ImPlot, Marker, Circle)
         .VALUE(ImPlot, Marker, Square)
         .VALUE(ImPlot, Marker, Diamond)

@@ -4,6 +4,27 @@
 
 void init_implot_structs(py::module& m)
 {
+    py::class_<ImPlotSpec>(m, "PlotSpec")
+        .def(py::init<>())
+        // TODO vararg constructor?
+        .RW(ImPlotSpec, LineColor)
+        .RW(ImPlotSpec, LineColors)
+        .RW(ImPlotSpec, LineWeight)
+        .RW(ImPlotSpec, FillColor)
+        .RW(ImPlotSpec, FillColors)
+        .RW(ImPlotSpec, FillAlpha)
+        .RW(ImPlotSpec, Marker)
+        .RW(ImPlotSpec, MarkerSize)
+        .RW(ImPlotSpec, MarkerSizes)
+        .RW(ImPlotSpec, MarkerLineColor)
+        .RW(ImPlotSpec, MarkerLineColors)
+        .RW(ImPlotSpec, MarkerFillColor)
+        .RW(ImPlotSpec, MarkerFillColors)
+        .RW(ImPlotSpec, Size)
+        .RW(ImPlotSpec, Offset)
+        .RW(ImPlotSpec, Stride)
+        .RW(ImPlotSpec, Flags);
+
     py::class_<ImPlotPoint>(m, "Point")
         .def(py::init<double, double>(), "x"_a = 0, "y"_a = 0)
         .RW(ImPlotPoint, x)
@@ -23,30 +44,31 @@ void init_implot_structs(py::module& m)
             "y_min"_a = 0,
             "y_max"_a = 0
         )
+        .RW(ImPlotRect, X)
+        .RW(ImPlotRect, Y)
         .def(
             "Contains",
-            static_cast<bool (ImPlotRect::*)(const ImPlotPoint&) const>(
-                &ImPlotRect::Contains
+            py::overload_cast<const ImPlotPoint&>(
+                &ImPlotRect::Contains,
+                py::const_
             ),
             "p"_a
         )
         .def(
             "Contains",
-            static_cast<bool (ImPlotRect::*)(double, double) const>(
-                &ImPlotRect::Contains
-            ),
+            py::overload_cast<double, double>(&ImPlotRect::Contains, py::const_),
             "x"_a,
             "y"_a
         )
         .def(DEF(ImPlotRect, Size))
         .def(
             "Clamp",
-            py::overload_cast<const ImPlotPoint&>(&ImPlotRect::Clamp),
+            py::overload_cast<const ImPlotPoint&>(&ImPlotRect::Clamp, py::const_),
             "p"_a
         )
         .def(
             "Clamp",
-            py::overload_cast<double, double>(&ImPlotRect::Clamp),
+            py::overload_cast<double, double>(&ImPlotRect::Clamp, py::const_),
             "x"_a,
             "y"_a
         )
@@ -54,15 +76,9 @@ void init_implot_structs(py::module& m)
         .def(DEF(ImPlotRect, Max));
 
     py::class_<ImPlotStyle>(m, "PlotStyle")
-        .RW(ImPlotStyle, LineWeight)
-        .RW(ImPlotStyle, Marker)
-        .RW(ImPlotStyle, MarkerSize)
-        .RW(ImPlotStyle, MarkerWeight)
-        .RW(ImPlotStyle, FillAlpha)
-        .RW(ImPlotStyle, ErrorBarSize)
-        .RW(ImPlotStyle, ErrorBarWeight)
-        .RW(ImPlotStyle, DigitalBitHeight)
-        .RW(ImPlotStyle, DigitalBitGap)
+        // Plot styling
+        .RW(ImPlotStyle, PlotDefaultSize)
+        .RW(ImPlotStyle, PlotMinSize)
         .RW(ImPlotStyle, PlotBorderSize)
         .RW(ImPlotStyle, MinorAlpha)
         .RW(ImPlotStyle, MajorTickLen)
@@ -71,6 +87,7 @@ void init_implot_structs(py::module& m)
         .RW(ImPlotStyle, MinorTickSize)
         .RW(ImPlotStyle, MajorGridSize)
         .RW(ImPlotStyle, MinorGridSize)
+        // Plot padding
         .RW(ImPlotStyle, PlotPadding)
         .RW(ImPlotStyle, LabelPadding)
         .RW(ImPlotStyle, LegendPadding)
@@ -79,8 +96,8 @@ void init_implot_structs(py::module& m)
         .RW(ImPlotStyle, MousePosPadding)
         .RW(ImPlotStyle, AnnotationPadding)
         .RW(ImPlotStyle, FitPadding)
-        .RW(ImPlotStyle, PlotDefaultSize)
-        .RW(ImPlotStyle, PlotMinSize)
+        .RW(ImPlotStyle, DigitalPadding)
+        .RW(ImPlotStyle, DigitalSpacing)
         .def_property_readonly(
             "Colors",
             [](ImPlotStyle* self)
