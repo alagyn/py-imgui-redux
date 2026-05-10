@@ -1,81 +1,208 @@
 #include <bind-imgui/implot-modules.h>
 
+#include <binder/wraps.h>
+
 void init_tools(py::module& m)
 {
     m.def(
         "DragPoint",
         [](int id,
-           double x,
-           double y,
+           DoubleRef xRef,
+           DoubleRef yRef,
            const ImVec4& col,
            float size,
-           ImPlotDragToolFlags flags)
+           ImPlotDragToolFlags flags,
+           BoolRef outClickedRef,
+           BoolRef outHoveredRef,
+           BoolRef outHeldRef)
         {
-            bool out = ImPlot::DragPoint(id, &x, &y, col, size, flags);
-            return py::make_tuple(out, x, y);
+            double* x = nullptr;
+            double* y = nullptr;
+            bool* outClicked = nullptr;
+            bool* outHovered = nullptr;
+            bool* outHeld = nullptr;
+
+            if(outClickedRef)
+            {
+                outClicked = &outClickedRef->val;
+            }
+            if(outHoveredRef)
+            {
+                outHovered = &outHoveredRef->val;
+            }
+            if(outHeldRef)
+            {
+                outHeld = &outHeldRef->val;
+            }
+
+            return ImPlot::DragPoint(
+                id,
+                &xRef->val,
+                &yRef->val,
+                col,
+                size,
+                flags,
+                outClicked,
+                outHovered,
+                outHeld
+            );
         },
         "id"_a,
-        "x"_a,
-        "y"_a,
+        "x"_a.none(false),
+        "y"_a.none(false),
         "col"_a,
         "size"_a = 4,
-        "flags"_a = 0
+        "flags"_a = 0,
+        "out_clicked"_a = nullptr,
+        "out_hovered"_a = nullptr,
+        "out_held"_a = nullptr
     );
 
     m.def(
         "DragLineX",
         [](int id,
-           double x,
+           DoubleRef xRef,
            const ImVec4& col,
            float thickness,
-           ImPlotDragToolFlags flags)
+           ImPlotDragToolFlags flags,
+           BoolRef outClickedRef,
+           BoolRef outHoveredRef,
+           BoolRef outHeldRef)
         {
-            bool out = ImPlot::DragLineX(id, &x, col, thickness, flags);
-            return py::make_tuple(out, x);
+            bool* outClicked = nullptr;
+            bool* outHovered = nullptr;
+            bool* outHeld = nullptr;
+            if(outClickedRef)
+            {
+                outClicked = &outClickedRef->val;
+            }
+            if(outHoveredRef)
+            {
+                outHovered = &outHoveredRef->val;
+            }
+            if(outHeldRef)
+            {
+                outHeld = &outHeldRef->val;
+            }
+            return ImPlot::DragLineX(
+                id,
+                &xRef->val,
+                col,
+                thickness,
+                flags,
+                outClicked,
+                outHovered,
+                outHeld
+            );
         },
         "id"_a,
-        "x"_a,
+        "x"_a.none(false),
         "col"_a,
         "thickness"_a = 1,
-        "flags"_a = 0
+        "flags"_a = 0,
+        "out_clicked"_a = nullptr,
+        "out_hovered"_a = nullptr,
+        "out_held"_a = nullptr
     );
     m.def(
         "DragLineY",
         [](int id,
-           double y,
+           DoubleRef yRef,
            const ImVec4& col,
            float thickness,
-           ImPlotDragToolFlags flags)
+           ImPlotDragToolFlags flags,
+           BoolRef outClickedRef,
+           BoolRef outHoveredRef,
+           BoolRef outHeldRef)
         {
-            bool out = ImPlot::DragLineY(id, &y, col, thickness, flags);
-            return py::make_tuple(out, y);
+            bool* outClicked = nullptr;
+            bool* outHovered = nullptr;
+            bool* outHeld = nullptr;
+            if(outClickedRef)
+            {
+                outClicked = &outClickedRef->val;
+            }
+            if(outHoveredRef)
+            {
+                outHovered = &outHoveredRef->val;
+            }
+            if(outHeldRef)
+            {
+                outHeld = &outHeldRef->val;
+            }
+            return ImPlot::DragLineY(
+                id,
+                &yRef->val,
+                col,
+                thickness,
+                flags,
+                outClicked,
+                outHovered,
+                outHeld
+            );
         },
         "id"_a,
-        "y"_a,
+        "y"_a.none(false),
         "col"_a,
         "thickness"_a = 1,
-        "flags"_a = 0
+        "flags"_a = 0,
+        "out_clicked"_a = nullptr,
+        "out_hovered"_a = nullptr,
+        "out_held"_a = nullptr
     );
+
     m.def(
         "DragRect",
         [](int id,
-           double x1,
-           double y1,
-           double x2,
-           double y2,
+           DoubleRef x1,
+           DoubleRef y1,
+           DoubleRef x2,
+           DoubleRef y2,
            const ImVec4& col,
-           ImPlotDragToolFlags flags)
+           ImPlotDragToolFlags flags,
+           BoolRef outClickedRef,
+           BoolRef outHoveredRef,
+           BoolRef outHeldRef)
         {
-            bool out = ImPlot::DragRect(id, &x1, &y1, &x2, &y2, col, flags);
-            return py::make_tuple(out, x1, y1, x2, y2);
+            bool* outClicked = nullptr;
+            bool* outHovered = nullptr;
+            bool* outHeld = nullptr;
+            if(outClickedRef)
+            {
+                outClicked = &outClickedRef->val;
+            }
+            if(outHoveredRef)
+            {
+                outHovered = &outHoveredRef->val;
+            }
+            if(outHeldRef)
+            {
+                outHeld = &outHeldRef->val;
+            }
+
+            return ImPlot::DragRect(
+                id,
+                &x1->val,
+                &y1->val,
+                &x2->val,
+                &y2->val,
+                col,
+                flags,
+                outClicked,
+                outHovered,
+                outHeld
+            );
         },
         "id"_a,
-        "x1"_a,
-        "y1"_a,
-        "x2"_a,
-        "y2"_a,
+        "x1"_a.none(false),
+        "y1"_a.none(false),
+        "x2"_a.none(false),
+        "y2"_a.none(false),
         "col"_a,
-        "flags"_a = 0
+        "flags"_a = 0,
+        "out_clicked"_a = nullptr,
+        "out_hovered"_a = nullptr,
+        "out_held"_a = nullptr
     );
 
     m.def(
@@ -90,6 +217,7 @@ void init_tools(py::module& m)
         "clamp"_a,
         "round"_a = false
     );
+
     m.def(
         "Annotation",
         [](double x,

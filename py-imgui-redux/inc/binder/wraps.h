@@ -383,6 +383,12 @@ using StrListPtr = StrList*;
 using Vec2List = ImList<ImVec2>;
 using Vec2ListPtr = Vec2List*;
 
+using Vec4List = ImList<ImVec4>;
+using Vec4ListPtr = Vec4List*;
+
+using ImU32List = ImList<ImU32>;
+using ImU32ListPtr = ImU32List*;
+
 class StrRef : public ImList<char>
 {
 public:

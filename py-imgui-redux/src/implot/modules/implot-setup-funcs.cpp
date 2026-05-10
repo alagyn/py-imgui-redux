@@ -16,13 +16,29 @@ struct FormatterCallbackData
 int plotFormatterCallback(double value, char* buff, int size, void* user_data)
 {
     auto* data = static_cast<FormatterCallbackData*>(user_data);
-    if(data->callback)
-    {
-        EditableStrWrapper wrapper(buff, size);
-        return data->callback(value, wrapper, data->userdata);
-    }
+    EditableStrWrapper wrapper(buff, size);
+    return data->callback(value, wrapper, data->userdata);
+}
 
-    return 0;
+using TransformCallback = std::function<double(double, py::object)>;
+
+struct TransformCallbackData
+{
+    TransformCallback forward;
+    TransformCallback inverse;
+    py::object userdata;
+};
+
+double plotTransformCallbackForward(double value, void* user_data)
+{
+    auto* data = static_cast<TransformCallbackData*>(user_data);
+    return data->forward(value, data->userdata);
+}
+
+double plotTransformCallbackInverse(double value, void* user_data)
+{
+    auto* data = static_cast<TransformCallbackData*>(user_data);
+    return data->inverse(value, data->userdata);
 }
 
 void init_setup_funcs(py::module& m)
@@ -153,7 +169,31 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "scale"_a
     );
-    // TODO setupAxisScale with callbacks
+    m.def(
+        "SetupAxisScale",
+        [](ImAxis axis,
+           TransformCallback forward,
+           TransformCallback inverse,
+           py::object data)
+        {
+            TransformCallbackData* userdata =
+                new TransformCallbackData{forward, inverse, data};
+            ImPlot::SetupAxisScale(
+                axis,
+                plotTransformCallbackForward,
+                plotTransformCallbackInverse,
+                userdata
+            );
+            return userdata;
+        },
+        "IMPORTANT: you must keep the return from this function around until "
+        "the next PlotXXX call",
+        "axis"_a,
+        "forward"_a.none(false),
+        "inverse"_a.none(false),
+        "data"_a = py::none(),
+        py::return_value_policy::take_ownership
+    );
     m.def(IMFUNC(SetupAxisLimitsConstraints), "axis"_a, "v_min"_a, "v_max"_a);
     m.def(IMFUNC(SetupAxisZoomConstraints), "axis"_a, "z_min"_a, "z_max"_a);
     m.def(
@@ -199,7 +239,10 @@ void init_setup_funcs(py::module& m)
             }
 
             ImPlot::SetNextAxisLinks(axis, a, b);
-        }
+        },
+        "axis"_a,
+        "link_min"_a.none(true),
+        "link_max"_a.none(true)
     );
     m.def(IMFUNC(SetNextAxisToFit), "axis"_a);
     m.def(

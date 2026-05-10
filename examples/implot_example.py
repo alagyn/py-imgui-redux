@@ -14,12 +14,18 @@ from imgui_utils.boilerplate import window_mainloop
 
 import imgui.implot as implot
 import imgui
+import math
 
 
 def formatterCallback(val: float, buf: imgui.EditableStrWrapper, userData):
     label = f'{userData} {val}'
     buf.set(label)
     return 0
+
+
+def dataGetter(idx: int, data) -> implot.Point:
+    val = idx + 0.1 / math.pi
+    return implot.Point(val, math.sin(val + data))
 
 
 class State:
@@ -38,6 +44,7 @@ class State:
 
         self.lastUpate = 0
         self.updatePeriod = 0.5
+        self.t = 0
 
     def render(self, dt: float):
         self.lastUpate += dt
@@ -47,6 +54,9 @@ class State:
                 implot.SetNextAxesToFit()
             if imgui.RadioButton("Heatmap", self.plotMode == 1):
                 self.plotMode = 1
+                implot.SetNextAxesToFit()
+            if imgui.RadioButton("Custom Getter", self.plotMode == 2):
+                self.plotMode = 2
                 implot.SetNextAxesToFit()
 
             if implot.BeginPlot("data", imgui.Vec2(500, 500)):
@@ -78,6 +88,10 @@ class State:
                         self.plotMin,
                         self.plotMax
                     )
+                elif self.plotMode == 2:
+                    size = 200
+                    self.t += dt * 0.1
+                    implot.PlotScatterG("DATA", dataGetter, self.t, size)
                 implot.EndPlot()
         imgui.End()
 

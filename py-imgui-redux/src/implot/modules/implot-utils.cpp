@@ -26,7 +26,8 @@ void init_utils(py::module& m)
 
     m.def(
         "PlotToPixels",
-        py::overload_cast<const ImPlotPoint&, ImAxis, ImAxis>(ImPlot::PlotToPixels
+        py::overload_cast<const ImPlotPoint&, ImAxis, ImAxis>(
+            ImPlot::PlotToPixels
         ),
         "plt"_a,
         "x_axis"_a = IMPLOT_AUTO,
@@ -137,35 +138,9 @@ void init_utils(py::module& m)
     );
     m.def(IMFUNC(PopStyleVar), "count"_a = 1);
 
-    m.def(
-        IMFUNC(SetNextLineStyle),
-        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
-        "weight"_a = IMPLOT_AUTO
-    );
-
-    m.def(
-        IMFUNC(SetNextFillStyle),
-        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
-        "alpha_mod"_a = IMPLOT_AUTO
-    );
-
-    m.def(
-        IMFUNC(SetNextMarkerStyle),
-        "marker"_a = IMPLOT_AUTO,
-        "size"_a = IMPLOT_AUTO,
-        py::arg_v("fill", IMPLOT_AUTO_COL, AUTO_COL_STR),
-        "weight"_a = IMPLOT_AUTO,
-        py::arg_v("outline", IMPLOT_AUTO_COL, AUTO_COL_STR)
-    );
-
-    m.def(
-        IMFUNC(SetNextErrorBarStyle),
-        py::arg_v("col", IMPLOT_AUTO_COL, AUTO_COL_STR),
-        "size"_a = IMPLOT_AUTO,
-        "weight"_a = IMPLOT_AUTO
-    );
-
     QUICK(GetLastItemColor);
     m.def(IMFUNC(GetStyleColorName), "idx"_a);
     m.def(IMFUNC(GetMarkerName), "idx"_a);
+
+    QUICK(NextMarker);
 }

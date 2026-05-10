@@ -216,6 +216,11 @@ void init_wraps(py::module& m)
         "Vec2List",
         "Thin wrapper over a std::vector<ImVec2>"
     );
+    initList<Vec4List, ImVec4>(
+        m,
+        "Vec4List",
+        "Thin wrapper over a std::vector<ImVec4>"
+    );
 
     py::class_<StrRef>(m, "StrRef", "Thin wrapper over a std::vector<char>")
         .def(
