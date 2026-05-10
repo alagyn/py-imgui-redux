@@ -3,6 +3,11 @@
 #include <pybind11/pybind11.h>
 #include <stdexcept>
 
+/**
+ * List wrappers are used to return pointers to fixed size arrays
+ * from various functions and allow editting (for non-const)
+ */
+
 template<class T> class ConstListWrapper
 {
 public:

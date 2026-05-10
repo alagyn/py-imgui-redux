@@ -132,9 +132,9 @@ void initMathRef(py::module& m, const char* name, const char* desc, U defaultVal
 }
 
 template<class T, class U>
-void initList(py::module& m, const char* name, const char* desc)
+py::class_<T> initList(py::module& m, const char* name, const char* desc)
 {
-    py::class_<T>(m, name, desc)
+    return py::class_<T>(m, name, desc)
         .def(py::init<std::vector<U>>(), "vals"_a = std::vector<U>())
         .def(py::init<>())
         .def("append", &T::append, "val"_a, "Append a value to the end")
@@ -191,11 +191,13 @@ void init_wraps(py::module& m)
         .def("__bool__", &BoolRef_::toBool);
 
     initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
-    initList<WCharList, ImWchar>(
+    auto u32list = initList<ImU32List, ImU32>(
         m,
-        "WCharList",
-        "Thin wrapper over a std::vector<ImWchar>"
+        "ImU32List",
+        "Thin wrapper over a std::vector<ImU32>"
     );
+    m.add_object("WCharList", u32list);
+
     initList<FloatList, float>(
         m,
         "FloatList",
@@ -215,6 +217,11 @@ void init_wraps(py::module& m)
         m,
         "Vec2List",
         "Thin wrapper over a std::vector<ImVec2>"
+    );
+    initList<Vec4List, ImVec4>(
+        m,
+        "Vec4List",
+        "Thin wrapper over a std::vector<ImVec4>"
     );
 
     py::class_<StrRef>(m, "StrRef", "Thin wrapper over a std::vector<char>")

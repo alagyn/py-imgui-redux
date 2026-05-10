@@ -16,9 +16,31 @@ void init_colormaps(py::module& m)
     );
     m.def(
         "AddColorMap",
+        [](const char* name, Vec4ListPtr cols, bool qual)
+        {
+            return ImPlot::AddColormap(name, cols->data(), cols->size(), qual);
+        },
+        "name"_a,
+        "cols"_a,
+        "qual"_a = true
+    );
+
+    m.def(
+        "AddColorMap",
         [](const char* name, arr<ImU32> cols, bool qual)
         {
             return ImPlot::AddColormap(name, cols.data(), cols.size(), qual);
+        },
+        "name"_a,
+        "cols"_a,
+        "qual"_a = true
+    );
+
+    m.def(
+        "AddColorMap",
+        [](const char* name, ImU32ListPtr cols, bool qual)
+        {
+            return ImPlot::AddColormap(name, cols->data(), cols->size(), qual);
         },
         "name"_a,
         "cols"_a,

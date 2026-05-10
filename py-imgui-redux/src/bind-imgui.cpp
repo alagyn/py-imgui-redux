@@ -1,12 +1,16 @@
 #include <binder/bind-modules.h>
 #include <binder/wraps.h>
 
+#include <bind-imgui/imgui-modules.h>
+
 PYBIND11_MODULE(imgui, m)
 {
     m.doc() = "DearImGui Framework";
     py::options options;
     //options.disable_function_signatures();
 
+    // Init the vectors first so we can use the list wrappers on them
+    init_imgui_vectors(m);
     init_wraps(m);
 
     // GLFW first so that the Window object is defined

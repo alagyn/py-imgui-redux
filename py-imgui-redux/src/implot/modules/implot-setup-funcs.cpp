@@ -11,18 +11,61 @@ struct FormatterCallbackData
 {
     FormatterCallback callback;
     py::object userdata;
+
+    FormatterCallbackData(FormatterCallback cb, py::object ud)
+        : callback(cb)
+        , userdata(ud)
+    {
+    }
 };
+
+// Static array of axis formatters
+// These are set by SetupAxisFormat and cleared by EndPlot
+static std::vector<std::shared_ptr<FormatterCallbackData>>
+    formatterCallbacks(ImAxis_COUNT, nullptr);
 
 int plotFormatterCallback(double value, char* buff, int size, void* user_data)
 {
     auto* data = static_cast<FormatterCallbackData*>(user_data);
-    if(data->callback)
-    {
-        EditableStrWrapper wrapper(buff, size);
-        return data->callback(value, wrapper, data->userdata);
-    }
+    EditableStrWrapper wrapper(buff, size);
+    return data->callback(value, wrapper, data->userdata);
+}
 
-    return 0;
+using TransformCallback = std::function<double(double, py::object)>;
+
+struct TransformCallbackData
+{
+    TransformCallback forward;
+    TransformCallback inverse;
+    py::object userdata;
+
+    TransformCallbackData(
+        TransformCallback fwd,
+        TransformCallback inv,
+        py::object ud
+    )
+        : forward(fwd)
+        , inverse(inv)
+        , userdata(ud)
+    {
+    }
+};
+
+// Static array of axis transforms
+// These are set by SetupAxisScale and cleared by EndPlot
+static std::vector<std::shared_ptr<TransformCallbackData>>
+    transformCallbacks(ImAxis_COUNT, nullptr);
+
+double plotTransformCallbackForward(double value, void* user_data)
+{
+    auto* data = static_cast<TransformCallbackData*>(user_data);
+    return data->forward(value, data->userdata);
+}
+
+double plotTransformCallbackInverse(double value, void* user_data)
+{
+    auto* data = static_cast<TransformCallbackData*>(user_data);
+    return data->inverse(value, data->userdata);
 }
 
 void init_setup_funcs(py::module& m)
@@ -64,31 +107,15 @@ void init_setup_funcs(py::module& m)
         "format"_a
     );
 
-    /*
-    This is different than the imgui text callbacks, because the callback is not
-    used in this function. It is store with the user data until later.
-    Therefore, the userdata needs to exist for an indeterminate amount of time.
-
-    Presumably, the formatter is called more than once, so we can't just dealloc
-    there.
-
-    Therefore, the simplest we can do is return the user data and let python
-    take ownership and in most use cases, it won't get destructed until after
-    the plotting funcs are called.
-    */
-    py::class_<FormatterCallbackData>(m, "_FormatterCallbackData");
-
     m.def(
         "SetupAxisFormat",
         [](ImAxis axis, FormatterCallback formatter, py::object userData)
         {
-            FormatterCallbackData* data =
-                new FormatterCallbackData{formatter, userData};
-            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data);
-            return data;
+            auto data =
+                std::make_shared<FormatterCallbackData>(formatter, userData);
+            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data.get());
+            formatterCallbacks[axis] = data;
         },
-        "IMPORTANT: you must keep the return from this function around until "
-        "the next PlotXXX call",
         "axis"_a,
         "formatter"_a,
         "data"_a = py::none(),
@@ -153,7 +180,28 @@ void init_setup_funcs(py::module& m)
         "axis"_a,
         "scale"_a
     );
-    // TODO setupAxisScale with callbacks
+    m.def(
+        "SetupAxisScale",
+        [](ImAxis axis,
+           TransformCallback forward,
+           TransformCallback inverse,
+           py::object data)
+        {
+            auto userdata =
+                std::make_shared<TransformCallbackData>(forward, inverse, data);
+            ImPlot::SetupAxisScale(
+                axis,
+                plotTransformCallbackForward,
+                plotTransformCallbackInverse,
+                userdata.get()
+            );
+            transformCallbacks[axis] = userdata;
+        },
+        "axis"_a,
+        "forward"_a.none(false),
+        "inverse"_a.none(false),
+        "data"_a = py::none()
+    );
     m.def(IMFUNC(SetupAxisLimitsConstraints), "axis"_a, "v_min"_a, "v_max"_a);
     m.def(IMFUNC(SetupAxisZoomConstraints), "axis"_a, "z_min"_a, "z_max"_a);
     m.def(
@@ -199,7 +247,10 @@ void init_setup_funcs(py::module& m)
             }
 
             ImPlot::SetNextAxisLinks(axis, a, b);
-        }
+        },
+        "axis"_a,
+        "link_min"_a,
+        "link_max"_a
     );
     m.def(IMFUNC(SetNextAxisToFit), "axis"_a);
     m.def(
@@ -211,4 +262,25 @@ void init_setup_funcs(py::module& m)
         "cond"_a = (int)ImPlotCond_Once
     );
     QUICK(SetNextAxesToFit);
+
+    m.def(
+        "EndPlot",
+        []()
+        {
+            // First end the plot
+            ImPlot::EndPlot();
+            // Then clear out the formatter callbacks
+            for(size_t i = 0; i < ImAxis_COUNT; ++i)
+            {
+                if(formatterCallbacks[i])
+                {
+                    formatterCallbacks[i].reset();
+                }
+                if(transformCallbacks[i])
+                {
+                    transformCallbacks[i].reset();
+                }
+            }
+        }
+    );
 }
