@@ -28,6 +28,18 @@ def dataGetter(idx: int, data) -> implot.Point:
     return implot.Point(val, math.sin(val + data))
 
 
+def customScaleForward(value: float, data) -> float:
+    if value <= 0.0:
+        return value
+    return math.log(value, data)
+
+
+def customScaleInverse(value: float, data) -> float:
+    if value <= 0.0:
+        return value
+    return math.pow(data, value)
+
+
 class State:
 
     def __init__(self) -> None:
@@ -71,9 +83,17 @@ class State:
             if implot.BeginPlot("data", imgui.Vec2(500, 500)):
                 if self.plotMode == 0:
                     # The return value from this has to exist until the plot is ended
-                    # implot.SetupAxisFormat(
-                    #     implot.Axis.X1, formatterCallback, "data"
-                    # )
+                    implot.SetupAxisFormat(
+                        implot.Axis.X1, formatterCallback, "data"
+                    )
+
+                    implot.SetupAxisScale(
+                        implot.Axis.X1,
+                        customScaleForward,
+                        customScaleInverse,
+                        3
+                    )
+
                     if self.lastUpate > self.updatePeriod:
                         self.plotY[
                             self.plotIdx

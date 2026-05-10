@@ -38,7 +38,23 @@ struct TransformCallbackData
     TransformCallback forward;
     TransformCallback inverse;
     py::object userdata;
+
+    TransformCallbackData(
+        TransformCallback fwd,
+        TransformCallback inv,
+        py::object ud
+    )
+        : forward(fwd)
+        , inverse(inv)
+        , userdata(ud)
+    {
+    }
 };
+
+// Static array of axis transforms
+// These are set by SetupAxisScale and cleared by EndPlot
+static std::vector<std::shared_ptr<TransformCallbackData>>
+    transformCallbacks(ImAxis_COUNT, nullptr);
 
 double plotTransformCallbackForward(double value, void* user_data)
 {
@@ -171,23 +187,20 @@ void init_setup_funcs(py::module& m)
            TransformCallback inverse,
            py::object data)
         {
-            TransformCallbackData* userdata =
-                new TransformCallbackData{forward, inverse, data};
+            auto userdata =
+                std::make_shared<TransformCallbackData>(forward, inverse, data);
             ImPlot::SetupAxisScale(
                 axis,
                 plotTransformCallbackForward,
                 plotTransformCallbackInverse,
-                userdata
+                userdata.get()
             );
-            return userdata;
+            transformCallbacks[axis] = userdata;
         },
-        "IMPORTANT: you must keep the return from this function around until "
-        "the next PlotXXX call",
         "axis"_a,
         "forward"_a.none(false),
         "inverse"_a.none(false),
-        "data"_a = py::none(),
-        py::return_value_policy::take_ownership
+        "data"_a = py::none()
     );
     m.def(IMFUNC(SetupAxisLimitsConstraints), "axis"_a, "v_min"_a, "v_max"_a);
     m.def(IMFUNC(SetupAxisZoomConstraints), "axis"_a, "z_min"_a, "z_max"_a);
@@ -262,6 +275,10 @@ void init_setup_funcs(py::module& m)
                 if(formatterCallbacks[i])
                 {
                     formatterCallbacks[i].reset();
+                }
+                if(transformCallbacks[i])
+                {
+                    transformCallbacks[i].reset();
                 }
             }
         }
