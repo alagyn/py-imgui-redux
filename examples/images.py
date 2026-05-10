@@ -3,9 +3,7 @@ Example of how to load and use images and textures
 in a couple different methods
 """
 
-import sys
 import os
-import numpy as np
 
 # Import a basic main loop for a simple UI
 # This is included with the library for you to use as well
@@ -33,6 +31,8 @@ SIZE = 255
 # Load via OpenCV
 def loadOpenCV(filename: str) -> im.Texture:
     image = cv2.imread(filename, cv2.IMREAD_UNCHANGED)
+    if image is None:
+        raise RuntimeError()
     # Might need to convert the colors here
     image = cv2.cvtColor(image, cv2.COLOR_BGRA2RGBA)
     # Pass the data to imgui

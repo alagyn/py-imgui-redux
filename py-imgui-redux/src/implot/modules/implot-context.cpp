@@ -28,7 +28,7 @@ void init_implot_context(py::module& m)
         py::arg_v("size", ImVec2(-1, 0), "Vec2(-1, 0)"),
         "flags"_a = 0
     );
-    QUICK(EndPlot);
+    // EndPlot is defined in implot-setup-funcs so we can clear the formatter callbacks
 
     m.def(
         "BeginSubplots",

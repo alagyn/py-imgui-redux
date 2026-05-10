@@ -11,7 +11,18 @@ struct FormatterCallbackData
 {
     FormatterCallback callback;
     py::object userdata;
+
+    FormatterCallbackData(FormatterCallback cb, py::object ud)
+        : callback(cb)
+        , userdata(ud)
+    {
+    }
 };
+
+// Static array of axis formatters
+// These are set by SetupAxisFormat and cleared by EndPlot
+static std::vector<std::shared_ptr<FormatterCallbackData>>
+    formatterCallbacks(ImAxis_COUNT, nullptr);
 
 int plotFormatterCallback(double value, char* buff, int size, void* user_data)
 {
@@ -80,31 +91,15 @@ void init_setup_funcs(py::module& m)
         "format"_a
     );
 
-    /*
-    This is different than the imgui text callbacks, because the callback is not
-    used in this function. It is store with the user data until later.
-    Therefore, the userdata needs to exist for an indeterminate amount of time.
-
-    Presumably, the formatter is called more than once, so we can't just dealloc
-    there.
-
-    Therefore, the simplest we can do is return the user data and let python
-    take ownership and in most use cases, it won't get destructed until after
-    the plotting funcs are called.
-    */
-    py::class_<FormatterCallbackData>(m, "_FormatterCallbackData");
-
     m.def(
         "SetupAxisFormat",
         [](ImAxis axis, FormatterCallback formatter, py::object userData)
         {
-            FormatterCallbackData* data =
-                new FormatterCallbackData{formatter, userData};
-            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data);
-            return data;
+            auto data =
+                std::make_shared<FormatterCallbackData>(formatter, userData);
+            ImPlot::SetupAxisFormat(axis, plotFormatterCallback, data.get());
+            formatterCallbacks[axis] = data;
         },
-        "IMPORTANT: you must keep the return from this function around until "
-        "the next PlotXXX call",
         "axis"_a,
         "formatter"_a,
         "data"_a = py::none(),
@@ -241,8 +236,8 @@ void init_setup_funcs(py::module& m)
             ImPlot::SetNextAxisLinks(axis, a, b);
         },
         "axis"_a,
-        "link_min"_a.none(true),
-        "link_max"_a.none(true)
+        "link_min"_a,
+        "link_max"_a
     );
     m.def(IMFUNC(SetNextAxisToFit), "axis"_a);
     m.def(
@@ -254,4 +249,21 @@ void init_setup_funcs(py::module& m)
         "cond"_a = (int)ImPlotCond_Once
     );
     QUICK(SetNextAxesToFit);
+
+    m.def(
+        "EndPlot",
+        []()
+        {
+            // First end the plot
+            ImPlot::EndPlot();
+            // Then clear out the formatter callbacks
+            for(size_t i = 0; i < ImAxis_COUNT; ++i)
+            {
+                if(formatterCallbacks[i])
+                {
+                    formatterCallbacks[i].reset();
+                }
+            }
+        }
+    );
 }

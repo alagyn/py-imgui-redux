@@ -1,4 +1,5 @@
 #include <bind-imgui/implot-modules.h>
+#include <bind-imgui/implot-spec.h>
 #include <bind-imgui/texture.h>
 #include <binder/numpy.h>
 #include <binder/wraps.h>
@@ -6,6 +7,16 @@
 #include <pybind11/functional.h>
 
 using GetterCallback = std::function<ImPlotPoint(int, py::object)>;
+
+#define PLOT_FUNC_CALL(func, ...) \
+    if(py::isinstance<py::tuple>(spec)) \
+    { \
+        func(__VA_ARGS__, makeSpec(spec)); \
+    } \
+    else \
+    { \
+        func(__VA_ARGS__, spec.cast<const ImPlotSpec&>()); \
+    }
 
 struct GetterCallbackData
 {
@@ -27,15 +38,15 @@ template<typename T> void initWrapperPlotting(py::module& m)
            T values,
            double xscale,
            double xstart,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotLine(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotLine,
                 label_id,
                 values->data(),
                 values->size(),
                 xscale,
-                xstart,
-                spec
+                xstart
             );
         },
         "label_id"_a,
@@ -47,13 +58,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotLine",
-        [](const char* label_id, T xs, T ys, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotLine(label_id, xs->data(), ys->data(), xs->size(), spec);
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotLine,
+                label_id,
+                xs->data(),
+                ys->data(),
+                xs->size()
+            );
         },
         "label_id"_a,
         "xs"_a,
@@ -67,10 +88,17 @@ template<typename T> void initWrapperPlotting(py::module& m)
            GetterCallback getter,
            py::object data,
            int count,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData userdata{getter, data};
-            ImPlot::PlotLineG(label_id, getterCallbackFunc, &userdata, count, spec);
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotLineG,
+                label_id,
+                getterCallbackFunc,
+                &userdata,
+                count
+            );
         },
         "label_id"_a,
         "getter"_a.none(false),
@@ -85,15 +113,15 @@ template<typename T> void initWrapperPlotting(py::module& m)
            T values,
            double xscale,
            double xstart,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotScatter(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotScatter,
                 label_id,
                 values->data(),
                 values->size(),
                 xscale,
-                xstart,
-                spec
+                xstart
             );
         },
         "label_id"_a,
@@ -105,13 +133,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotScatter",
-        [](const char* label_id, T xs, T ys, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotScatter(label_id, xs->data(), ys->data(), xs->size(), spec);
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotScatter,
+                label_id,
+                xs->data(),
+                ys->data(),
+                xs->size()
+            )
         },
         "label_id"_a,
         "xs"_a,
@@ -125,15 +163,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            GetterCallback getter,
            py::object data,
            int count,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData userdata{getter, data};
-            ImPlot::PlotScatterG(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotScatterG,
                 label_id,
                 getterCallbackFunc,
                 &userdata,
-                count,
-                spec
+                count
             );
         },
         "label_id"_a,
@@ -150,20 +189,21 @@ template<typename T> void initWrapperPlotting(py::module& m)
            T sizes,
            double xscale,
            double xstart,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(values->size() != sizes->size())
             {
                 throw py::value_error("len(values) != len(sizes)");
             }
-            ImPlot::PlotBubbles(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBubbles,
                 label_id,
                 values->data(),
                 sizes->data(),
                 values->size(),
                 xscale,
-                xstart,
-                spec
+                xstart
             );
         },
         "label_id"_a,
@@ -176,19 +216,24 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotBubbles",
-        [](const char* label_id, T xs, T ys, T sizes, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           T sizes,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotBubbles(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBubbles,
                 label_id,
                 xs->data(),
                 ys->data(),
                 sizes->data(),
-                xs->size(),
-                spec
+                xs->size()
             );
         },
         "label_id"_a,
@@ -200,13 +245,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotPolygon",
-        [](const char* label_id, T xs, T ys, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotPolygon(label_id, xs->data(), ys->data(), xs->size(), spec);
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotPolygon,
+                label_id,
+                xs->data(),
+                ys->data(),
+                xs->size()
+            );
         },
         "label_id"_a,
         "xs"_a,
@@ -220,15 +275,15 @@ template<typename T> void initWrapperPlotting(py::module& m)
            T values,
            double xscale,
            double xstart,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotStairs(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotStairs,
                 label_id,
                 values->data(),
                 values->size(),
                 xscale,
-                xstart,
-                spec
+                xstart
             );
         },
         "label_id"_a,
@@ -240,13 +295,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotStairs",
-        [](const char* label_id, T xs, T ys, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotStairs(label_id, xs->data(), ys->data(), xs->size(), spec);
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotStairs,
+                label_id,
+                xs->data(),
+                ys->data(),
+                xs->size()
+            );
         },
         "label_id"_a,
         "xs"_a,
@@ -260,15 +325,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            GetterCallback getter,
            py::object data,
            int count,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData userdata{getter, data};
-            ImPlot::PlotStairsG(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotStairsG,
                 label_id,
                 getterCallbackFunc,
                 &userdata,
-                count,
-                spec
+                count
             );
         },
         "label_id"_a,
@@ -285,16 +351,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            double yref,
            double xscale,
            double xstart,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotShaded(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotShaded,
                 label_id,
                 values->data(),
                 values->size(),
                 yref,
                 xscale,
-                xstart,
-                spec
+                xstart
             );
         },
         "label_id"_a,
@@ -307,19 +373,24 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotShaded",
-        [](const char* label_id, T xs, T ys, double yref, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           double yref,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y)");
             }
-            ImPlot::PlotShaded(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotShaded,
                 label_id,
                 xs->data(),
                 ys->data(),
                 xs->size(),
-                yref,
-                spec
+                yref
             );
         },
         "label_id"_a,
@@ -331,19 +402,24 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotShaded",
-        [](const char* label_id, T xs, T ys1, T ys2, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys1,
+           T ys2,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys1->size() || xs->size() != ys2->size())
             {
                 throw py::value_error("len(x) != len(y1) != len(y2)");
             }
-            ImPlot::PlotShaded(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotShaded,
                 label_id,
                 xs->data(),
                 ys1->data(),
                 ys2->data(),
-                xs->size(),
-                spec
+                xs->size()
             );
         },
         "label_id"_a,
@@ -361,18 +437,19 @@ template<typename T> void initWrapperPlotting(py::module& m)
            GetterCallback getter2,
            py::object data2,
            int count,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData cbdata1{getter1, data1};
             GetterCallbackData cbdata2{getter2, data2};
-            ImPlot::PlotShadedG(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotShadedG,
                 label_id,
                 getterCallbackFunc,
                 &cbdata1,
                 getterCallbackFunc,
                 &cbdata2,
-                count,
-                spec
+                count
             );
         },
         "label_id"_a,
@@ -390,15 +467,15 @@ template<typename T> void initWrapperPlotting(py::module& m)
            T values,
            double bar_size,
            double shift,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotBars(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBars,
                 label_id,
                 values->data(),
                 values->size(),
                 bar_size,
-                shift,
-                spec
+                shift
             );
         },
         "label_id"_a,
@@ -410,19 +487,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotBars",
-        [](const char* label_id, T xs, T ys, double bar_size, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           double bar_size,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y1)");
             }
-            ImPlot::PlotBars(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBars,
                 label_id,
                 xs->data(),
                 ys->data(),
                 xs->size(),
-                bar_size,
-                spec
+                bar_size
             );
         },
         "label_id"_a,
@@ -439,16 +520,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            py::object data,
            int count,
            double bar_size,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData userdata{getter, data};
-            ImPlot::PlotBarsG(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBarsG,
                 label_id,
                 getterCallbackFunc,
                 &userdata,
                 count,
-                bar_size,
-                spec
+                bar_size
             );
         },
         "label_id"_a,
@@ -467,7 +548,7 @@ template<typename T> void initWrapperPlotting(py::module& m)
            int group_count,
            double group_size,
            double shift,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(labels->size() != item_count)
             {
@@ -478,14 +559,14 @@ template<typename T> void initWrapperPlotting(py::module& m)
                 throw py::value_error("len(values) != item_count * group_count");
             }
 
-            ImPlot::PlotBarGroups(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotBarGroups,
                 labels->data(),
                 values->data(),
                 item_count,
                 group_count,
                 group_size,
-                shift,
-                spec
+                shift
             );
         },
         "labels"_a,
@@ -499,20 +580,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotErrorBars",
-        [](const char* label_id, T xs, T ys, T err, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           T err,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size() || xs->size() != err->size())
             {
                 throw py::value_error("len(xs) != len(ys) != len(err)");
             }
-
-            ImPlot::PlotErrorBars(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotErrorBars,
                 label_id,
                 xs->data(),
                 ys->data(),
                 err->data(),
-                xs->size(),
-                spec
+                xs->size()
             );
         },
         "label_id"_a,
@@ -524,7 +608,12 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotErrorBars",
-        [](const char* label_id, T xs, T ys, T neg, T pos, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           T neg,
+           T pos,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size() || xs->size() != neg->size()
                || xs->size() != pos->size())
@@ -534,14 +623,14 @@ template<typename T> void initWrapperPlotting(py::module& m)
                 );
             }
 
-            ImPlot::PlotErrorBars(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotErrorBars,
                 label_id,
                 xs->data(),
                 ys->data(),
                 neg->data(),
                 pos->data(),
-                xs->size(),
-                spec
+                xs->size()
             );
         },
         "label_id"_a,
@@ -559,16 +648,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            int ref,
            double scale,
            double start,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotStems(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotStems,
                 label_id,
                 values->data(),
                 values->size(),
                 ref,
                 scale,
-                start,
-                spec
+                start
             );
         },
         "label_id"_a,
@@ -581,19 +670,23 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotStems",
-        [](const char* label_id, T xs, T ys, int ref, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           int ref,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(x) != len(y1)");
             }
-            ImPlot::PlotStems(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotStems,
                 label_id,
                 xs->data(),
                 ys->data(),
                 xs->size(),
-                ref,
-                spec
+                ref
             );
         },
         "label_id"_a,
@@ -605,9 +698,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotInfLines",
-        [](const char* label_id, T values, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T values,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotInfLines(label_id, values->data(), values->size(), spec);
+            PLOT_FUNC_CALL(
+                ImPlot::PlotInfLines,
+                label_id,
+                values->data(),
+                values->size()
+            );
         },
         "label_id"_a,
         "values"_a,
@@ -625,13 +725,14 @@ template<typename T> void initWrapperPlotting(py::module& m)
            double radius,
            const char* label_fmt,
            double angle0,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(label_ids->size() != values->size())
             {
                 throw py::value_error("len(label_ids) != len(values)");
             }
-            ImPlot::PlotPieChart(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotPieChart,
                 label_ids->data(),
                 values->data(),
                 label_ids->size(),
@@ -639,8 +740,7 @@ template<typename T> void initWrapperPlotting(py::module& m)
                 y,
                 radius,
                 label_fmt,
-                angle0,
-                spec
+                angle0
             );
         },
         "label_ids"_a,
@@ -664,14 +764,14 @@ template<typename T> void initWrapperPlotting(py::module& m)
            const char* label_fmt,
            const ImPlotPoint& bounds_min,
            const ImPlotPoint& bounds_max,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(values->size() < rows * cols)
             {
                 throw py::value_error("len(values) > rows * cols");
             }
-
-            ImPlot::PlotHeatmap(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotHeatmap,
                 label_id,
                 values->data(),
                 rows,
@@ -680,8 +780,7 @@ template<typename T> void initWrapperPlotting(py::module& m)
                 scale_max,
                 label_fmt,
                 bounds_min,
-                bounds_max,
-                spec
+                bounds_max
             );
         },
         "label_id"_a,
@@ -703,16 +802,16 @@ template<typename T> void initWrapperPlotting(py::module& m)
            int bins,
            double bar_scale,
            ImPlotRange range,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotHistogram(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotHistogram,
                 label_id,
                 values->data(),
                 values->size(),
                 bins,
                 bar_scale,
-                range,
-                spec
+                range
             );
         },
         "label_id"_a,
@@ -731,21 +830,22 @@ template<typename T> void initWrapperPlotting(py::module& m)
            int x_bins,
            int y_bins,
            ImPlotRect range,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(xs) != len(ys)");
             }
-            ImPlot::PlotHistogram2D(
+
+            PLOT_FUNC_CALL(
+                ImPlot::PlotHistogram2D,
                 label_id,
                 xs->data(),
                 ys->data(),
                 xs->size(),
                 x_bins,
                 y_bins,
-                range,
-                spec
+                range
             );
         },
         "label_id"_a,
@@ -759,14 +859,22 @@ template<typename T> void initWrapperPlotting(py::module& m)
 
     m.def(
         "PlotDigital",
-        [](const char* label_id, T xs, T ys, const ImPlotSpec& spec)
+        [](const char* label_id,
+           T xs,
+           T ys,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             if(xs->size() != ys->size())
             {
                 throw py::value_error("len(xs) != len(ys)");
             }
-
-            ImPlot::PlotDigital(label_id, xs->data(), ys->data(), xs->size(), spec);
+            PLOT_FUNC_CALL(
+                ImPlot::PlotDigital,
+                label_id,
+                xs->data(),
+                ys->data(),
+                xs->size()
+            );
         },
         "label_id"_a,
         "xs"_a,
@@ -780,15 +888,15 @@ template<typename T> void initWrapperPlotting(py::module& m)
            GetterCallback getter,
            py::object data,
            int count,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
             GetterCallbackData userdata{getter, data};
-            ImPlot::PlotDigitalG(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotDigitalG,
                 label_id,
                 getterCallbackFunc,
                 &userdata,
-                count,
-                spec
+                count
             );
         },
         "label_id"_a,
@@ -814,17 +922,17 @@ void init_plotting(py::module& m)
            const ImVec2& uv0,
            const ImVec2& uv1,
            const ImVec4& tint_col,
-           const ImPlotSpec& spec)
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
         {
-            ImPlot::PlotImage(
+            PLOT_FUNC_CALL(
+                ImPlot::PlotImage,
                 label_id,
                 ImTextureRef(tex.texID),
                 bounds_min,
                 bounds_max,
                 uv0,
                 uv1,
-                tint_col,
-                spec
+                tint_col
             );
         },
         "label_id"_a,
@@ -838,7 +946,15 @@ void init_plotting(py::module& m)
     );
 
     m.def(
-        IMFUNC(PlotText),
+        "PlotText",
+        [](const char* text,
+           double x,
+           double y,
+           const ImVec2& pix_offset,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
+        {
+            PLOT_FUNC_CALL(ImPlot::PlotText, text, x, y, pix_offset);
+        },
         "text"_a,
         "x"_a,
         "y"_a,
@@ -847,7 +963,12 @@ void init_plotting(py::module& m)
     );
 
     m.def(
-        IMFUNC(PlotDummy),
+        "PlotDummy",
+        [](const char* label_id,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
+        {
+            PLOT_FUNC_CALL(ImPlot::PlotDummy, label_id);
+        },
         "label_id"_a,
         py::arg_v("spec", ImPlotSpec(), "PlotSpec()")
     );

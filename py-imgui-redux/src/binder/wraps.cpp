@@ -191,10 +191,10 @@ void init_wraps(py::module& m)
         .def("__bool__", &BoolRef_::toBool);
 
     initList<IntList, int>(m, "IntList", "Thin wrapper over a std::vector<int>");
-    initList<WCharList, ImWchar>(
+    initList<ImU32List, ImU32>(
         m,
-        "WCharList",
-        "Thin wrapper over a std::vector<ImWchar>"
+        "ImU32List",
+        "Thin wrapper over a std::vector<ImU32>"
     );
     initList<FloatList, float>(
         m,

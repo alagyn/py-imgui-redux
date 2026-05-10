@@ -2,11 +2,74 @@
 #include <binder/list-wrapper.h>
 #include <binder/struct-utility.h>
 
+#include <binder/wraps.h>
+
+#include <bind-imgui/implot-spec.h>
+
+ImPlotSpec makeSpec(py::tuple args)
+{
+    if(args.size() % 2 != 0)
+    {
+        throw py::value_error(
+            "Odd number of arguments! You must provide "
+            "(ImPlotProp, value) pairs!"
+        );
+    }
+
+    ImPlotSpec out;
+
+    for(size_t i = 0; i < args.size(); i += 2)
+    {
+        ImPlotProp prop = args[i].cast<ImPlotProp>();
+        switch(prop)
+        {
+        case ImPlotProp_LineColor:
+        case ImPlotProp_FillColor:
+        case ImPlotProp_MarkerLineColor:
+        case ImPlotProp_MarkerFillColor:
+            out.SetProp(prop, args[i + 1].cast<ImVec4>());
+            break;
+
+        case ImPlotProp_LineColors:
+        case ImPlotProp_FillColors:
+        case ImPlotProp_MarkerLineColors:
+        case ImPlotProp_MarkerFillColors:
+            out.SetProp(prop, args[i + 1].cast<ImU32ListPtr>()->data());
+            break;
+
+        case ImPlotProp_LineWeight:
+        case ImPlotProp_FillAlpha:
+        case ImPlotProp_MarkerSize:
+        case ImPlotProp_Size:
+            out.SetProp(prop, args[i + 1].cast<float>());
+            break;
+
+        case ImPlotProp_Offset:
+        case ImPlotProp_Stride:
+        case ImPlotProp_Marker:
+        case ImPlotProp_Flags:
+            out.SetProp(prop, args[i + 1].cast<int>());
+            break;
+
+        case ImPlotProp_MarkerSizes:
+            out.SetProp(prop, args[i + 1].cast<FloatListPtr>()->data());
+            break;
+
+        default:
+            std::stringstream ss;
+            ss << "Invalid implot.PlotProp value '" << prop << "'";
+            throw py::value_error(ss.str());
+        }
+    }
+
+    return out;
+}
+
 void init_implot_structs(py::module& m)
 {
     py::class_<ImPlotSpec>(m, "PlotSpec")
         .def(py::init<>())
-        // TODO vararg constructor?
+        .def(py::init(py::overload_cast<py::tuple>(&makeSpec)))
         .RW(ImPlotSpec, LineColor)
         .RW(ImPlotSpec, LineColors)
         .RW(ImPlotSpec, LineWeight)

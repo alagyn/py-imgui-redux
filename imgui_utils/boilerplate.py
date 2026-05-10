@@ -2,7 +2,7 @@
 A basic boilerplate function so you can get up and running fast
 """
 
-from typing import Callable, Optional
+from typing import Callable, Optional, Union
 import platform
 
 import imgui as im
@@ -33,7 +33,7 @@ def window_mainloop(
     opengl_ver_minor=6,
     glsl_version="#version 130",
     clear_color=im.Vec4(0.22, 0.22, 0.22, 1.0),
-    window_icon: Optional[str] = None
+    window_icon: Optional[Union[str, glfw.Image]] = None
 ):
     """
     Create a single window and enter render loop until either the window is closed
@@ -53,14 +53,13 @@ def window_mainloop(
     :param opengl_ver_minor: The openGL minor version
     :param glsl_version: The GLSL version
     :param clear_color: The default background clear color
-    :param window_icon: The path to an image to use as the window icon
+    :param window_icon: The image (or path) to use as the window icon
     """
 
     # set error callback func
     glfw.SetErrorCallback(errorCallback)
     if not glfw.Init():
-        print("Cannot initialize GLFW")
-        return
+        raise RuntimeError("Cannot initialize GLFW")
 
     # create our window
     glfw.WindowHint(glfw.CONTEXT_VERSION_MAJOR, opengl_ver_major)
@@ -79,8 +78,7 @@ def window_mainloop(
 
     window = glfw.CreateWindow(width, height, title)
     if window is None:
-        print("Cannot create GLFW window")
-        return
+        raise RuntimeError("Cannot create GLFW window")
 
     glfw.MakeContextCurrent(window)
     # enable vsync
@@ -88,8 +86,14 @@ def window_mainloop(
 
     # Set window icon
     if window_icon is not None:
-        # Byte data must be RGBA
-        icon = glfw.Image(window_icon)
+        if isinstance(window_icon, str):
+            icon = glfw.Image(window_icon)
+        elif isinstance(window_icon, glfw.Image):
+            icon = window_icon
+        else:
+            raise ValueError(
+                "Invalid type for window_icon, expected str or glfw.Image"
+            )
         glfw.SetWindowIcon(window, [icon])
 
     # Create ImGui context
