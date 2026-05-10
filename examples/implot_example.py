@@ -24,7 +24,7 @@ def formatterCallback(val: float, buf: imgui.EditableStrWrapper, userData):
 
 
 def dataGetter(idx: int, data) -> implot.Point:
-    val = idx + 0.1 / math.pi
+    val = idx * 0.1 / math.pi
     return implot.Point(val, math.sin(val + data))
 
 
@@ -65,7 +65,7 @@ class State:
             if imgui.RadioButton("Custom Getter", self.plotMode == 2):
                 self.plotMode = 2
                 implot.SetNextAxesLimits(
-                    -0.1, 200, -1.1, 1.1, cond=implot.Cond.Always
+                    -0.1, 7, -1.3, 1.3, cond=implot.Cond.Always
                 )
 
             if implot.BeginPlot("data", imgui.Vec2(500, 500)):
@@ -110,8 +110,8 @@ class State:
                     )
                 elif self.plotMode == 2:
                     size = 200
-                    self.t += dt * 0.1
-                    implot.PlotScatterG("Custom", dataGetter, self.t, size)
+                    self.t += dt * 0.5
+                    implot.PlotLineG("Custom", dataGetter, self.t, size)
                 implot.EndPlot()
         imgui.End()
 
