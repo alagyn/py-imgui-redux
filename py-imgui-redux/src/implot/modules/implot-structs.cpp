@@ -20,44 +20,121 @@ ImPlotSpec makeSpec(py::tuple args)
 
     for(size_t i = 0; i < args.size(); i += 2)
     {
-        ImPlotProp prop = args[i].cast<ImPlotProp>();
-        switch(prop)
+        ImPlotProp prop;
+        try
         {
-        case ImPlotProp_LineColor:
-        case ImPlotProp_FillColor:
-        case ImPlotProp_MarkerLineColor:
-        case ImPlotProp_MarkerFillColor:
-            out.SetProp(prop, args[i + 1].cast<ImVec4>());
-            break;
-
-        case ImPlotProp_LineColors:
-        case ImPlotProp_FillColors:
-        case ImPlotProp_MarkerLineColors:
-        case ImPlotProp_MarkerFillColors:
-            out.SetProp(prop, args[i + 1].cast<ImU32ListPtr>()->data());
-            break;
-
-        case ImPlotProp_LineWeight:
-        case ImPlotProp_FillAlpha:
-        case ImPlotProp_MarkerSize:
-        case ImPlotProp_Size:
-            out.SetProp(prop, args[i + 1].cast<float>());
-            break;
-
-        case ImPlotProp_Offset:
-        case ImPlotProp_Stride:
-        case ImPlotProp_Marker:
-        case ImPlotProp_Flags:
-            out.SetProp(prop, args[i + 1].cast<int>());
-            break;
-
-        case ImPlotProp_MarkerSizes:
-            out.SetProp(prop, args[i + 1].cast<FloatListPtr>()->data());
-            break;
-
-        default:
+            prop = args[i].cast<ImPlotProp>();
+        }
+        catch(py::cast_error& err)
+        {
             std::stringstream ss;
-            ss << "Invalid implot.PlotProp value '" << prop << "'";
+            ss << "Invalid PlotProp at index " << i << ": " << err.what();
+            throw py::value_error(ss.str());
+        }
+
+        try
+        {
+            switch(prop)
+            {
+            case ImPlotProp_LineColor:
+            case ImPlotProp_FillColor:
+            case ImPlotProp_MarkerLineColor:
+            case ImPlotProp_MarkerFillColor:
+                out.SetProp(prop, args[i + 1].cast<ImVec4>());
+                break;
+
+            case ImPlotProp_LineColors:
+            case ImPlotProp_FillColors:
+            case ImPlotProp_MarkerLineColors:
+            case ImPlotProp_MarkerFillColors:
+                out.SetProp(prop, args[i + 1].cast<ImU32ListPtr>()->data());
+                break;
+
+            case ImPlotProp_LineWeight:
+            case ImPlotProp_FillAlpha:
+            case ImPlotProp_MarkerSize:
+            case ImPlotProp_Size:
+                out.SetProp(prop, args[i + 1].cast<float>());
+                break;
+
+            case ImPlotProp_Offset:
+            case ImPlotProp_Stride:
+            case ImPlotProp_Marker:
+            case ImPlotProp_Flags:
+                out.SetProp(prop, args[i + 1].cast<int>());
+                break;
+
+            case ImPlotProp_MarkerSizes:
+                out.SetProp(prop, args[i + 1].cast<FloatListPtr>()->data());
+                break;
+
+            default:
+                std::stringstream ss;
+                ss << "Invalid PlotProp enumeration (" << prop << ")";
+                throw py::value_error(ss.str());
+            }
+        }
+        catch(py::cast_error& err)
+        {
+            std::stringstream ss;
+            ss << "Invalid type for property ";
+            switch(prop)
+            {
+            case ImPlotProp_LineColor:
+                ss << "PlotProp.LineColor";
+                break;
+            case ImPlotProp_FillColor:
+                ss << "PlotProp.FillColor";
+                break;
+            case ImPlotProp_MarkerLineColor:
+                ss << "PlotProp.MarkerLineColor";
+                break;
+            case ImPlotProp_MarkerFillColor:
+                ss << "PlotProp.MarkerFillColor";
+                break;
+            case ImPlotProp_LineColors:
+                ss << "PlotProp.LineColors";
+                break;
+            case ImPlotProp_FillColors:
+                ss << "PlotProp.FillColors";
+                break;
+            case ImPlotProp_MarkerLineColors:
+                ss << "PlotProp.MarkerLineColors";
+                break;
+            case ImPlotProp_MarkerFillColors:
+                ss << "PlotProp.MarkerFillColors";
+                break;
+            case ImPlotProp_LineWeight:
+                ss << "PlotProp.LineWeight";
+                break;
+            case ImPlotProp_FillAlpha:
+                ss << "PlotProp.FillAlpha";
+                break;
+            case ImPlotProp_MarkerSize:
+                ss << "PlotProp.MarkerSize";
+                break;
+            case ImPlotProp_Size:
+                ss << "PlotProp.Size";
+                break;
+            case ImPlotProp_Offset:
+                ss << "PlotProp.Offset";
+                break;
+            case ImPlotProp_Stride:
+                ss << "PlotProp.Stride";
+                break;
+            case ImPlotProp_Marker:
+                ss << "PlotProp.Marker";
+                break;
+            case ImPlotProp_Flags:
+                ss << "PlotProp.Flags";
+                break;
+            case ImPlotProp_MarkerSizes:
+                ss << "PlotProp.MarkerSizes";
+                break;
+            }
+
+            ss << " at index " << i << ": " << err.what();
+
             throw py::value_error(ss.str());
         }
     }
