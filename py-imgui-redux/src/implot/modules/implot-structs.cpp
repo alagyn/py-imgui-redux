@@ -34,40 +34,61 @@ ImPlotSpec makeSpec(py::tuple args)
 
         try
         {
+            // Could simplify this and use spec.SetProp(), but that adds another
+            // switch and extra branching
             switch(prop)
             {
             case ImPlotProp_LineColor:
-            case ImPlotProp_FillColor:
-            case ImPlotProp_MarkerLineColor:
-            case ImPlotProp_MarkerFillColor:
-                out.SetProp(prop, args[i + 1].cast<ImVec4>());
+                out.LineColor = args[i + 1].cast<ImVec4>();
                 break;
-
             case ImPlotProp_LineColors:
-            case ImPlotProp_FillColors:
-            case ImPlotProp_MarkerLineColors:
-            case ImPlotProp_MarkerFillColors:
-                out.SetProp(prop, args[i + 1].cast<ImU32ListPtr>()->data());
+                out.LineColors = args[i + 1].cast<ImU32ListPtr>()->data();
                 break;
-
             case ImPlotProp_LineWeight:
+                out.LineWeight = args[i + 1].cast<float>();
+                break;
+            case ImPlotProp_FillColor:
+                out.FillColor = args[i + 1].cast<ImVec4>();
+                break;
+            case ImPlotProp_FillColors:
+                out.FillColors = args[i + 1].cast<ImU32ListPtr>()->data();
+                break;
             case ImPlotProp_FillAlpha:
-            case ImPlotProp_MarkerSize:
-            case ImPlotProp_Size:
-                out.SetProp(prop, args[i + 1].cast<float>());
+                out.FillAlpha = args[i + 1].cast<float>();
                 break;
-
-            case ImPlotProp_Offset:
-            case ImPlotProp_Stride:
             case ImPlotProp_Marker:
-            case ImPlotProp_Flags:
-                out.SetProp(prop, args[i + 1].cast<int>());
+                out.Marker = args[i + 1].cast<int>();
                 break;
-
+            case ImPlotProp_MarkerSize:
+                out.MarkerSize = args[i + 1].cast<float>();
+                break;
             case ImPlotProp_MarkerSizes:
-                out.SetProp(prop, args[i + 1].cast<FloatListPtr>()->data());
+                out.MarkerSizes = args[i + 1].cast<FloatListPtr>()->data();
                 break;
-
+            case ImPlotProp_MarkerLineColor:
+                out.MarkerLineColor = args[i + 1].cast<ImVec4>();
+                break;
+            case ImPlotProp_MarkerLineColors:
+                out.MarkerLineColors = args[i + 1].cast<ImU32ListPtr>()->data();
+                break;
+            case ImPlotProp_MarkerFillColor:
+                out.MarkerFillColor = args[i + 1].cast<ImVec4>();
+                break;
+            case ImPlotProp_MarkerFillColors:
+                out.MarkerFillColors = args[i + 1].cast<ImU32ListPtr>()->data();
+                break;
+            case ImPlotProp_Size:
+                out.Size = args[i + 1].cast<float>();
+                break;
+            case ImPlotProp_Offset:
+                out.Offset = args[i + 1].cast<int>();
+                break;
+            case ImPlotProp_Stride:
+                out.Stride = args[i + 1].cast<int>();
+                break;
+            case ImPlotProp_Flags:
+                out.Flags = args[i + 1].cast<int>();
+                break;
             default:
                 std::stringstream ss;
                 ss << "Invalid PlotProp enumeration (" << prop << ")";

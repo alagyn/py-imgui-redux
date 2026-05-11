@@ -1,4 +1,6 @@
 #include <bind-imgui/implot-modules.h>
+
+#include <bind-imgui/implot-formatter-callback.h>
 #include <bind-imgui/implot-spec.h>
 #include <bind-imgui/texture.h>
 #include <binder/numpy.h>
@@ -714,7 +716,46 @@ template<typename T> void initWrapperPlotting(py::module& m)
         py::arg_v("spec", ImPlotSpec(), "PlotSpec()")
     );
 
-    // TODO PlotPieChart with formatter?
+    m.def(
+        "PlotPieChart",
+        [](StrListPtr label_ids,
+           T values,
+           double x,
+           double y,
+           double radius,
+           FormatterCallback fmt,
+           py::object fmt_data,
+           double angle0,
+           py::typing::Union<const ImPlotSpec&, py::tuple> spec)
+        {
+            if(label_ids->size() != values->size())
+            {
+                throw py::value_error("len(label_ids) != len(values)");
+            }
+            FormatterCallbackData data(fmt, fmt_data);
+            PLOT_FUNC_CALL(
+                ImPlot::PlotPieChart,
+                label_ids->data(),
+                values->data(),
+                label_ids->size(),
+                x,
+                y,
+                radius,
+                plotFormatterCallback,
+                &data,
+                angle0
+            );
+        },
+        "label_ids"_a,
+        "values"_a,
+        "x"_a,
+        "y"_a,
+        "radius"_a,
+        "fmt"_a.none(false),
+        "fmt_data"_a = py::none(),
+        "angle0"_a = 90,
+        py::arg_v("spec", ImPlotSpec(), "PlotSpec()")
+    );
 
     m.def(
         "PlotPieChart",

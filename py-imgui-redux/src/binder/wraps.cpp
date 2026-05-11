@@ -61,6 +61,56 @@ void StrRef::calcLen()
     this->strLen = strnlen(vals.data(), vals.size());
 }
 
+size_t StrList::size()
+{
+    return strs.size();
+}
+
+const char** StrList::data()
+{
+    return str_ptrs.data();
+}
+
+void StrList::append(const std::string& val)
+{
+    strs.push_back(val);
+    str_ptrs.push_back(strs.back().data());
+}
+
+void StrList::pop()
+{
+    strs.pop_back();
+    str_ptrs.pop_back();
+}
+
+std::string StrList::getItem(size_t idx)
+{
+    return strs[idx];
+}
+
+void StrList::setItem(size_t idx, const std::string& val)
+{
+    strs[idx] = val;
+    str_ptrs[idx] = strs[idx].data();
+}
+
+void StrList::clear()
+{
+    strs.clear();
+    str_ptrs.clear();
+}
+
+void StrList::reserve(size_t size)
+{
+    strs.reserve(size);
+    str_ptrs.reserve(size);
+}
+
+pybind11::iterator StrList::makeIter()
+{
+    return pybind11::make_iterator(str_ptrs.begin(), str_ptrs.end());
+}
+
 template<class T, class U>
 void initRef(py::module& m, const char* name, const char* desc, U defaultVal)
 {
@@ -135,8 +185,8 @@ template<class T, class U>
 py::class_<T> initList(py::module& m, const char* name, const char* desc)
 {
     return py::class_<T>(m, name, desc)
-        .def(py::init<std::vector<U>>(), "vals"_a = std::vector<U>())
         .def(py::init<>())
+        .def(py::init<py::typing::Iterable<U>>(), "vals"_a)
         .def("append", &T::append, "val"_a, "Append a value to the end")
         .def("pop", &T::pop, "Pop a value from the end")
         .def(
@@ -208,11 +258,6 @@ void init_wraps(py::module& m)
         "DoubleList",
         "Thin wrapper over a std::vector<double>"
     );
-    initList<StrList, const char*>(
-        m,
-        "StrList",
-        "Thin wrapper over a std::vector<const char*>"
-    );
     initList<Vec2List, ImVec2>(
         m,
         "Vec2List",
@@ -262,6 +307,35 @@ void init_wraps(py::module& m)
             "the maxSize will remain unchanged and extra chars will be "
             "dropped"
         );
+
+    py::class_<StrList>(
+        m,
+        "StrList",
+        "A thin wrapper around std::vector<const char*>"
+    )
+        .def(py::init<>())
+        .def(
+            py::init(
+                [](py::typing::Iterable<std::string> vals)
+                {
+                    StrList out;
+                    out.reserve(py::len(vals));
+                    for(auto val : vals)
+                    {
+                        out.append(val.cast<std::string>());
+                    }
+                    return out;
+                }
+            ),
+            "vals"_a
+        )
+        .def("append", &StrList::append, "val"_a, "Append a value to the end")
+        .def("pop", &StrList::pop, "Pop a value from the end")
+        .def("clear", &StrList::clear)
+        .def("__len__", &StrList::size)
+        .def("__iter__", &StrList::makeIter)
+        .def("__getitem__", &StrList::getItem, "index"_a)
+        .def("__setitem__", &StrList::setItem, "index"_a, "val"_a);
 
     initListWrapper<unsigned char>(m, "ListWrapperUC");
     initListWrapper<unsigned short>(m, "ListWrapperUS");

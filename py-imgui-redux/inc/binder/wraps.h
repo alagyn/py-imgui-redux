@@ -312,6 +312,16 @@ public:
     {
     }
 
+    ImList(pybind11::typing::Iterable<T> pvals)
+    {
+        vals.reserve(pybind11::len(pvals));
+        pybind11::iterator iter = pvals.begin();
+        for(pybind11::iterator end = pvals.end(); iter != end; ++iter)
+        {
+            vals.push_back(iter->cast<T>());
+        }
+    }
+
     ImList()
         : vals()
     {
@@ -377,9 +387,6 @@ using FloatListPtr = FloatList*;
 using DoubleList = ImList<double>;
 using DoubleListPtr = DoubleList*;
 
-using StrList = ImList<const char*>;
-using StrListPtr = StrList*;
-
 using Vec2List = ImList<ImVec2>;
 using Vec2ListPtr = Vec2List*;
 
@@ -412,3 +419,34 @@ public:
     char* buff;
     size_t maxSize;
 };
+
+// Separate wrapper so we can maintain a list
+// of std::string to handle the memory management,
+// and also a vector of ptrs to the start of each string
+class StrList
+{
+public:
+    StrList()
+    {
+    }
+
+    size_t size();
+    const char** data();
+
+    void append(const std::string& val);
+    void pop();
+    std::string getItem(size_t idx);
+    void setItem(size_t idx, const std::string& val);
+    void clear();
+
+    pybind11::iterator makeIter();
+
+    void reserve(size_t size);
+
+private:
+    std::vector<std::string> strs;
+    // Pointers to the beginning of each string
+    std::vector<const char*> str_ptrs;
+};
+
+using StrListPtr = StrList*;
