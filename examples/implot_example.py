@@ -40,6 +40,16 @@ def customScaleInverse(value: float, data) -> float:
     return math.pow(data, value)
 
 
+def pieChartFormatter(val: float, buf: imgui.EditableStrWrapper, userData):
+    if val > 0.3:
+        label = f'wow {val}, {userData}'
+    else:
+        label = f'{val}'
+
+    buf.set(label)
+    return 0
+
+
 class State:
 
     def __init__(self) -> None:
@@ -61,6 +71,9 @@ class State:
             )
         self.plotIdx = 0
 
+        self.pieLabels = imgui.StrList(("One", "Two", "Three"))
+        self.pieValues = imgui.DoubleList((0.2, 0.1, 0.7))
+
         self.lastUpate = 0
         self.updatePeriod = 0.5
         self.t = 0
@@ -79,6 +92,9 @@ class State:
                 implot.SetNextAxesLimits(
                     -0.1, 7, -1.3, 1.3, cond=implot.Cond.Always
                 )
+            if imgui.RadioButton("Pie Chart", self.plotMode == 3):
+                self.plotMode = 3
+                implot.SetNextAxesToFit()
 
             if implot.BeginPlot("data", imgui.Vec2(500, 500)):
                 if self.plotMode == 0:
@@ -132,6 +148,16 @@ class State:
                     size = 200
                     self.t += dt * 0.5
                     implot.PlotLineG("Custom", dataGetter, self.t, size)
+                elif self.plotMode == 3:
+                    implot.PlotPieChart(
+                        self.pieLabels,
+                        self.pieValues,
+                        1.0,
+                        1.0,
+                        5.0,
+                        pieChartFormatter,
+                        "myData"
+                    )
                 implot.EndPlot()
         imgui.End()
 

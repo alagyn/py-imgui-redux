@@ -1,23 +1,10 @@
 #include <bind-imgui/implot-modules.h>
+
+#include <bind-imgui/implot-formatter-callback.h>
 #include <binder/list-wrapper.h>
 #include <binder/wraps.h>
 
 #include <pybind11/functional.h>
-
-using FormatterCallback =
-    std::function<int(double, EditableStrWrapper, py::object)>;
-
-struct FormatterCallbackData
-{
-    FormatterCallback callback;
-    py::object userdata;
-
-    FormatterCallbackData(FormatterCallback cb, py::object ud)
-        : callback(cb)
-        , userdata(ud)
-    {
-    }
-};
 
 // Static array of axis formatters
 // These are set by SetupAxisFormat and cleared by EndPlot
