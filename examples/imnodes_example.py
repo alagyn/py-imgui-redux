@@ -127,4 +127,11 @@ class State:
 
 if __name__ == '__main__':
     state = State()
-    window_mainloop("ImNodes Demo", state.render, 1024, 768, init=state.setup)
+    window_mainloop(
+        "ImNodes Demo",
+        state.render,
+        1024,
+        768,
+        init=state.setup,
+        init_imnodes=True
+    )
