@@ -1,8 +1,9 @@
 include CMakeLists.txt
 include pybind11_stubgen.py
 recursive-include cmake *
-recursive-include source *
+recursive-include py-imgui-redux *
 recursive-include third-party *
+recursive-include imgui_utils *
 prune test
 
 prune third-party/*/.github
